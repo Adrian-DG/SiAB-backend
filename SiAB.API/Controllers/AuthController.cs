@@ -18,12 +18,10 @@ namespace SiAB.API.Controllers
 	{
 		private readonly UserManager<Usuario> _userManager;
 		private readonly JwtService _jwtService;
-		private readonly IMapper _mapper;
-		public AuthController(UserManager<Usuario> userManager, JwtService jwtService, IMapper mapper)
+		public AuthController(UserManager<Usuario> userManager, JwtService jwtService)
 		{
 			_userManager = userManager;
 			_jwtService = jwtService;
-			_mapper = mapper;
 		}
 
 		[HttpPost("register-user")]
