@@ -10,7 +10,7 @@ namespace SiAB.API.Services
 {
 	public class JwtService
 	{
-		private const int EXPIRATION_MINUTES = 15;
+		private const int EXPIRATION_MINUTES = 30;
 		private readonly IConfiguration _configuration;
 
 		public JwtService(IConfiguration configuration)
@@ -41,6 +41,7 @@ namespace SiAB.API.Services
 				claims,
 				expires: expiration,
 				signingCredentials: credentials
+			
 			);
 		}
 

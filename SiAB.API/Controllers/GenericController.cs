@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
@@ -8,10 +9,10 @@ using SiAB.Core.Models;
 using System.Linq.Expressions;
 
 namespace SiAB.API.Controllers
-{	
+{
 	[ApiController]
 	[Route("api/[controller]")]
-	public abstract class GenericController<T> : ControllerBase where T : NamedMetadata
+	public class GenericController<T> : ControllerBase where T : NamedMetadata
 	{
 		protected readonly IUnitOfWork _uow;
 		protected GenericController(IUnitOfWork unitOfWork)
@@ -19,7 +20,7 @@ namespace SiAB.API.Controllers
 			_uow = unitOfWork;
 		}
 
-		[HttpPost]
+		[HttpPost]		
 		public async Task<IActionResult> Create([FromBody] string Nombre)
 		{
 			T entity = (T) new NamedMetadata() { Nombre = Nombre };	
@@ -27,7 +28,7 @@ namespace SiAB.API.Controllers
 			return Created();
 		}
 
-		[HttpGet]
+		[HttpGet]		
 		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{
 			var result = await _uow.Repository<T>().GetListPaginateAsync(
@@ -41,7 +42,7 @@ namespace SiAB.API.Controllers
 			return new JsonResult(result);			
 		}
 
-		[HttpPut("{id:int}")]
+		[HttpPut("{id:int}")]		
 		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] string Nombre)
 		{
 			var entity = await _uow.Repository<T>().GetByIdAsync(id);
