@@ -13,7 +13,7 @@ using SiAB.Core.Enums;
 namespace SiAB.Core.Entities.Auth
 {
     [Table("Usuarios", Schema = "accesos")]
-    public class Usuario : IdentityUser
+    public class Usuario : IdentityUser<int>
     {
         [Required]
         [StringLength(11)]

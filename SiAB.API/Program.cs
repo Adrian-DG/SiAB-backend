@@ -55,7 +55,7 @@ builder.Services.AddCors(opt => opt.AddPolicy("custom", b => {
 
 // identity requirements
 
-builder.Services.AddIdentity<Usuario, IdentityRole>(opt => {
+builder.Services.AddIdentity<Usuario, Role>(opt => {
 	opt.SignIn.RequireConfirmedAccount = false;
 	opt.Password.RequireNonAlphanumeric = false;
 	opt.Password.RequireUppercase = false;

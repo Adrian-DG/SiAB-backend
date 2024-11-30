@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using SiAB.Core.Abstraction;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Infrastructure.Data
 {
-	public class AppDbContext : IdentityDbContext<Usuario>
+	public class AppDbContext : IdentityDbContext<Usuario, Role, int>
 	{
 		public AppDbContext(DbContextOptions options) : base(options)
 		{
@@ -24,6 +25,9 @@ namespace SiAB.Infrastructure.Data
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
+
+			builder.Entity<Usuario>(e => e.ToTable("Usuarios", "accesos"));
+			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
 			SetGlobalQueryFilter(builder);
 		}

@@ -29,7 +29,15 @@ namespace SiAB.API.Controllers
 		[HttpPost("register-user")]
 		public async Task<IActionResult> Register([FromBody] UsuarioRegisterDto registerDto)
 		{
-			var usuario = _mapper.Map<Usuario>(registerDto);
+			var usuario = new Usuario
+			{
+				Cedula = registerDto.Cedula,
+				Nombre = registerDto.Nombre,
+				Apellido = registerDto.Apellido,
+				RangoId = registerDto.RangoId,
+				Institucion = registerDto.InstitucionEnum,
+				UserName = registerDto.Username
+			};
 
 			var result = await _userManager.CreateAsync(usuario, registerDto.Password);
 
