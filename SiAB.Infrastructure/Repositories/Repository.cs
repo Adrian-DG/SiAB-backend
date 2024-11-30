@@ -83,17 +83,14 @@ namespace SiAB.Infrastructure.Repositories
 			return await orderBy(query).Select(selector).ToListAsync();
 		}
 
-		public async Task<IEnumerable<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> selector, int page = 1, int pageSize = 10, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+		public async Task<IEnumerable<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, int page = 1, int pageSize = 10, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
 		{
 			return await _repository.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).Select(selector).ToListAsync();
 		}
 
 		public async Task Update(T entity)
 		{
-			if (_context.Entry<T>(entity).State != EntityState.Detached)
-			{
-				_context.Attach<T>(entity);
-			}
+			if (_context.Entry<T>(entity).State != EntityState.Detached) _context.Attach<T>(entity);
 
 			_context.Entry(entity).State = EntityState.Modified;
 
