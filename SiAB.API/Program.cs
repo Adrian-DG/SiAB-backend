@@ -79,6 +79,7 @@ builder.Services.AddAuthentication(options => {
 	};
 });
 
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
