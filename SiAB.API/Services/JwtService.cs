@@ -51,18 +51,17 @@ namespace SiAB.API.Services
 			{
 				new Claim(JwtRegisteredClaimNames.Sub, _configuration[JwtBearerConstants.Jwt_Subject]),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-				new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-				new Claim(ClaimTypes.Name, user.UserName),
-                //new Claim(ClaimTypes.Email, user.Email),
+				new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 		}
 
 		private SigningCredentials CreateCredentials()
 		{
+			var key = Encoding.UTF8.GetBytes(_configuration[JwtBearerConstants.JWT_KEY]);
 			return new SigningCredentials(
-				new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[JwtBearerConstants.JWT_KEY])),
-				SecurityAlgorithms.HmacSha256
+				new SymmetricSecurityKey(key),
+				SecurityAlgorithms.HmacSha256Signature
 			);
 		}
 	}

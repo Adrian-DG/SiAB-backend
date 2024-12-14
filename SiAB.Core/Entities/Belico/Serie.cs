@@ -11,23 +11,20 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Belico
 {
-	[Table("Alertas", Schema = "Belico")]
-	public class Alerta : EntityMetadata
+	[Table("Series", Schema = "Belico")]
+	public class Serie : EntityMetadata
 	{
-        public AlertaEstatusEnum Estatus { get; set; }
-
-        [ForeignKey(nameof(SerieId))]
-        public int SerieId { get; set; }
-        public virtual Serie? Serie { get; set; }
-
-        [ForeignKey(nameof(ArticuloId))]
+		[ForeignKey(nameof(ArticuloId))]
         public int ArticuloId { get; set; }
         public virtual Articulo? Articulo { get; set; }
+        public string? SerieCode { get; set; }
+        public EstadoEnum Estado { get; set; }
+
+        [ForeignKey(nameof(PropiedadId))]
+        public int PropiedadId { get; set; }
+        public virtual Propiedad? Propiedad { get; set; }
 
         [DataType(DataType.MultilineText)]
         public string? Comentario { get; set; }
-
-        [Required]
-        public DateTime FechaEfectividad { get; set; }
     }
 }

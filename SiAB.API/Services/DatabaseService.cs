@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SiAB.Core.Entities.Auth;
 using SiAB.Infrastructure.Data;
 
 namespace SiAB.API.Services
@@ -7,7 +9,7 @@ namespace SiAB.API.Services
 	{
 		public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
 		{	
-			return services.AddDbContext<AppDbContext>(opt =>
+			services.AddDbContext<AppDbContext>(opt =>
 			{
 				var connectionString = environment.IsProduction()
 				? configuration.GetConnectionString("ProdConnection")
@@ -15,6 +17,14 @@ namespace SiAB.API.Services
 				
 				opt.UseSqlServer(connectionString, builder => builder.MigrationsAssembly("SiAB.API"));
 			});
+
+			services.AddIdentity<Usuario, Role>(opt => {
+				opt.SignIn.RequireConfirmedAccount = false;
+				opt.Password.RequireNonAlphanumeric = false;
+				opt.Password.RequireUppercase = false;
+			}).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+			return services;
 		}
 	}
 }

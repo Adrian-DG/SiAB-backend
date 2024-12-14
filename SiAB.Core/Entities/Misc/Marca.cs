@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Misc
 {
-    [Table("Marcas", Schema = "misc")]
+    [Table("Marcas", Schema = "Misc")]
     public class Marca : NamedMetadata
     {
-        
     }
 }

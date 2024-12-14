@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Misc
 {
-	[Table("Propiedades", Schema = "misc")]
+	[Table("Propiedades", Schema = "Misc")]
 	public class Propiedad : NamedMetadata
 	{
 	}

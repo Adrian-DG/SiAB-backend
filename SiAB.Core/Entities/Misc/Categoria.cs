@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Misc
 {
-	[Table("Categorias", Schema ="misc")]
+	[Table("Categorias", Schema = "Misc")]
 	public class Categoria : NamedMetadata
 	{
 	}

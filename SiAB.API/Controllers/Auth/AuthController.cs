@@ -12,7 +12,6 @@ namespace SiAB.API.Controllers.Auth
 {
 
     [ApiController]
-    [AllowAnonymous]
     [Route("api/authentication")]
     public class AuthController : ControllerBase
     {
@@ -58,11 +57,10 @@ namespace SiAB.API.Controllers.Auth
             return Ok(token);
         }
 
-        [Authorize]
         [HttpGet("is-authenticated")]
         public IActionResult IsAuthenticated()
         {
-            return Ok();
+            return Ok("Authenticated");
         }
 
     }

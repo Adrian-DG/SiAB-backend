@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiAB.Core.Entities.Misc
+namespace SiAB.Core.Entities.Personal
 {
-    [Table("Rangos", Schema = "misc")]
+	[Table("Rangos", Schema = "Personal")]
 	public class Rango : NamedMetadata
 	{
-        public string NombreArmada { get; set; }
+        public string? NombreArmada { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using SiAB.Core.Entities.Misc;
 
 namespace SiAB.API.Controllers.Misc
 {
-	[ApiController]
+    [ApiController]
 	[Route("api/marcas")]
 	public class MarcasController : GenericController<Marca>
 	{
@@ -16,10 +16,5 @@ namespace SiAB.API.Controllers.Misc
 			
 		}
 
-		[HttpGet("have-access")]
-		public ActionResult MarcasAuthorize()
-		{
-			return Ok("Authorized");
-		}
 	}
 }

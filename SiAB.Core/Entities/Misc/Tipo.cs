@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Misc
 {
-	[Table("Tipos", Schema = "misc")]
+	[Table("Tipos", Schema = "Misc")]
 	public class Tipo : NamedMetadata
 	{
-        [ForeignKey("CategoriaId")]
+        [ForeignKey(nameof(CategoriaId))]
         public int CategoriaId { get; set; }
         public virtual Categoria? Categoria { get; set; }
     }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.DTO
 {
-	public class PaginationFilter
+	public record PaginationFilter
 	{
-        public int Page { get; set; }
+		public int Page { get; set; }
 		public int Size { get; set; }
-		public string SearchTerm { get; set; } = String.Empty;
+		public string? SearchTerm { get; set; } = String.Empty;
     }
 }

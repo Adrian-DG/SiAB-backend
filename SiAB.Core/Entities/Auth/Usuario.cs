@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SiAB.Core.Entities.Misc;
+using SiAB.Core.Entities.Personal;
 using SiAB.Core.Enums;
 
 namespace SiAB.Core.Entities.Auth
@@ -21,7 +22,7 @@ namespace SiAB.Core.Entities.Auth
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
 
-        [ForeignKey("RangoId")]
+        [ForeignKey(nameof(RangoId))]
         public int RangoId { get; set; }
         public virtual Rango? Rango { get; set; }
         public InstitucionEnum Institucion { get; set; }

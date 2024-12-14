@@ -6,7 +6,7 @@ using SiAB.Core.Entities.Misc;
 
 namespace SiAB.API.Controllers.Misc
 {
-	[Route("api/modelos")]
+    [Route("api/modelos")]
 	public class ModelosController : GenericController<Modelo>
 	{
 		public ModelosController(IUnitOfWork unitOfWork) : base(unitOfWork)
