@@ -14,5 +14,6 @@ namespace SiAB.Core.Entities.Misc
         [ForeignKey(nameof(CategoriaId))]
         public int CategoriaId { get; set; }
         public virtual Categoria? Categoria { get; set; }
+        public virtual ICollection<SubTipo>? SubTipos { get; set; }
     }
 }

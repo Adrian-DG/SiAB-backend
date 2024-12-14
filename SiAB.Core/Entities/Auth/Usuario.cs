@@ -23,7 +23,7 @@ namespace SiAB.Core.Entities.Auth
         public string? Apellido { get; set; }
 
         [ForeignKey(nameof(RangoId))]
-        public int RangoId { get; set; }
+        public Nullable<int> RangoId { get; set; }
         public virtual Rango? Rango { get; set; }
         public InstitucionEnum Institucion { get; set; }
     }

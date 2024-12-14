@@ -11,5 +11,6 @@ namespace SiAB.Core.Entities.Misc
 	[Table("Categorias", Schema = "Misc")]
 	public class Categoria : NamedMetadata
 	{
+		public virtual ICollection<Tipo>? Tipos { get; set; }
 	}
 }

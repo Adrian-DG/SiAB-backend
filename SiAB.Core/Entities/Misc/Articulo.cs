@@ -37,5 +37,8 @@ namespace SiAB.Core.Entities.Misc
         public virtual Calibre? Calibre { get; set; }
 
         public bool EsSeriado { get; set; } = false;
+
+        public virtual ICollection<Serie>? Series { get; set; }
+        public virtual ICollection<Alerta>? Alertas { get; set; }
     }
 }

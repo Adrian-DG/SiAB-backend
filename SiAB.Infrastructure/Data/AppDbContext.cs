@@ -7,6 +7,7 @@ using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Identity;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -23,7 +24,104 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<Usuario>(e => e.ToTable("Usuarios", "accesos"));
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
+			#region Relations configuration
+
+			builder.Entity<Usuario>()
+				.HasOne(u => u.Rango)
+				.WithOne(r => r.Usuario)
+				.HasForeignKey<Usuario>(u => u.RangoId);
+
+			builder.Entity<Rango>()
+				.HasOne(r => r.Usuario)
+				.WithOne(u => u.Rango)
+				.HasForeignKey<Rango>(r => r.UsuarioId);
+			
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Modelo)
+				.WithMany(m => m.Articulos)
+				.HasForeignKey(a => a.ModeloId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<SubTipo>()
+				.HasOne(st => st.Tipo)
+				.WithMany(t => t.SubTipos)
+				.HasForeignKey(st => st.TipoId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Tipo>()
+				.HasOne(t => t.Categoria)
+				.WithMany(c => c.Tipos)
+				.HasForeignKey(t => t.CategoriaId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Dependencia>()
+				.HasMany(d => d.Funciones)
+				.WithOne(d => d.Dependencia)
+				.HasForeignKey(d => d.DependenciaId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Funcion>()
+				.HasOne(f => f.Dependencia)
+				.WithMany(d => d.Funciones)
+				.HasForeignKey(f => f.DependenciaId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Alerta>()
+				.HasOne(a => a.Serie)
+				.WithMany(s => s.Alertas)
+				.HasForeignKey(a => a.SerieId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Alerta>()
+				.HasOne(a => a.Articulo)
+				.WithMany(a => a.Alertas)
+				.HasForeignKey(a => a.ArticuloId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Serie>()
+				.HasOne(s => s.Articulo)
+				.WithMany(a => a.Series)
+				.HasForeignKey(s => s.ArticuloId)
+				.OnDelete(DeleteBehavior.NoAction);
+			
+			builder.Entity<Serie>()
+				.HasOne(s => s.Propiedad)
+				.WithMany(p => p.Series)
+				.HasForeignKey(s => s.PropiedadId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			#endregion
+			
+			SeedUserRoleData(builder);
+			
 			SetGlobalQueryFilter(builder);
+		}
+
+		// Metodo para insertar datos de roles y usuarios
+		private void SeedUserRoleData(ModelBuilder modelBuilder)
+		{
+			var passwordHasher = new PasswordHasher<Usuario>();
+			
+			modelBuilder.Entity<Role>().HasData(
+				new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+				new Role { Id = 2, Name = "User", NormalizedName = "USER" }
+			);
+
+			modelBuilder.Entity<Usuario>().HasData(
+				new Usuario 
+				{
+				Id = 1,
+				Cedula = "0000000000",
+				Nombre = "Admin",
+				Apellido = "Admin",
+				UserName = "admin",
+				NormalizedUserName = "ADMIN",
+				PasswordHash = passwordHasher.HashPassword(null, "admin01")
+			});
+			
+			modelBuilder.Entity<IdentityUserRole<int>>().HasData(
+				new IdentityUserRole<int> { UserId = 1, RoleId = 1 }
+			);
 		}
 
 		// Configuramos un filtro global para las entidades, omitiendo registros borraddos (IsDeleted)

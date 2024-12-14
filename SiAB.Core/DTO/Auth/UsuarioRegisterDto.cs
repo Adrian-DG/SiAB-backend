@@ -16,5 +16,6 @@ namespace SiAB.Core.DTO.Auth
         public required InstitucionEnum InstitucionEnum { get; set; }
         public required string Username { get; set; }
         public required string Password { get; set; }
+        public required IList<string> Roles { get; set; }
     }
 }

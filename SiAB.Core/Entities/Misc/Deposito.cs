@@ -13,10 +13,6 @@ namespace SiAB.Core.Entities.Misc
 	[Table("Depositos", Schema = "Misc")]
 	public class Deposito : NamedMetadata
 	{
-		[ForeignKey(nameof(DependenciaId))]
-		public int DependenciaId { get; set;}
-		public virtual Dependencia? Dependencia { get; set;}
-
 		[ForeignKey(nameof(FuncionId))]
 		public int FuncionId { get; set;}	
 		public virtual Funcion? Funcion { get; set; }

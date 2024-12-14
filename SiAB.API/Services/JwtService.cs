@@ -18,11 +18,11 @@ namespace SiAB.API.Services
 			_configuration = configuration;
 		}
 
-		public AuthenticatedResponse CreateToken(Usuario user)
+		public AuthenticatedResponse CreateToken(Usuario user, IList<string> roles)
 		{
 			var expiration = DateTime.Now.AddMinutes(EXPIRATION_MINUTES);
 
-			var token = CreateJwtToken(CreateClaims(user), CreateCredentials(), expiration);
+			var token = CreateJwtToken(CreateClaims(user, roles), CreateCredentials(), expiration);
 
 			var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -45,14 +45,18 @@ namespace SiAB.API.Services
 			);
 		}
 
-		private Claim[] CreateClaims(Usuario user)
+		private Claim[] CreateClaims(Usuario user, IList<string> roles)
 		{
 			return new Claim[]
 			{
 				new Claim(JwtRegisteredClaimNames.Sub, _configuration[JwtBearerConstants.Jwt_Subject]),
+				new Claim(JwtRegisteredClaimNames.Aud, _configuration[JwtBearerConstants.Jwt_Audience]),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 				new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Role, string.Join(",", roles)),
+				// new Claim("CodInstitucion", user.Institucion.ToString()),
             };
 		}
 

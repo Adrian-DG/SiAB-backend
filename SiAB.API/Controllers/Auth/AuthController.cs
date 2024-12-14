@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -36,11 +37,17 @@ namespace SiAB.API.Controllers.Auth
                 UserName = registerDto.Username
             };
 
-            var result = await _userManager.CreateAsync(usuario, registerDto.Password);
+            if (!(await _userManager.CreateAsync(usuario, registerDto.Password)).Succeeded)
+            {
+                throw new BaseException("Error registrando usuario", HttpStatusCode.BadRequest);
+            }
 
-            if (!result.Succeeded) throw new BaseException("Error registrando usuario");
+            if(!(await _userManager.AddToRolesAsync(usuario, registerDto.Roles)).Succeeded)
+            {
+                throw new BaseException("Error asignando roles", HttpStatusCode.BadRequest);
+            }
 
-            return Created("register-user", result.Succeeded);
+            return Created("register-user", true);
         }
 
         [HttpPost("login-user")]
@@ -52,7 +59,9 @@ namespace SiAB.API.Controllers.Auth
 
             if (!await _userManager.CheckPasswordAsync(usuario, loginDto.Password)) throw new BaseException("Credenciales invalidas", System.Net.HttpStatusCode.BadRequest);
 
-            var token = _jwtService.CreateToken(usuario);
+            var roles = await _userManager.GetRolesAsync(usuario);
+            
+            var token = _jwtService.CreateToken(usuario, roles);
 
             return Ok(token);
         }

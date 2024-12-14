@@ -11,10 +11,6 @@ namespace SiAB.Core.Entities.Misc
 	[Table("SubTipos", Schema = "Misc")]
 	public class SubTipo : NamedMetadata
 	{
-        [ForeignKey(nameof(CategoriaId))]
-        public int CategoriaId { get; set; }
-        public virtual Categoria? Categoria { get; set; }
-
         [ForeignKey(nameof(TipoId))]
         public int TipoId { get; set; }
         public virtual Tipo? Tipo { get; set; }

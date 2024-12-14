@@ -17,6 +17,7 @@ namespace SiAB.Core.Entities.Belico
 		[ForeignKey(nameof(ArticuloId))]
         public int ArticuloId { get; set; }
         public virtual Articulo? Articulo { get; set; }
+        
         public string? SerieCode { get; set; }
         public EstadoEnum Estado { get; set; }
 
@@ -26,5 +27,7 @@ namespace SiAB.Core.Entities.Belico
 
         [DataType(DataType.MultilineText)]
         public string? Comentario { get; set; }
+        
+        public virtual ICollection<Alerta>? Alertas { get; set; }
     }
 }

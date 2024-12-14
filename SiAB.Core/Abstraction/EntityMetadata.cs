@@ -17,7 +17,7 @@ namespace SiAB.Core.Abstraction
 		public int Id { get; set; }
 
 		[ForeignKey(nameof(UsuarioId))]
-		public int UsuarioId { get; set; }
+		public Nullable<int> UsuarioId { get; set; }
         public virtual Usuario? Usuario { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 		public DateTime? FechaModificacion { get; set; } = null;
