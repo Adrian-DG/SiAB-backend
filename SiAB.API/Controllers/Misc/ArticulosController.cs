@@ -7,7 +7,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/articulos")]
 	[ApiController]
-	public class ArticulosController : GenericController<Articulo>
+	public class ArticulosController : NamedController<Articulo>
 	{
 		public ArticulosController(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{

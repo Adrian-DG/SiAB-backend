@@ -7,7 +7,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/calibres")]
 	[ApiController]
-	public class CalibresController : GenericController<Calibre>
+	public class CalibresController : NamedController<Calibre>
 	{
 		public CalibresController(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{

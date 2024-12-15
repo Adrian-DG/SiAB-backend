@@ -7,7 +7,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/subtipos")]
 	[ApiController]
-	public class SubTiposController : GenericController<SubTipo>
+	public class SubTiposController : NamedController<SubTipo>
 	{
 		public SubTiposController(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{

@@ -7,7 +7,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/depositos")]
 	[ApiController]
-	public class DepositosController : GenericController<Deposito>
+	public class DepositosController : NamedController<Deposito>
 	{
 		public DepositosController(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{

@@ -20,28 +20,5 @@ namespace SiAB.API.Controllers
 			_uow = unitOfWork;
 		}
 		
-		[HttpGet]
-		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
-		{
-			var result = await _uow.Repository<T>().GetListPaginateAsync(
-					selector: x => new T{}
-					page: filter.Page,
-					pageSize: filter.Size,
-					orderBy: x => x.OrderBy(x => x.Id)
-				);
-			
-			return new JsonResult(result);
-		}
-		{
-			var result = await _uow.Repository<T>().GetListPaginateAsync(
-					predicate: x => x.Nombre.Contains(filter.SearchTerm ?? ""),
-					selector: x => new { x.Id, x.Nombre },
-					page: filter.Page,
-					pageSize: filter.Size,
-					orderBy: x => x.OrderBy(x => x.Id)
-				);
-			
-			return new JsonResult(result);
-		}
 	}
 }

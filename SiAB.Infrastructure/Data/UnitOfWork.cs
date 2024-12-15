@@ -36,5 +36,21 @@ namespace SiAB.Infrastructure.Data
 			return (IRepository<T>)repositories[type];
 		}
 		
+		public INamedRepository<T> NamedRepository<T>() where T : NamedMetadata
+		{
+			repositories ??= [];
+
+			var type = typeof(T).Name;
+
+			if (!repositories.ContainsKey(type))
+			{
+				var repositoryType = typeof(Repository<>);
+				object repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), _context)!;
+				repositories.Add(type, repositoryInstance);
+			}
+
+			return (INamedRepository<T>)repositories[type];
+		}
+		
 	}
 }

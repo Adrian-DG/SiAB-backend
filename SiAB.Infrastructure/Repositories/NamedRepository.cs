@@ -1,28 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SiAB.Infrastructure.Repositories
+namespace SiAB.Infrastructure.Repositories;
+
+public class NamedRepository<T> : INamedRepository<T> where T : NamedMetadata
 {
-	public class Repository<T> : IRepository<T> where T : EntityMetadata
-	{
-		protected readonly AppDbContext _context;
-		protected readonly DbSet<T> _repository;
-		public Repository(AppDbContext dbContext)
-		{
-			_context = dbContext;
-			_repository = _context.Set<T>();
-		}
-
-		public async Task AddAsync(T entity)
+    protected readonly AppDbContext _context;
+    protected readonly DbSet<T> _repository;
+    public NamedRepository(AppDbContext dbContext)
+    {
+        _context = dbContext;
+        _repository = _context.Set<T>();
+    }
+    
+    public async Task AddAsync(T entity)
 		{
 			await _repository.AddAsync(entity);
 			await CommitChangeAsync();
@@ -92,5 +87,5 @@ namespace SiAB.Infrastructure.Repositories
 
 			await CommitChangeAsync();
 		}
-	}
+    
 }
