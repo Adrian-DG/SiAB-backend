@@ -18,13 +18,13 @@ namespace SiAB.Infrastructure.Repositories
 			_context = context;
 		}
 		
-		public async Task<Miembro?> GetMiembroByCedula(string cedula)
+		public async Task<ConsultaMiembro?> GetMiembroByCedula(string cedula)
 		{
-			var query = $"SELECT TOP 1 * FROM miembros.MIEMBROS AS M WHERE M.Cedula = '{cedula}' ORDER BY M.FechaRegistro DESC";
+			var query = $"SELECT TOP 1 * FROM Consultas.Miembros AS M WHERE M.Cedula = '{cedula}' ORDER BY M.FechaRegistro DESC";
 			
 			using (var connection = _context.CreateConnection())
 			{
-				var result = await connection.QueryFirstOrDefaultAsync<Miembro>(query);
+				var result = await connection.QueryFirstOrDefaultAsync<ConsultaMiembro>(query);
 				return result;
 			}
 		}

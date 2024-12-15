@@ -9,6 +9,6 @@ namespace SiAB.Application.Contracts
 {
 	public interface ISipffaaRepository
 	{
-		Task<Miembro?> GetMiembroByCedula(string cedula);
+		Task<ConsultaMiembro?> GetMiembroByCedula(string cedula);
 	}
 }
