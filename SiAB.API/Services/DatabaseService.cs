@@ -8,7 +8,8 @@ namespace SiAB.API.Services
 	public static class DatabaseService
 	{
 		public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
-		{	
+		{		
+			
 			services.AddDbContext<AppDbContext>(opt =>
 			{
 				var connectionString = environment.IsProduction()

@@ -13,13 +13,13 @@ namespace SiAB.Infrastructure.Data
 	public class UnitOfWork : IUnitOfWork
 	{
 		private Dictionary<string, object> repositories;
-		private readonly DbContext _context;
 
-		public UnitOfWork(AppDbContext applicationContext)
+		private readonly AppDbContext _context;
+		public UnitOfWork(AppDbContext context)
 		{
-			_context = applicationContext;
+			_context = context;
 		}
-
+		
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
 			repositories ??= [];
@@ -35,5 +35,6 @@ namespace SiAB.Infrastructure.Data
 
 			return (IRepository<T>)repositories[type];
 		}
+		
 	}
 }

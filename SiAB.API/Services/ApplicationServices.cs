@@ -10,7 +10,9 @@ namespace SiAB.API.Services
 		{
 			return services
 				.AddScoped<IUnitOfWork, UnitOfWork>()
-				.AddScoped(typeof(IRepository<>), typeof(Repository<>))				
+				.AddScoped(typeof(IRepository<>), typeof(Repository<>))	
+				.AddSingleton<DapperContext>()
+				.AddScoped<ISipffaaRepository, SipffaaRepository>()
 				.AddSingleton<JwtService>();
 		}
 	}
