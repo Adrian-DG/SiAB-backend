@@ -74,13 +74,11 @@ namespace SiAB.Infrastructure.Repositories
 			return await _repository.FindAsync(id) ?? throw new BaseException($"No hay registros de tipo {typeof(T).Name} para este ID", System.Net.HttpStatusCode.NotFound);
 		}
 
-		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>>? selector, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
 		{
-			var query = _repository.Where(predicate).AsQueryable();
+			var result = _repository.Where(predicate).Select(selector).AsQueryable();
 			
-			if (orderBy is null) return await query.Select(selector).ToListAsync();
-
-			return await orderBy(query).Select(selector).ToListAsync();
+			if (orderBy is not null) return  orderBy(result.AsQueryable()).ToList();
 		}
 
 		public async Task<IEnumerable<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, int page = 1, int pageSize = 10, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)

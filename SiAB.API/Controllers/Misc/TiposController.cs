@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
+using SiAB.Core.DTO;
 using SiAB.Core.Entities.Misc;
 
 namespace SiAB.API.Controllers.Misc
@@ -12,5 +13,6 @@ namespace SiAB.API.Controllers.Misc
 		public TiposController(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
 		}
+		
 	}
 }

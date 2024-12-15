@@ -12,44 +12,36 @@ namespace SiAB.API.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class GenericController<T> : ControllerBase where T : EntityMetadata
+	public abstract class GenericController<T> : ControllerBase where T : EntityMetadata
 	{
 		protected readonly IUnitOfWork _uow;
 		public GenericController(IUnitOfWork unitOfWork)
 		{
 			_uow = unitOfWork;
 		}
-
-		//[HttpPost]		
-		//public async Task<IActionResult> Create([FromBody] string Nombre)
-		//{
-		//	T entity = (T) new NamedMetadata() { Nombre = Nombre };	
-		//	await _uow.Repository<T>().AddAsync(entity);
-		//	return Created();
-		//}
-
-		//[HttpGet]		
-		//public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
-		//{
-		//	var result = await _uow.Repository<T>().GetListPaginateAsync(
-		//		x => x.Nombre.Contains(filter.SearchTerm), 
-		//		e => new NamedModel { Id = e.Id, Nombre = e.Nombre },
-		//		page: filter.Page,
-		//		pageSize: filter.Size,
-		//		orderBy: e => e.OrderBy(p => p.Nombre)
-		//	);
-
-		//	return new JsonResult(result);			
-		//}
-
-		//[HttpPut("{id:int}")]		
-		//public async Task<IActionResult> Update([FromRoute] int id, [FromBody] string Nombre)
-		//{
-		//	var entity = await _uow.Repository<T>().GetByIdAsync(id);
-		//	entity.Nombre = Nombre;
-		//	await _uow.Repository<T>().Update(entity);
-		//	return Ok();
-		//}
 		
+		[HttpGet]
+		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
+		{
+			var result = await _uow.Repository<T>().GetListPaginateAsync(
+					selector: x => new T{}
+					page: filter.Page,
+					pageSize: filter.Size,
+					orderBy: x => x.OrderBy(x => x.Id)
+				);
+			
+			return new JsonResult(result);
+		}
+		{
+			var result = await _uow.Repository<T>().GetListPaginateAsync(
+					predicate: x => x.Nombre.Contains(filter.SearchTerm ?? ""),
+					selector: x => new { x.Id, x.Nombre },
+					page: filter.Page,
+					pageSize: filter.Size,
+					orderBy: x => x.OrderBy(x => x.Id)
+				);
+			
+			return new JsonResult(result);
+		}
 	}
 }
