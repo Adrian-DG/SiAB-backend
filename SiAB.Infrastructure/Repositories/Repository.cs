@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using SiAB.Core.Models;
 
 namespace SiAB.Infrastructure.Repositories
 {
@@ -78,10 +79,32 @@ namespace SiAB.Infrastructure.Repositories
 		{
 			return await _repository.Where(predicate).Select(selector).ToListAsync();
 		}
-
-		public async Task<IEnumerable<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, int page = 1, int pageSize = 10)
+		
+		public async Task<PagedData<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, int page = 1, int pageSize = 10, params Expression<Func<T, object>>[] includes) where TResult : class
 		{
-			return await _repository.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).Select(selector).ToListAsync();
+			IQueryable<T> query = _repository;
+
+			foreach (var include in includes)
+			{
+				query = query.Include(include);
+			}
+
+			IQueryable<TResult> query2 = query.Where(predicate).Select(selector); //.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+			if (orderBy is not null)
+			{
+				query2 = orderBy(query2);
+			}
+			
+			var result = await query2.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+			
+			return new PagedData<TResult>
+			{
+				Page = page,
+				Size = pageSize,
+				TotalCount = await _repository.CountAsync(predicate),
+				Rows = result
+			};
 		}
 
 		public async Task Update(T entity)
