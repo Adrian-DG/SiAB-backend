@@ -2,16 +2,17 @@ namespace SiAB.Core.Entities.Sipffaa;
 
 public class ConsultaMiembro
 {
+        public string? Foto { get; set; }
         public int CodMiembro { get; set; }
-        public string NombreCompleto { get; set; }
-        public string PrimerNombre { get; set; }
-        public string SegundoNombre { get; set; }
-        public string PrimerApellido { get; set; }
-        public string SegundoApellido { get; set; }
+        public string? NombreCompleto { get; set; }
+        public string? PrimerNombre { get; set; }
+        public string? SegundoNombre { get; set; }
+        public string? PrimerApellido { get; set; }
+        public string? SegundoApellido { get; set; }
         public System.DateTime FechaNacimiento { get; set; }
-        public string Cedula { get; set; }
-        public string NombreApellidoCompleto { get; set; }
-        public string sexo { get; set; }
+        public string? Cedula { get; set; }
+        public string? NombreApellidoCompleto { get; set; }
+        public string? sexo { get; set; }
         public int CodInstitucion { get; set; }
         public string SiglasInstitucion { get; set; }
         public string Institucion { get; set; }

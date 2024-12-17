@@ -15,10 +15,30 @@ namespace SiAB.API.Controllers
 	public abstract class GenericController<T> : ControllerBase where T : EntityMetadata
 	{
 		protected readonly IUnitOfWork _uow;
-		public GenericController(IUnitOfWork unitOfWork)
+		protected readonly IMapper _mapper;
+		public GenericController(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_uow = unitOfWork;
+			_mapper = mapper;
 		}
-		
-	}
+
+		[HttpDelete("{id:int}")]
+		public async Task<IActionResult> Delete([FromRoute] int id)
+		{
+			var entity = await _uow.Repository<T>().GetByIdAsync(id);
+
+			if (entity is null)
+			{
+				return NotFound();
+			}
+
+			entity.IsDeleted = true;
+			entity.FechaModificacion = DateTime.Now;
+
+			await _uow.Repository<T>().Update(entity);
+
+			return NoContent();
+		}
+
+	}	
 }

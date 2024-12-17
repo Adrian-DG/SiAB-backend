@@ -12,5 +12,7 @@ namespace SiAB.API.Controllers.Belico
 		public SeriesController(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
 		}
+
+		
 	}
 }

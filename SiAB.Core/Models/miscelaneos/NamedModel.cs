@@ -12,3 +12,4 @@ namespace SiAB.Core.Models
         public string? Nombre { get; set; }
     }
 }
+

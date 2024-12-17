@@ -12,7 +12,7 @@ namespace SiAB.API.Controllers.Misc
     [Route("api/modelos")]
 	public class ModelosController : GenericController<Modelo>
 	{
-		public ModelosController(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public ModelosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
 		}
 

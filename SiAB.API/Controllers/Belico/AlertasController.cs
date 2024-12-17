@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
 using SiAB.Core.Entities.Belico;
@@ -9,7 +10,7 @@ namespace SiAB.API.Controllers.Belico
 	[ApiController]
 	public class AlertasController : GenericController<Alerta>
 	{
-		public AlertasController(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public AlertasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
 		}
 	}

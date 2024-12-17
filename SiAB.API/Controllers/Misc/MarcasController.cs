@@ -14,11 +14,10 @@ namespace SiAB.API.Controllers.Misc
 	[Route("api/marcas")]
 	public class MarcasController : GenericController<Marca>
 	{
-		public MarcasController(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public MarcasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
-			
 		}
-		
+
 		[HttpGet]
 		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{

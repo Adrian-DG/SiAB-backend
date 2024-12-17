@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
 using SiAB.Core.Entities.Personal;
@@ -9,7 +10,7 @@ namespace SiAB.API.Controllers.Misc
 	[ApiController]
 	public class FuncionesController : GenericController<Funcion>
 	{
-		public FuncionesController(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public FuncionesController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
 		}
 	}

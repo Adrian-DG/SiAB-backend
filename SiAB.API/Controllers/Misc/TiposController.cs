@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
@@ -12,10 +13,10 @@ namespace SiAB.API.Controllers.Misc
 	[ApiController]
 	public class TiposController : GenericController<Tipo>
 	{
-		public TiposController(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public TiposController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
 		}
-		
+
 		[HttpGet]
 		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{

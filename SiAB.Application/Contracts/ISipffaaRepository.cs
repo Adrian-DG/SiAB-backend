@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SiAB.Core.Entities.Sipffaa;
+using SiAB.Core.Models.Sipffaa;
 
 namespace SiAB.Application.Contracts
 {
 	public interface ISipffaaRepository
 	{
+		Task<IEnumerable<MiembroListDetail>> GetMiembrosByCedula(string cedula);
 		Task<ConsultaMiembro?> GetMiembroByCedula(string cedula);
 	}
 }
