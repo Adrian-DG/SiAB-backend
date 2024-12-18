@@ -16,7 +16,7 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpGet("filtrar")]
-		public async Task<IActionResult> GetDepositos([FromQuery] string? nombre)
+		public async Task<IActionResult> GetDepositos([FromQuery] string nombre)
 		{		
 			var depositos = await _uow.Repository<Deposito>().GetListAsync(
 				predicate: d => d.Nombre.Contains(nombre ?? string.Empty), 
