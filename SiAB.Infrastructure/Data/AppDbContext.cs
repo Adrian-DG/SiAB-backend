@@ -8,6 +8,10 @@ using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Text.Json;
+using Newtonsoft.Json;
+using SiAB.Core.Models.RegistroDebitoCredito;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -91,10 +95,28 @@ namespace SiAB.Infrastructure.Data
 				.OnDelete(DeleteBehavior.NoAction);
 
 			#endregion
-			
+
+			ConfigureRegistroDebitoCreditoo(builder.Entity<RegistroDebitoCredito>());
+
 			SeedUserRoleData(builder);
 			
 			SetGlobalQueryFilter(builder);
+		}
+
+		public void ConfigureRegistroDebitoCreditoo(EntityTypeBuilder<RegistroDebitoCredito> builder)
+		{
+			var options = new JsonSerializerSettings
+			{
+				NullValueHandling = NullValueHandling.Ignore,
+				Formatting = Formatting.Indented,
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			};
+
+			builder.Property<IList<RegistroDebitoModel>?>(p => p.Articulos)
+				.HasConversion(
+					v => v == null ? null : JsonConvert.SerializeObject(v, options),
+					v => v == null ? null : JsonConvert.DeserializeObject<IList<RegistroDebitoModel>>(v, options)
+				);				
 		}
 
 		// Metodo para insertar datos de roles y usuarios
@@ -149,11 +171,12 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Alerta> Alertas { get; set; }
 		public DbSet<Calibre> Calibres { get; set; }
         public DbSet<Serie> Series { get; set; }
+        public DbSet<RegistroDebitoCredito> RegistrosDebitoCredito { get; set; }
 
-		#endregion
+        #endregion
 
-		#region Miscelaneos
-		public DbSet<Articulo> Articulos { get; set; }
+        #region Miscelaneos
+        public DbSet<Articulo> Articulos { get; set; }
 		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<Deposito> Depositos { get; set; }
 		public DbSet<Marca> Marcas { get; set; }

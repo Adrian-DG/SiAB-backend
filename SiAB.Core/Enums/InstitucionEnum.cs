@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Enums
 {
-	public enum InstitucionEnum
+	public enum InstitucionEnum : int
 	{
 		NO_DEFINIDO = 0,
 		MIDE = 1,

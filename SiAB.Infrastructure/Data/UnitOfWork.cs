@@ -14,12 +14,15 @@ namespace SiAB.Infrastructure.Data
 	{
 		private Dictionary<string, object> repositories;
 
-		private readonly AppDbContext _context;
+		private readonly AppDbContext _context;		
+
 		public UnitOfWork(AppDbContext context)
 		{
 			_context = context;
 		}
-		
+
+		public IRDCRepository RDCRepository => new RDCRepository(_context);
+
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
 			repositories ??= [];

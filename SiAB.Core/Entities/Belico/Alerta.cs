@@ -14,6 +14,7 @@ namespace SiAB.Core.Entities.Belico
 	[Table("Alertas", Schema = "Belico")]
 	public class Alerta : EntityMetadata
 	{
+        public string? Cedula { get; set; }
         public AlertaEstatusEnum Estatus { get; set; }
 
         [ForeignKey(nameof(SerieId))]

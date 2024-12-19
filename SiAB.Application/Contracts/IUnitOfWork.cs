@@ -10,5 +10,6 @@ namespace SiAB.Application.Contracts
 	public interface IUnitOfWork
 	{
 		IRepository<T> Repository<T>() where T : EntityMetadata;
+		IRDCRepository RDCRepository { get; }
 	}
 }

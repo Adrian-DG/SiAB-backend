@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
 using SiAB.Core.Entities.Misc;
+using SiAB.Core.Enums;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -12,6 +13,7 @@ namespace SiAB.API.Controllers.Misc
 	{
 		public ArticulosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
-		}
+		}		
+
 	}
 }
