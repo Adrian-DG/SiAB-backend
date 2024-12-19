@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+    siab-api:
+        image: siab-api
+        build:
+            context: .
+            dockerfile: SiAB.API/Dockerfile
+        ports:
+            - '8080:8080'
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__ProdConnection=Data Source=SKYLANDSQLEXPRESS;Initial Catalog=SiAB_Database;Integrated Security=True;Trust Server Certificate=True
+            - Jwt__Key=fvh8456477hth44j6wfds98bq9hp8bqh9ubq9gjig3qr0[94vj5
+            - Jwt__Issuer=SiAB.endpoint.com
+            - Jwt__Audience=SiAB.endpoint.com
+            - Jwt__Subject=JWT for SiAB.endpoint.com
+        volumes:
+            - ./SiAB.API/appsettings.json:/app/appsettings.json
+            - ./SiAB.API/appsettings.Development.json:/app/appsettings.Development.json
