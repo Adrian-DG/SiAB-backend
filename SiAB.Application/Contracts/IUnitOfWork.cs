@@ -11,5 +11,6 @@ namespace SiAB.Application.Contracts
 	{
 		IRepository<T> Repository<T>() where T : EntityMetadata;
 		IRDCRepository RDCRepository { get; }
+		IJCERepository JCERepository { get; }
 	}
 }

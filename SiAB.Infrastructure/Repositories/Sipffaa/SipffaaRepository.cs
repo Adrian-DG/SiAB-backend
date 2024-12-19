@@ -9,10 +9,13 @@ using Dapper;
 using SiAB.Core.Entities.Sipffaa;
 using SiAB.Core.Models.Sipffaa;
 using SiAB.Core.Exceptions;
+using System.Runtime.ConstrainedExecution;
+using System.Net;
+using System.Drawing;
 
 namespace SiAB.Infrastructure.Repositories
 {
-	public class SipffaaRepository : ISipffaaRepository
+    public class SipffaaRepository : ISipffaaRepository
 	{
 		private readonly DapperContext _context;
 		public SipffaaRepository(DapperContext context)
@@ -71,6 +74,7 @@ namespace SiAB.Infrastructure.Repositories
 				return result;
 			}
 		}
+		
 		
 	}
 }

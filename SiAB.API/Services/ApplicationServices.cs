@@ -1,6 +1,7 @@
 ﻿using SiAB.Application.Contracts;
 using SiAB.Infrastructure.Data;
 using SiAB.Infrastructure.Repositories;
+using SiAB.Infrastructure.Repositories.JCE;
 
 namespace SiAB.API.Services
 {
@@ -12,6 +13,7 @@ namespace SiAB.API.Services
 				.AddScoped<IUnitOfWork, UnitOfWork>()
 				.AddScoped(typeof(IRepository<>), typeof(Repository<>))	
 				.AddScoped<IRDCRepository, RDCRepository>()	
+				.AddScoped<IJCERepository, JCERepository>()
 				.AddSingleton<DapperContext>()
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
 				.AddSingleton<JwtService>();

@@ -2,6 +2,7 @@
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Repositories;
+using SiAB.Infrastructure.Repositories.JCE;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace SiAB.Infrastructure.Data
 		}
 
 		public IRDCRepository RDCRepository => new RDCRepository(_context);
+
+		public IJCERepository JCERepository => new JCERepository();
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
