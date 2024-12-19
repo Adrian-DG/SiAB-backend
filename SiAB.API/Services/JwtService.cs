@@ -53,8 +53,8 @@ namespace SiAB.API.Services
 				new Claim(JwtRegisteredClaimNames.Aud, _configuration[JwtBearerConstants.Jwt_Audience]),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 				new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+				new Claim(JwtRegisteredClaimNames.Name, user.UserName),
 				new Claim(ClaimTypes.Role, string.Join(",", roles)),
 				// new Claim("CodInstitucion", user.Institucion.ToString()),
             };
