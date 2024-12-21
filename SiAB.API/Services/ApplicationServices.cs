@@ -14,9 +14,8 @@ namespace SiAB.API.Services
 				.AddScoped(typeof(IRepository<>), typeof(Repository<>))	
 				.AddScoped<IRDCRepository, RDCRepository>()	
 				.AddScoped<IJCERepository, JCERepository>()
-				.AddSingleton<DapperContext>()
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
-				.AddSingleton<JwtService>();
+				.AddSingleton<DapperContext>();
 		}
 	}
 }

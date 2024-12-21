@@ -10,63 +10,32 @@ namespace SiAB.API.Services
 {
 	public class JwtService
 	{
-		private const int EXPIRATION_MINUTES = 30;
-		private readonly IConfiguration _configuration;
+		private readonly string _secretKey;
 
-		public JwtService(IConfiguration configuration)
+		public JwtService(string secretKey)
 		{
-			_configuration = configuration;
+			_secretKey = secretKey;
 		}
 
-		public AuthenticatedResponse CreateToken(Usuario user, IList<string> roles)
+		public string GenerateToken(Usuario usuario, string[] roles)
 		{
-			var expiration = DateTime.Now.AddMinutes(EXPIRATION_MINUTES);
-
-			var token = CreateJwtToken(CreateClaims(user, roles), CreateCredentials(), expiration);
-
 			var tokenHandler = new JwtSecurityTokenHandler();
-
-			return new AuthenticatedResponse
-			{
-				Token = tokenHandler.WriteToken(token),
-				Expiration = expiration
-			};
-		}
-
-		private JwtSecurityToken CreateJwtToken(Claim[] claims, SigningCredentials credentials, DateTime expiration)
-		{
-			return new JwtSecurityToken(
-				_configuration[JwtBearerConstants.JWT_ISSUER],
-				_configuration[JwtBearerConstants.Jwt_Audience],
-				claims,
-				expires: expiration,
-				signingCredentials: credentials
+			var key = Encoding.ASCII.GetBytes(_secretKey);
 			
-			);
-		}
-
-		private Claim[] CreateClaims(Usuario user, IList<string> roles)
-		{
-			return new Claim[]
+			var tokenDescriptor = new SecurityTokenDescriptor
 			{
-				new Claim(JwtRegisteredClaimNames.Sub, _configuration[JwtBearerConstants.Jwt_Subject]),
-				new Claim(JwtRegisteredClaimNames.Aud, _configuration[JwtBearerConstants.Jwt_Audience]),
-				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-				new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
-				new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-				new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-				new Claim(ClaimTypes.Role, string.Join(",", roles)),
-				// new Claim("CodInstitucion", user.Institucion.ToString()),
-            };
-		}
+			Subject = new ClaimsIdentity(new[]
+			{
+				new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+				new Claim(ClaimTypes.Name, usuario.UserName),
+				new Claim(ClaimTypes.Role, string.Join(",", roles)),			
+			}),
+			Expires = DateTime.UtcNow.AddHours(1),
+			SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+			};
 
-		private SigningCredentials CreateCredentials()
-		{
-			var key = Encoding.UTF8.GetBytes(_configuration[JwtBearerConstants.JWT_KEY]);
-			return new SigningCredentials(
-				new SymmetricSecurityKey(key),
-				SecurityAlgorithms.HmacSha256Signature
-			);
+			var token = tokenHandler.CreateToken(tokenDescriptor);
+			return tokenHandler.WriteToken(token);
 		}
 	}
 }

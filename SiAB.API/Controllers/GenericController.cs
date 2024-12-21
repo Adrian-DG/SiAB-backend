@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 
 namespace SiAB.API.Controllers
 {
+	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
 	public abstract class GenericController<T> : ControllerBase where T : EntityMetadata

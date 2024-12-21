@@ -17,11 +17,21 @@ namespace SiAB.API.Controllers.Auth
     public class AuthController : ControllerBase
     {
         private readonly UserManager<Usuario> _userManager;
+        private readonly IConfiguration _configuration;
         private readonly JwtService _jwtService;
-        public AuthController(UserManager<Usuario> userManager, JwtService jwtService)
+        public AuthController(UserManager<Usuario> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
-            _jwtService = jwtService;
+            _configuration = configuration;
+
+            var jwtKey = configuration["Jwt:Key"];
+            
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new ArgumentNullException(nameof(jwtKey), "JWT Key cannot be null or empty.");
+            }
+
+            _jwtService = new JwtService(jwtKey);
         }
 
         [HttpPost("register-user")]
@@ -61,11 +71,12 @@ namespace SiAB.API.Controllers.Auth
 
             var roles = await _userManager.GetRolesAsync(usuario);
             
-            var token = _jwtService.CreateToken(usuario, roles);
+            var token = _jwtService.GenerateToken(usuario, roles.ToArray());
 
             return Ok(token);
         }
 
+        [Authorize]
         [HttpGet("is-authenticated")]
         public IActionResult IsAuthenticated()
         {

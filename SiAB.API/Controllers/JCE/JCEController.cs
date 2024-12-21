@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
@@ -17,6 +18,7 @@ namespace SiAB.API.Controllers.JCE
 			_mapper = mapper;
 		}
 
+		[Authorize]
 		[HttpGet("{cedula}")]
 		public IActionResult Get([FromRoute] string cedula)
 		{
