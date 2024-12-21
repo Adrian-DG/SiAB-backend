@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Attributes;
 using SiAB.API.Services;
 using SiAB.Core.DTO.Auth;
 using SiAB.Core.Entities.Auth;
+using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
 
 namespace SiAB.API.Controllers.Auth
@@ -76,7 +78,7 @@ namespace SiAB.API.Controllers.Auth
             return Ok(token);
         }
 
-        [Authorize]
+        [AuthorizeRole(UsuarioRole.USER, UsuarioRole.ADMIN)]
         [HttpGet("is-authenticated")]
         public IActionResult IsAuthenticated()
         {
