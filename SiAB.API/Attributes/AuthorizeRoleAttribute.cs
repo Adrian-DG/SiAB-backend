@@ -6,10 +6,10 @@ namespace SiAB.API.Attributes
 {
     public class AuthorizeRoleAttribute : AuthorizeAttribute, IAuthorizationFilter    
     { 
-        private readonly UsuarioRole[] _roles;
+        private readonly string[] _roles;
         public AuthorizeRoleAttribute(params UsuarioRole[] roles) 
-        {
-            _roles = roles;
+        {            
+            _roles = roles.Select(r => r.ToString()).ToArray();
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -23,11 +23,7 @@ namespace SiAB.API.Attributes
                 return;
             }
 
-            var userRoles = user.Claims
-                .Where(c => c.Type == "role")
-                .Select(c => Enum.Parse<UsuarioRole>(c.Value));
-
-            if (!_roles.Any(r => userRoles.Contains(r)))
+			if (!_roles.Any(r => user.IsInRole(r)))
             {
                 context.Result = new Microsoft.AspNetCore.Mvc.ForbidResult();
                 return;
