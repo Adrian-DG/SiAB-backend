@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Text.Json;
 using Newtonsoft.Json;
 using SiAB.Core.Models.RegistroDebitoCredito;
+using SiAB.Core.Enums;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -125,8 +126,8 @@ namespace SiAB.Infrastructure.Data
 			var passwordHasher = new PasswordHasher<Usuario>();
 			
 			modelBuilder.Entity<Role>().HasData(
-				new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
-				new Role { Id = 2, Name = "User", NormalizedName = "USER" }
+				new Role { Id = (int)UsuarioRole.ADMIN, Name = RoleConstant.ADMIN, NormalizedName = RoleConstant.ADMIN },
+				new Role { Id = (int)UsuarioRole.USER, Name = RoleConstant.USER, NormalizedName = RoleConstant.USER }
 			);
 
 			modelBuilder.Entity<Usuario>().HasData(
@@ -142,7 +143,7 @@ namespace SiAB.Infrastructure.Data
 			});
 			
 			modelBuilder.Entity<IdentityUserRole<int>>().HasData(
-				new IdentityUserRole<int> { UserId = 1, RoleId = 1 }
+				new IdentityUserRole<int> { UserId = 1, RoleId = (int)UsuarioRole.ADMIN }
 			);
 		}
 
