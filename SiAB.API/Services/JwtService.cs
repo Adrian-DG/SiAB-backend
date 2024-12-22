@@ -11,17 +11,19 @@ namespace SiAB.API.Services
 	public class JwtService
 	{
 		private readonly string _secretKey;
+		private const int EXPIRATION_TIME = 1;
 
 		public JwtService(string secretKey)
 		{
 			_secretKey = secretKey;
 		}
 
-		public string GenerateToken(Usuario usuario, string[] roles)
+		public AuthenticatedResponse GenerateToken(Usuario usuario, string[] roles)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var key = Encoding.ASCII.GetBytes(_secretKey);
-			
+			var expiration = DateTime.UtcNow.AddHours(EXPIRATION_TIME);	
+
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 			Subject = new ClaimsIdentity(new[]
@@ -30,12 +32,17 @@ namespace SiAB.API.Services
 				new Claim(ClaimTypes.Name, usuario.UserName),
 				new Claim(ClaimTypes.Role, string.Join(",", roles)),			
 			}),
-			Expires = DateTime.UtcNow.AddHours(1),
+			Expires = expiration,
 			SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 
 			var token = tokenHandler.CreateToken(tokenDescriptor);
-			return tokenHandler.WriteToken(token);
+
+			return new AuthenticatedResponse 
+			{ 
+				Token = tokenHandler.WriteToken(token),
+				Expiration = expiration
+			}; 
 		}
 	}
 }

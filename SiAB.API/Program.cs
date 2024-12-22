@@ -49,14 +49,15 @@ builder.Services.AddAuthentication(options => {
     {
         ValidateIssuer = false,
         ValidateAudience = false,
-        ValidateLifetime = false,
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = false,
         ValidIssuer = builder.Configuration[JwtBearerConstants.JWT_ISSUER],
         ValidAudience = builder.Configuration[JwtBearerConstants.Jwt_Audience],
 		TokenDecryptionKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[JwtBearerConstants.JWT_KEY])),
 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[JwtBearerConstants.JWT_KEY])),
-		ClockSkew = TimeSpan.Zero
-    };
+		ClockSkew = TimeSpan.Zero,
+		RequireExpirationTime = true,
+	};
 });
 
 builder.Services.AddAuthorization();
