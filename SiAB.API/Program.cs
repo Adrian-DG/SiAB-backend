@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SiAB.API.Constants;
+using SiAB.API.Middlewares;
 using SiAB.API.Services;
 
 
@@ -60,11 +61,8 @@ builder.Services.AddAuthentication(options => {
 
 builder.Services.AddAuthorization();
 
-// builder.Services.AddAuthorization(options =>
-// {
-//   options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
-// });
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Configuraci�n de Autenticaci�n y Autorizaci�n
 
@@ -90,6 +88,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
 
 app.MapControllers();
 
