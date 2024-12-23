@@ -11,7 +11,7 @@ namespace SiAB.API.Services
 	public class JwtService
 	{
 		private readonly string _secretKey;
-		private const int EXPIRATION_TIME = 1;
+		private const int EXPIRATION_TIME = 2;
 
 		public JwtService(string secretKey)
 		{
