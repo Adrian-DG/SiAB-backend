@@ -75,9 +75,25 @@ namespace SiAB.Infrastructure.Repositories
 			return await _repository.FindAsync(id) ?? throw new BaseException($"No hay registros de tipo {typeof(T).Name} para este ID", System.Net.HttpStatusCode.NotFound);
 		}
 
-		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, params Expression<Func<T, object>>[] includes)
 		{
-			return await _repository.Where(predicate).Select(selector).ToListAsync();
+			IQueryable<T> query = _repository;
+
+			foreach (var include in includes)
+			{
+				query = query.Include(include);
+			}
+
+			IQueryable<TResult> query2 = query.Where(predicate).Select(selector);
+
+			if (orderBy is not null)
+			{
+				query2 = orderBy(query2);
+			}
+
+			var result = await query2.Take(5).ToListAsync();
+
+			return result;
 		}
 		
 		public async Task<PagedData<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, int page = 1, int pageSize = 10, params Expression<Func<T, object>>[] includes) where TResult : class

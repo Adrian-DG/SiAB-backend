@@ -35,5 +35,18 @@ namespace SiAB.API.Controllers.Misc
 
 			return new JsonResult(result);
 		}
+
+		[HttpGet("filter")]
+		public async Task<IActionResult> GetFunciones([FromQuery] string funcion)
+		{
+			var result = await _uow.Repository<Funcion>().GetListAsync(
+					predicate: f => f.Nombre.Contains(funcion),
+					includes: new Expression<Func<Funcion, object>>[] { t => t.Dependencia },
+					selector: f => new { Id = f.Id, Nombre = f.Nombre, Dependencia = f.Dependencia.Nombre },
+					orderBy: f => f.OrderBy(o => o.Dependencia )
+				);
+
+			return new JsonResult(result);	
+		}
 	}
 }
