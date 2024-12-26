@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using SiAB.API.Constants;
 
@@ -18,7 +19,8 @@ namespace SiAB.API.Middlewares
 					{ typeof(ArgumentNullException), ex => $"A required argument was null: {ex.Message}" },
 					{ typeof(ArgumentException), ex => $"An argument provided was invalid: {ex.Message}" },
 					{ typeof(InvalidOperationException), ex => $"The operation is not valid in the current state: {ex.Message}" },
-					{ typeof(KeyNotFoundException), ex => $"{ExceptionConstant.KeyNotFoundException}: {ex.Message}" }
+					{ typeof(KeyNotFoundException), ex => $"{ExceptionConstant.KeyNotFoundException}: {ex.Message}" },
+					{ typeof(SqlException), ex => $"A database error occurred: {ex.Message}" }
                     // Add more custom messages for other exception types as needed
                 };
 		}
@@ -41,6 +43,7 @@ namespace SiAB.API.Middlewares
 			};
 
 			httpContext.Response.StatusCode = problemDetails.Status.Value;
+			httpContext.Response.ContentType = "application/json; charset=utf-8";
 
 			await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken: cancellationToken);
 
