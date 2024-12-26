@@ -10,6 +10,8 @@ using SiAB.Core.Models.miscelaneos;
 using System.Linq.Expressions;
 using SiAB.API.Attributes;
 using SiAB.Core.Enums;
+using SiAB.Core.DTO.Misc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -48,12 +50,19 @@ namespace SiAB.API.Controllers.Misc
 		{		
 			var depositos = await _uow.Repository<Deposito>().GetListAsync(
 				predicate: d => d.Nombre.Contains(nombre ?? string.Empty), 
-				selector: d => d
+				includes: null,
+				selector: d => new NamedModel { Id = d.Id, Nombre = d.Nombre },
+				orderBy: d => d.OrderBy(o => o.Nombre)
 			);
 
-			var formatedDepositos = _mapper.Map<IEnumerable<NamedModel>>(depositos);
+			return new JsonResult(depositos);
+		}
 
-			return new JsonResult(formatedDepositos);
+		[HttpPost]
+		public async Task<IActionResult> Create([FromBody] CreateDepositoDto createDepositoDto)
+		{
+			await _uow.Repository<Deposito>().AddAsync(new Deposito { Nombre = createDepositoDto.Nombre, FuncionId = createDepositoDto.FuncionId });
+			return Ok();
 		}
 
 		

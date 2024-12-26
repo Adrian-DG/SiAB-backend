@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.DTO.Misc
 {
-	internal class CreateDepositoDto
+	public record CreateDepositoDto : CreateNamedEntityDto
 	{
-	}
+        public required int FuncionId { get; set; }
+    }
 }

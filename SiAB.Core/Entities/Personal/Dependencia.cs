@@ -16,4 +16,5 @@ namespace SiAB.Core.Entities.Personal
         public InstitucionEnum Institucion { get; set; }
         public bool EsExterna { get; set; }
     }
+
 }
