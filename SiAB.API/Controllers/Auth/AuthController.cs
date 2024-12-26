@@ -32,9 +32,8 @@ namespace SiAB.API.Controllers.Auth
             {
                 throw new ArgumentNullException(nameof(jwtKey), "JWT Key cannot be null or empty.");
             }
-
-            _jwtService = new JwtService(jwtKey);
-        }
+			_jwtService = new JwtService(jwtKey);
+		}
 
         [HttpPost("register-user")]
         public async Task<IActionResult> Register([FromBody] UsuarioRegisterDto registerDto)
