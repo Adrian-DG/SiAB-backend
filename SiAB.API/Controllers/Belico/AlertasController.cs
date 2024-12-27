@@ -8,7 +8,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/alertas")]
 	[ApiController]
-	public class AlertasController : GenericController<Alerta>
+	public class AlertasController : GenericController
 	{
 		public AlertasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{

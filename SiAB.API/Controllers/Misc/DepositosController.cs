@@ -17,7 +17,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/depositos")]
 	[ApiController]
-	public class DepositosController : GenericController<Deposito>
+	public class DepositosController : GenericController
 	{
 		public DepositosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
@@ -61,7 +61,14 @@ namespace SiAB.API.Controllers.Misc
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateDepositoDto createDepositoDto)
 		{
-			await _uow.Repository<Deposito>().AddAsync(new Deposito { Nombre = createDepositoDto.Nombre, FuncionId = createDepositoDto.FuncionId });
+			await _uow.Repository<Deposito>().AddAsync(new Deposito 
+			{ 
+				Nombre = createDepositoDto.Nombre, 
+				FuncionId = createDepositoDto.FuncionId,
+				UsuarioId = _codUsuario,
+				CodInstitucion = _codInstitucionUsuario
+			});
+
 			return Ok();
 		}
 

@@ -10,7 +10,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class DependenciasController : GenericController<Dependencia>
+	public class DependenciasController : GenericController
 	{
 		public DependenciasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
@@ -36,7 +36,10 @@ namespace SiAB.API.Controllers.Misc
 			await _uow.Repository<Dependencia>().AddAsync(new Dependencia { 
 				Nombre = createDependenciaDto.Nombre, 
 				Institucion = createDependenciaDto.InstitucionEnum, 
-				EsExterna = createDependenciaDto.EsExterna });
+				EsExterna = createDependenciaDto.EsExterna,
+				UsuarioId = _codUsuario,
+				CodInstitucion = _codInstitucionUsuario
+			});
 
 			return Ok();
 		}

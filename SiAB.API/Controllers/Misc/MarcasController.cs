@@ -12,7 +12,7 @@ namespace SiAB.API.Controllers.Misc
 {
     [ApiController]
 	[Route("api/marcas")]
-	public class MarcasController : GenericController<Marca>
+	public class MarcasController : GenericController
 	{
 		public MarcasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{

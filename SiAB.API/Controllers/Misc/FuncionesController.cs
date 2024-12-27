@@ -11,7 +11,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/funciones")]
 	[ApiController]
-	public class FuncionesController : GenericController<Funcion>
+	public class FuncionesController : GenericController
 	{
 		public FuncionesController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{

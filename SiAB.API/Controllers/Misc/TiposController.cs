@@ -11,7 +11,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/tipos")]
 	[ApiController]
-	public class TiposController : GenericController<Tipo>
+	public class TiposController : GenericController
 	{
 		public TiposController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{

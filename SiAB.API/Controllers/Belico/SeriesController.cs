@@ -12,7 +12,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/series")]
 	[ApiController]
-	public class SeriesController : GenericController<Serie>
+	public class SeriesController : GenericController
 	{
 		public SeriesController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{

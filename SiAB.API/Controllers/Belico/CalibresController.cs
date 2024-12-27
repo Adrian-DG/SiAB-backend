@@ -11,7 +11,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/calibres")]
 	[ApiController]
-	public class CalibresController : GenericController<Calibre>
+	public class CalibresController : GenericController
 	{
 		public CalibresController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
@@ -34,7 +34,7 @@ namespace SiAB.API.Controllers.Belico
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto entity)
 		{
-			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = entity.Nombre });
+			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = entity.Nombre, CodInstitucion = _codInstitucionUsuario, UsuarioId = _codUsuario });
 			return Ok();
 		}
 	}

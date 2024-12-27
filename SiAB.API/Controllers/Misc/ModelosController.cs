@@ -10,7 +10,7 @@ using SiAB.Core.Models;
 namespace SiAB.API.Controllers.Misc
 {
     [Route("api/modelos")]
-	public class ModelosController : GenericController<Modelo>
+	public class ModelosController : GenericController
 	{
 		public ModelosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
@@ -19,10 +19,10 @@ namespace SiAB.API.Controllers.Misc
 		[HttpGet]
 		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{
-			var result = await _uow.Repository<Modelo>().GetListPaginateAsync<ModeloDetailModel>(
+			var result = await _uow.Repository<Modelo>().GetListPaginateAsync(
 				predicate: m => m.Nombre.Contains(filter.SearchTerm ?? "") || m.Marca.Nombre.Contains(filter.SearchTerm ?? ""),
 				includes: new Expression<Func<Modelo, object>>[] { m => m.Marca },
-				selector: m => new ModeloDetailModel
+				selector: m => new 
 				{
 					Id = m.Id,
 					Nombre = m.Nombre,

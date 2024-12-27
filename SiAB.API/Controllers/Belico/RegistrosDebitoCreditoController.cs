@@ -9,7 +9,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/registros")]
 	[ApiController]
-	public class RegistrosDebitoCreditoController : GenericController<RegistroDebitoCredito>
+	public class RegistrosDebitoCreditoController : GenericController
 	{
 		public RegistrosDebitoCreditoController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
 		{
