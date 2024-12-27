@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.Entities.Misc;
@@ -14,7 +15,7 @@ namespace SiAB.API.Controllers.Misc
 	[Route("api/marcas")]
 	public class MarcasController : GenericController
 	{
-		public MarcasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public MarcasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 

@@ -12,6 +12,7 @@ using SiAB.API.Attributes;
 using SiAB.Core.Enums;
 using SiAB.Core.DTO.Misc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SiAB.API.Helpers;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -19,7 +20,7 @@ namespace SiAB.API.Controllers.Misc
 	[ApiController]
 	public class DepositosController : GenericController
 	{
-		public DepositosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public DepositosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 

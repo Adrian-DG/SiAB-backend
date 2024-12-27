@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.API.Attributes;
 using SiAB.API.Filters;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Core.DTO;
@@ -21,12 +22,24 @@ namespace SiAB.API.Controllers
 	{
 		protected readonly IUnitOfWork _uow;
 		protected readonly IMapper _mapper;
-        public int _codUsuario { get; set; }
-        public int _codInstitucionUsuario { get; set; }
-        public GenericController(IUnitOfWork unitOfWork, IMapper mapper)
+		private readonly IUserContextService _userContextService;
+
+		public int _codUsuario
+		{
+			get => _userContextService.CodUsuario;
+			set => _userContextService.CodUsuario = value;
+		}
+
+		public int _codInstitucionUsuario
+		{
+			get => _userContextService.CodInstitucionUsuario;
+			set => _userContextService.CodInstitucionUsuario = value;
+		}
+		public GenericController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService)
 		{
 			_uow = unitOfWork;
 			_mapper = mapper;
+			_userContextService = userContextService;
 		}
 
 		//[HttpDelete("{id:int}")]

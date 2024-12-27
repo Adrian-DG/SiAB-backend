@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO.CargoDescargo;
 using SiAB.Core.Entities.Belico;
@@ -11,7 +12,7 @@ namespace SiAB.API.Controllers.Belico
 	[ApiController]
 	public class RegistrosDebitoCreditoController : GenericController
 	{
-		public RegistrosDebitoCreditoController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public RegistrosDebitoCreditoController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 

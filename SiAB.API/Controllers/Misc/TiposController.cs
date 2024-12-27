@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.Entities.Misc;
@@ -13,7 +14,7 @@ namespace SiAB.API.Controllers.Misc
 	[ApiController]
 	public class TiposController : GenericController
 	{
-		public TiposController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public TiposController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 

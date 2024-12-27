@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
@@ -12,9 +13,8 @@ namespace SiAB.API.Controllers.Misc
 	[ApiController]
 	public class DependenciasController : GenericController
 	{
-		public DependenciasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public DependenciasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
-			
 		}
 
 		[HttpGet]

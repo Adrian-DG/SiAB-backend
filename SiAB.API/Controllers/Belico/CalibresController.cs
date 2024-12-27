@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
@@ -13,7 +14,7 @@ namespace SiAB.API.Controllers.Belico
 	[ApiController]
 	public class CalibresController : GenericController
 	{
-		public CalibresController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public CalibresController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 
