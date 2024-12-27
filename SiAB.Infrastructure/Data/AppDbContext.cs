@@ -139,7 +139,8 @@ namespace SiAB.Infrastructure.Data
 				Apellido = "Admin",
 				UserName = "admin",
 				NormalizedUserName = "ADMIN",
-				PasswordHash = passwordHasher.HashPassword(null, "admin01")
+				Institucion = InstitucionEnum.MIDE,
+					PasswordHash = passwordHasher.HashPassword(null, "admin01")
 			});
 			
 			modelBuilder.Entity<IdentityUserRole<int>>().HasData(
