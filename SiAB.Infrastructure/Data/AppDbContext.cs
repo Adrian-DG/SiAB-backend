@@ -34,7 +34,7 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<Usuario>()
 				.HasOne(u => u.Rango)
 				.WithOne(r => r.Usuario)
-				.HasForeignKey<Usuario>(u => u.RangoId);
+				.HasForeignKey<Usuario>(u => u.RangoId);			
 
 			builder.Entity<Rango>()
 				.HasOne(r => r.Usuario)
@@ -94,6 +94,16 @@ namespace SiAB.Infrastructure.Data
 				.WithMany(p => p.Series)
 				.HasForeignKey(s => s.PropiedadId)
 				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Modelo>()
+				.HasOne(s => s.Marca)
+				.WithMany(p => p.Modelos)
+				.HasForeignKey(s => s.MarcaId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Modelo>()
+				.HasOne(s => s.Usuario);
+
 
 			#endregion
 
