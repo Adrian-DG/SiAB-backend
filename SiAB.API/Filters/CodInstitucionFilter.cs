@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SiAB.API.Controllers;
+using SiAB.API.Helpers;
 using SiAB.Core.Abstraction;
 
 namespace SiAB.API.Filters
 {
 	public class CodInstitucionFilter : IAsyncActionFilter
 	{
-		private readonly GenericController _controller;
+		private readonly IUserContextService _userContextService;
 
-		public CodInstitucionFilter(GenericController controller)
+		public CodInstitucionFilter(IUserContextService userContextService)
 		{
-			_controller = controller;	
+			_userContextService = userContextService;
 		}
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
@@ -22,7 +23,7 @@ namespace SiAB.API.Filters
 				throw new System.Exception("No se encontró el código de institución en el token.");
 			}
 
-			_controller._codInstitucionUsuario = int.Parse(codInstitucion);
+			_userContextService.CodInstitucionUsuario = int.Parse(codInstitucion);
 
 			await next();
 		}

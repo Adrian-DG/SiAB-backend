@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using SiAB.API.Controllers;
+using SiAB.API.Helpers;
 using SiAB.Core.Abstraction;
 
 namespace SiAB.API.Filters
 {
 	public class CodUsuarioFilter : IAsyncActionFilter
 	{
-		private readonly GenericController _controller;
+		private readonly IUserContextService _userContextService;
 
-		public CodUsuarioFilter(GenericController controller)
+		public CodUsuarioFilter(IUserContextService userContextService)
 		{
-			_controller = controller;
+			_userContextService = userContextService;
 		}
 
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -22,7 +23,7 @@ namespace SiAB.API.Filters
 				throw new System.Exception("No se encontró el código de usuario en el token.");
 			}
 
-			_controller._codUsuario = int.Parse(codUsuario);
+			_userContextService.CodUsuario = int.Parse(codUsuario);
 
 			await next();
 		}
