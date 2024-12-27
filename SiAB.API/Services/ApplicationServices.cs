@@ -21,7 +21,7 @@ namespace SiAB.API.Services
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
 				.AddScoped<GenericController>()
 				.AddScoped<CodUsuarioFilter>()
-				.AddScoped<CodInstitucionFilter>()
+				.AddScoped<CodInstitucionFilter>()				
 				.AddSingleton<DapperContext>();
 		}
 	}

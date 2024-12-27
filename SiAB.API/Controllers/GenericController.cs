@@ -15,8 +15,8 @@ namespace SiAB.API.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
-	[ServiceFilter(typeof(CodUsuarioFilter))]
-	[ServiceFilter(typeof(CodInstitucionFilter))]
+	[TypeFilter(typeof(CodUsuarioFilter))]
+	[TypeFilter(typeof(CodInstitucionFilter))]
 	public class GenericController : ControllerBase
 	{
 		protected readonly IUnitOfWork _uow;

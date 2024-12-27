@@ -4,7 +4,7 @@ using SiAB.Core.Abstraction;
 
 namespace SiAB.API.Filters
 {
-    public class CodUsuarioFilter : IActionFilter
+	public class CodUsuarioFilter : IAsyncActionFilter
 	{
 		private readonly GenericController _controller;
 
@@ -13,7 +13,7 @@ namespace SiAB.API.Filters
 			_controller = controller;
 		}
 
-		public void OnActionExecuted(ActionExecutedContext context)
+		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
 			var codUsuario = context.HttpContext.User.FindFirst("CodUsuario")?.Value;
 
@@ -23,18 +23,9 @@ namespace SiAB.API.Filters
 			}
 
 			_controller._codUsuario = int.Parse(codUsuario);
+
+			await next();
 		}
-
-		public void OnActionExecuting(ActionExecutingContext context)
-		{
-			var codUsuario = context.HttpContext.User.FindFirst("CodUsuario")?.Value;
-
-			if (codUsuario is null)
-			{
-				throw new System.Exception("No se encontró el código de usuario en el token.");
-			}
-
-			_controller._codUsuario = int.Parse(codUsuario);
-		}
+		
 	}
 }
