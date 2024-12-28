@@ -16,13 +16,15 @@ namespace SiAB.API.Services
 		{
 			return services
 				.AddScoped<IUnitOfWork, UnitOfWork>()
-				.AddScoped(typeof(IRepository<>), typeof(Repository<>))	
-				.AddScoped<IRDCRepository, RDCRepository>()	
+				.AddScoped(typeof(IRepository<>), typeof(Repository<>))
+				.AddScoped<IRDCRepository, RDCRepository>()
 				.AddScoped<IJCERepository, JCERepository>()
-				.AddScoped<ISipffaaRepository, SipffaaRepository>()				
+				.AddScoped<ISipffaaRepository, SipffaaRepository>()
 				.AddScoped<CodUsuarioFilter>()
 				.AddScoped<CodInstitucionFilter>()
 				.AddScoped<IUserContextService, UserContextService>()
+				.AddScoped<INamedService, NamedService>()
+				.AddScoped(typeof(NamedFilter<>))
 				.AddSingleton<DapperContext>();
 		}
 	}

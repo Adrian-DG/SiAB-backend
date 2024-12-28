@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SiAB.API.Constants;
+using SiAB.API.Filters;
 using SiAB.API.Middlewares;
 using SiAB.API.Services;
 

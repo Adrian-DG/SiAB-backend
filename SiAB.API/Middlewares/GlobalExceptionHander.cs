@@ -37,7 +37,7 @@ namespace SiAB.API.Middlewares
 
 			var problemDetails = new ProblemDetails
 			{
-				Title = "An error occurred",
+				Title = "Error",
 				Status = StatusCodes.Status500InternalServerError,
 				Detail = GetCustomMessage(exception, requestnfo)
 			};
@@ -58,7 +58,7 @@ namespace SiAB.API.Middlewares
 			}
 
 			// Default message if no custom message is found
-			return $"An unexpected error occurred: {exception.Message}";
+			return exception.Message;
 		}
 	}
 }
