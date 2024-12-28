@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 using System;
@@ -16,6 +17,15 @@ namespace SiAB.Core.Profiles.Miscelaneos
 			CreateMap<Deposito, NamedModel>()
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
 				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
+
+
+			#region Propiedades
+
+			CreateMap<Propiedad, NamedModel>()
+				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
+
+			#endregion
 		}
 	}
 }

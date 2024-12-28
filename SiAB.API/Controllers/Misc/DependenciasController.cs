@@ -29,11 +29,6 @@ namespace SiAB.API.Controllers.Misc
 
 			return new JsonResult(result);
 		}
-
-		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] CreateDependenciaDto createDependenciaDto)
-		{
-			
-		}
+		
 	}
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Misc
 {
 	[Table("SubTipos", Schema = "Misc")]
-	public class SubTipo : NamedMetadata
+	public class SubTipo : NamedEntityMetadata
 	{
         [ForeignKey(nameof(TipoId))]
         public int TipoId { get; set; }

@@ -10,7 +10,7 @@ using SiAB.Core.Entities.Belico;
 namespace SiAB.Core.Entities.Misc
 {
 	[Table("Propiedades", Schema = "Misc")]
-	public class Propiedad : NamedMetadata
+	public class Propiedad : NamedEntityMetadata
 	{
 		public virtual ICollection<Serie>? Series { get; set; }
 	}

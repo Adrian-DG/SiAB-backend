@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Extensions;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
@@ -12,7 +14,7 @@ using System.Net;
 
 namespace SiAB.API.Controllers.Misc
 {
-	[Route("api/propiedades")]
+    [Route("api/propiedades")]
 	[ApiController]
 	public class PropiedadesController : GenericController
 	{
@@ -38,18 +40,10 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Propiedad>))]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
-		{
-			var comparer = StringExtensions.CompareStringsExpression();
-
-			if (await _uow.Repository<Propiedad>().ConfirmExistsAsync(p => comparer.Compile()(p.Nombre, createNamedEntityDto.Nombre)))
-			{
-				throw new BaseException("Ya existe una propiedad con ese nombre", HttpStatusCode.BadRequest);
-			}     
-
-            var propiedad = _mapper.Map<Propiedad>(createNamedEntityDto);
-
-			await _uow.Repository<Propiedad>().AddAsync(propiedad);
+		{    
+			await _uow.Repository<Propiedad>().AddAsync(new Propiedad { Nombre = createNamedEntityDto.Nombre });
 
 			return Ok();
 		}

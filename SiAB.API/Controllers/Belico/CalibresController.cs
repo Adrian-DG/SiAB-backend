@@ -31,11 +31,6 @@ namespace SiAB.API.Controllers.Belico
 
 			return new JsonResult(calibres);
 		}
-
-		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto entity)
-		{
-			
-		}
+		
 	}
 }

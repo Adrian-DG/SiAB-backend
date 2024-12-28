@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Personal
 {
 	[Table("Rangos", Schema = "Personal")]
-	public class Rango : NamedMetadata
+	public class Rango : NamedEntityMetadata
 	{
         public string? NombreArmada { get; set; }
     }

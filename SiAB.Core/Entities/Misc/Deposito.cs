@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Misc
 {
 	[Table("Depositos", Schema = "Misc")]
-	public class Deposito : NamedMetadata
+	public class Deposito : NamedEntityMetadata
 	{
 		public bool EsFuncion { get; set; } = false;
 

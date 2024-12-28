@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Misc
 {
     [Table("Marcas", Schema = "Misc")]
-    public class Marca : NamedMetadata
+    public class Marca : NamedEntityMetadata
     {
         public virtual ICollection<Modelo>? Modelos { get; set; }
 	}

@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using SiAB.Core.Models;
+using AutoMapper.Configuration.Annotations;
 
 namespace SiAB.Infrastructure.Repositories
 {
@@ -36,7 +37,7 @@ namespace SiAB.Infrastructure.Repositories
 
 		public async Task<bool> ConfirmExistsAsync(Expression<Func<T, bool>> predicate)
 		{
-			return await _repository.AnyAsync(predicate);
+			return await _repository.IgnoreQueryFilters().AnyAsync(predicate);
 		}
 
 		public async Task DeleteById(int id)
@@ -65,9 +66,9 @@ namespace SiAB.Infrastructure.Repositories
 			return entity;
 		}
 
-		public async Task<IEnumerable<T>> GetAllAsync()
+		public async Task<IEnumerable<T>> GetAllAsync(bool ignoreFilter = false)
 		{
-			return await _repository.ToListAsync();
+			return (ignoreFilter) ? await _repository.IgnoreQueryFilters().ToListAsync() : await _repository.ToListAsync();
 		}
 
 		public async Task<T> GetByIdAsync(int id)
@@ -75,9 +76,9 @@ namespace SiAB.Infrastructure.Repositories
 			return await _repository.FindAsync(id) ?? throw new BaseException($"No hay registros de tipo {typeof(T).Name} para este ID", System.Net.HttpStatusCode.NotFound);
 		}
 
-		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, params Expression<Func<T, object>>[] includes)
+		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, bool ignoreFilter = false, params Expression<Func<T, object>>[] includes)
 		{
-			IQueryable<T> query = _repository;
+			IQueryable<T> query = ignoreFilter ? _repository.IgnoreQueryFilters() : _repository;
 
 			foreach (var include in includes)
 			{
@@ -111,6 +112,7 @@ namespace SiAB.Infrastructure.Repositories
 			{
 				query2 = orderBy(query2);
 			}
+
 			
 			var result = await query2.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 			
