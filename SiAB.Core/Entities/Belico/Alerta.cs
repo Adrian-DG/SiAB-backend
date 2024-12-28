@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Belico
 {
 	[Table("Alertas", Schema = "Belico")]
-	public class Alerta : EntityMetadata
+	public class Alerta : EntityMetadata, IAuditableEntityMetadata
 	{
         public string? Cedula { get; set; }
         public AlertaEstatusEnum Estatus { get; set; }
@@ -30,5 +30,11 @@ namespace SiAB.Core.Entities.Belico
 
         [Required]
         public DateTime FechaEfectividad { get; set; }
-    }
+
+        [ForeignKey(nameof(UsuarioId))]
+		public required int UsuarioId { get; set; }
+		public required InstitucionEnum CodInstitucion { get; set; }
+		public DateTime FechaCreacion { get; set; } = DateTime.Now;
+		public DateTime? FechaModificacion { get; set; } = null;
+	}
 }

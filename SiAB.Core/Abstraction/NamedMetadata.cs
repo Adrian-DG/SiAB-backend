@@ -8,6 +8,6 @@ namespace SiAB.Core.Abstraction
 {
 	public abstract class NamedMetadata : EntityMetadata
 	{
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
     }
 }

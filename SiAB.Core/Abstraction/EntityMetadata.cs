@@ -14,14 +14,7 @@ namespace SiAB.Core.Abstraction
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; }
-
-		[ForeignKey(nameof(UsuarioId))]
-		public required int UsuarioId { get; set; }
-        public virtual Usuario? Usuario { get; set; }
-        public required int CodInstitucion { get; set; }
-        public DateTime FechaCreacion { get; set; } = DateTime.Now;
-        public DateTime? FechaModificacion { get; set; } = null;
+		public int Id { get; set; }		       
         public bool IsDeleted { get; set; } = false;
 	}
 }
