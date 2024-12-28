@@ -13,6 +13,8 @@ using SiAB.Core.Enums;
 using SiAB.Core.DTO.Misc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SiAB.API.Helpers;
+using SiAB.Core.Exceptions;
+using System.Net;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -62,15 +64,12 @@ namespace SiAB.API.Controllers.Misc
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateDepositoDto createDepositoDto)
 		{
-			await _uow.Repository<Deposito>().AddAsync(new Deposito 
-			{ 
-				Nombre = createDepositoDto.Nombre, 
-				FuncionId = createDepositoDto.FuncionId,
-				UsuarioId = _codUsuario,
-				CodInstitucion = _codInstitucionUsuario
-			});
+			var comparer = StringExtensions.CompareStringsExpression();
 
-			return Ok();
+			if (await _uow.Repository<Propiedad>().ConfirmExistsAsync(p => comparer.Compile()(p.Nombre, createDepositoDto.Nombre)))
+			{
+				throw new BaseException("Ya existe una propiedad con ese nombre", HttpStatusCode.BadRequest);
+			}
 		}
 
 		

@@ -35,8 +35,7 @@ namespace SiAB.API.Controllers.Belico
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto entity)
 		{
-			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = entity.Nombre, CodInstitucion = _codInstitucionUsuario, UsuarioId = _codUsuario });
-			return Ok();
+			
 		}
 	}
 }

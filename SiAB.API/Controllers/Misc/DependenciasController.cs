@@ -33,15 +33,7 @@ namespace SiAB.API.Controllers.Misc
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] CreateDependenciaDto createDependenciaDto)
 		{
-			await _uow.Repository<Dependencia>().AddAsync(new Dependencia { 
-				Nombre = createDependenciaDto.Nombre, 
-				Institucion = createDependenciaDto.InstitucionEnum, 
-				EsExterna = createDependenciaDto.EsExterna,
-				UsuarioId = _codUsuario,
-				CodInstitucion = _codInstitucionUsuario
-			});
-
-			return Ok();
+			
 		}
 	}
 }

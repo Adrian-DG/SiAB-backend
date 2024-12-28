@@ -9,7 +9,7 @@ namespace SiAB.Core.Enums
 	public enum TipoDebitoCreditoEnum
 	{
 		MIEMBRO = 1,
-		S4,
+		DEPOSITO,
 		CIVIL
 	}
 }

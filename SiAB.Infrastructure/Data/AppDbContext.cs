@@ -30,16 +30,6 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
 			#region Relations configuration
-
-			builder.Entity<Usuario>()
-				.HasOne(u => u.Rango)
-				.WithOne(r => r.Usuario)
-				.HasForeignKey<Usuario>(u => u.RangoId);			
-
-			builder.Entity<Rango>()
-				.HasOne(r => r.Usuario)
-				.WithOne(u => u.Rango)
-				.HasForeignKey<Rango>(r => r.UsuarioId);
 			
 			builder.Entity<Articulo>()
 				.HasOne(a => a.Modelo)
@@ -57,19 +47,7 @@ namespace SiAB.Infrastructure.Data
 				.HasOne(t => t.Categoria)
 				.WithMany(c => c.Tipos)
 				.HasForeignKey(t => t.CategoriaId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Dependencia>()
-				.HasMany(d => d.Funciones)
-				.WithOne(d => d.Dependencia)
-				.HasForeignKey(d => d.DependenciaId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Funcion>()
-				.HasOne(f => f.Dependencia)
-				.WithMany(d => d.Funciones)
-				.HasForeignKey(f => f.DependenciaId)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.NoAction);	
 			
 			builder.Entity<Alerta>()
 				.HasOne(a => a.Serie)
@@ -100,10 +78,6 @@ namespace SiAB.Infrastructure.Data
 				.WithMany(p => p.Modelos)
 				.HasForeignKey(s => s.MarcaId)
 				.OnDelete(DeleteBehavior.NoAction);
-
-			builder.Entity<Modelo>()
-				.HasOne(s => s.Usuario);
-
 
 			#endregion
 
@@ -200,7 +174,6 @@ namespace SiAB.Infrastructure.Data
 
 		#region Personal
 		public DbSet<Rango> Rangos { get; set; }
-		public DbSet<Funcion> Funciones { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
 		#endregion
