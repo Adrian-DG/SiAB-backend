@@ -10,6 +10,5 @@ namespace SiAB.Core.DTO.Misc
 	public record CreateDependenciaDto : CreateNamedEntityDto
 	{
         public bool EsExterna { get; set; }
-        public InstitucionEnum Institucion { get; set; }
     }
 }

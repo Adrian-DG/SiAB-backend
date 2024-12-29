@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Personal;
+using SiAB.Core.Enums;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -30,12 +32,13 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Dependencia>))]
 		public async Task<IActionResult> Create([FromBody] CreateDependenciaDto createDependenciaDto)
 		{
 			var dependencia = new Dependencia
 			{
 				Nombre = createDependenciaDto.Nombre,
-				Institucion = createDependenciaDto.Institucion,
+				Institucion = (InstitucionEnum)_codInstitucionUsuario,
 				EsExterna = createDependenciaDto.EsExterna
 			};
 

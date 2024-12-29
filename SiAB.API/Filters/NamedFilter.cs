@@ -26,16 +26,16 @@ namespace SiAB.API.Filters
 				AllowTrailingCommas = true
 			};
 
-			var requestJson = context.ActionArguments.TryGetValue(key: "createNamedEntityDto", out var value) 
-				? JsonSerializer.Serialize(value, jsonSerializerOptions) 
-				: throw new BaseException("No se pudo serializar el objeto", HttpStatusCode.BadRequest);
-
-			var requestDto = JsonSerializer.Deserialize<CreateNamedEntityDto>(requestJson, jsonSerializerOptions);
-
-			if (requestDto != null && await _namedService.ExistByNameAsync<T>(requestDto.Nombre))
+			foreach (var argument in context.ActionArguments.Values)
 			{
-				throw new BaseException($"Ya existe una registro con ese nombre", HttpStatusCode.BadRequest);
-			}
+				if (argument is CreateNamedEntityDto requestDto)
+				{
+					if (await _namedService.ExistByNameAsync<T>(requestDto.Nombre))
+					{
+						throw new BaseException("Ya existe una registro con ese nombre", HttpStatusCode.BadRequest);
+					}
+				}
+			}			
 
 			await next();
 		}
