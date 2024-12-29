@@ -13,5 +13,6 @@ namespace SiAB.Core.Models
         public bool Status { get; set; }
         public int Code { get; set; }
         public object? Data { get; set; }
+
 	}
 }

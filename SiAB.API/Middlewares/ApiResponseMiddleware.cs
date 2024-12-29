@@ -1,4 +1,5 @@
-﻿using SiAB.Core.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using SiAB.Core.Models;
 using System.Net;
 using System.Text.Json;
 
@@ -36,13 +37,24 @@ namespace SiAB.API.Middlewares
 				responseData = JsonSerializer.Deserialize<object>(responseBodyText);
 			}
 
+			string message;
+			if (context.Response.StatusCode == StatusCodes.Status200OK)
+			{
+				message = "La solicitud se ejecuto de manera existosa";
+			}
+			else
+			{
+				var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseBodyText);
+				message = problemDetails?.Detail ?? "Ocurrio un error";
+			}
+
 			var customResponse = new ApiResponse
 			{
 				Title = context.Response.StatusCode == StatusCodes.Status200OK ? "Ok" : "Error",
-				Message = "",
+				Message = message,
 				Status = context.Response.StatusCode == StatusCodes.Status200OK,
 				Code = context.Response.StatusCode,
-				Data = responseData
+				Data = context.Response.StatusCode == StatusCodes.Status200OK ? responseData : null
 			};
 
 			var customResponseJson = JsonSerializer.Serialize(customResponse);
