@@ -32,7 +32,7 @@ namespace SiAB.API.Filters
 				{
 					if (await _namedService.ExistByNameAsync<T>(requestDto.Nombre))
 					{
-						throw new BaseException("Ya existe una registro con ese nombre", HttpStatusCode.BadRequest);
+						throw new BaseException("Ya existe un registro con ese nombre", HttpStatusCode.BadRequest);
 					}
 				}
 			}			

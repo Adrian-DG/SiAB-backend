@@ -2,6 +2,7 @@
 using SiAB.API.Controllers;
 using SiAB.API.Filters;
 using SiAB.API.Helpers;
+using SiAB.API.Middlewares;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Data;
@@ -25,7 +26,8 @@ namespace SiAB.API.Services
 				.AddScoped<IUserContextService, UserContextService>()
 				.AddScoped<INamedService, NamedService>()
 				.AddScoped(typeof(NamedFilter<>))
-				.AddSingleton<DapperContext>();
+				.AddSingleton<DapperContext>()
+				.AddTransient<ApiResponseMiddleware>(); // Register the middleware here
 		}
 	}
 }

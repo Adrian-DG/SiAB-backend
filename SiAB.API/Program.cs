@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SiAB.API.Constants;
 using SiAB.API.Filters;
+using SiAB.API.Handlers;
 using SiAB.API.Middlewares;
 using SiAB.API.Services;
 
@@ -90,6 +91,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ApiResponseMiddleware>();
 app.UseExceptionHandler();
 
 app.MapControllers();
