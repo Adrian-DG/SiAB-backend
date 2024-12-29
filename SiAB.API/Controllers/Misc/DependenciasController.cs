@@ -9,7 +9,7 @@ using SiAB.Core.Entities.Personal;
 
 namespace SiAB.API.Controllers.Misc
 {
-	[Route("api/[controller]")]
+	[Route("api/dependencias")]
 	[ApiController]
 	public class DependenciasController : GenericController
 	{
@@ -22,13 +22,26 @@ namespace SiAB.API.Controllers.Misc
 		{
 			var result = await _uow.Repository<Dependencia>().GetListPaginateAsync(
 					predicate: d => d.Nombre.Contains(filter.SearchTerm ?? ""),
-					includes: null,
 					selector: d => new { Id = d.Id, Nombre = d.Nombre, Institucion = d.Institucion.ToString(), Externa = d.EsExterna },
 					orderBy: d => d.OrderBy(o => o.Nombre)
 				);
 
 			return new JsonResult(result);
 		}
-		
+
+		[HttpPost]
+		public async Task<IActionResult> Create([FromBody] CreateDependenciaDto createDependenciaDto)
+		{
+			var dependencia = new Dependencia
+			{
+				Nombre = createDependenciaDto.Nombre,
+				Institucion = createDependenciaDto.Institucion,
+				EsExterna = createDependenciaDto.EsExterna
+			};
+
+			await _uow.Repository<Dependencia>().AddAsync(dependencia);
+			return Ok();
+		}
+
 	}
 }

@@ -15,7 +15,7 @@ namespace SiAB.API.Helpers
 		{
 			_uow = unitOfWork;
 		}
-		public string Nombre { get; set; }
+		public string Nombre { get; set; } = string.Empty;
 
 		public async Task<bool> ExistByNameAsync<T>(string name) where T : NamedEntityMetadata
 		{

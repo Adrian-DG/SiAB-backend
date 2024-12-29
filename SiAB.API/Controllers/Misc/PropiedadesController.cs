@@ -44,7 +44,6 @@ namespace SiAB.API.Controllers.Misc
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
 		{    
 			await _uow.Repository<Propiedad>().AddAsync(new Propiedad { Nombre = createNamedEntityDto.Nombre });
-
 			return Ok();
 		}
 	}

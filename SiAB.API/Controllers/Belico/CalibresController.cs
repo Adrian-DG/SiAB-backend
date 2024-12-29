@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
@@ -30,6 +31,14 @@ namespace SiAB.API.Controllers.Belico
 				);
 
 			return new JsonResult(calibres);
+		}
+
+		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Calibre>))]
+		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
+		{
+			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = createNamedEntityDto.Nombre });
+			return Ok();
 		}
 		
 	}
