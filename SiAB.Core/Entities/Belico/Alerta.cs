@@ -35,6 +35,10 @@ namespace SiAB.Core.Entities.Belico
 		public required int UsuarioId { get; set; }
 		public required InstitucionEnum CodInstitucion { get; set; }
 		public DateTime FechaCreacion { get; set; } = DateTime.Now;
+
+		[ForeignKey(nameof(UsuarioIdModifico))]
+		public int? UsuarioIdModifico { get; set; }
 		public DateTime? FechaModificacion { get; set; } = null;
+		
 	}
 }

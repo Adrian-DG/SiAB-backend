@@ -137,10 +137,10 @@ namespace SiAB.Infrastructure.Data
 		{
 			// Obtenemos todas las clases que hereden de EntityMetadata (Entidades)
 			var entities = modelBuilder.Model.GetEntityTypes()
-				.Where(c => c.ClrType.IsAssignableTo(typeof(EntityMetadata)));
+				.Where(c => c.ClrType.IsAssignableTo(typeof(IAuditableEntityMetadata)));
 
 			// omitir registros borrados al momento de hacer las consultas 
-			Expression<Func<EntityMetadata, bool>> filterExpression = e => !e.IsDeleted;
+			Expression<Func<IAuditableEntityMetadata, bool>> filterExpression = e => !e.IsDeleted;
 
 			foreach (var entity in entities)
 			{
@@ -158,6 +158,7 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Calibre> Calibres { get; set; }
         public DbSet<Serie> Series { get; set; }
         public DbSet<RegistroDebitoCredito> RegistrosDebitoCredito { get; set; }
+        public DbSet<Secuencia> Secuencias { get; set; }
 
         #endregion
 
@@ -170,10 +171,11 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
-		#endregion
+        public DbSet<FotoModelo> FotoModelos { get; set; }
+        #endregion
 
-		#region Personal
-		public DbSet<Rango> Rangos { get; set; }
+        #region Personal
+        public DbSet<Rango> Rangos { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
 		#endregion
