@@ -57,7 +57,7 @@ namespace SiAB.API.Middlewares
 				Data = context.Response.StatusCode == StatusCodes.Status200OK ? responseData : null
 			};
 
-			var customResponseJson = JsonSerializer.Serialize(customResponse);
+			var customResponseJson = JsonSerializer.Serialize(customResponse, options: new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 			context.Response.ContentType = "application/json";
 
 			// Write the custom response to the original response body stream
