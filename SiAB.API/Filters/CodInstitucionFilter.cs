@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using SiAB.API.Controllers;
 using SiAB.API.Helpers;
 using SiAB.Core.Abstraction;
+using SiAB.Core.Constants;
 
 namespace SiAB.API.Filters
 {
@@ -16,7 +17,7 @@ namespace SiAB.API.Filters
 		}
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
-			var codInstitucion = context.HttpContext.User.FindFirst("CodInstitucion")?.Value;
+			var codInstitucion = context.HttpContext.User.FindFirst(TokenPropertiesContants.CodInstitucion)?.Value;
 
 			if (codInstitucion is null)
 			{

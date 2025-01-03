@@ -137,10 +137,10 @@ namespace SiAB.Infrastructure.Data
 		{
 			// Obtenemos todas las clases que hereden de EntityMetadata (Entidades)
 			var entities = modelBuilder.Model.GetEntityTypes()
-				.Where(c => c.ClrType.IsAssignableTo(typeof(IAuditableEntityMetadata)));
+				.Where(c => c.ClrType.IsAssignableTo(typeof(EntityMetadata)));
 
 			// omitir registros borrados al momento de hacer las consultas 
-			Expression<Func<IAuditableEntityMetadata, bool>> filterExpression = e => !e.IsDeleted;
+			Expression<Func<EntityMetadata, bool>> filterExpression = e => !e.IsDeleted;
 
 			foreach (var entity in entities)
 			{

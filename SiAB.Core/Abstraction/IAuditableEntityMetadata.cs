@@ -12,6 +12,7 @@ namespace SiAB.Core.Abstraction
         public int UsuarioId { get; set; }
 		public InstitucionEnum CodInstitucion { get; set; }
 		public DateTime FechaCreacion { get; set; }
+		public int? UsuarioIdModifico { get; set; }       
 		public DateTime? FechaModificacion { get; set; }
 	}
 }

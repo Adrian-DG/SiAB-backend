@@ -8,6 +8,8 @@ using SiAB.API.Filters;
 using SiAB.API.Handlers;
 using SiAB.API.Middlewares;
 using SiAB.API.Services;
+using SiAB.Core.Constants;
+using SiAB.Infrastructure.Interceptors;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +38,21 @@ builder.Services.AddSwaggerService();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDatabaseServices(builder.Configuration, builder.Environment);
+
+builder.Services.AddScoped(provider =>
+{
+	var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+	var codUsuario = httpContextAccessor.HttpContext.User.FindFirst(TokenPropertiesContants.CodUsuario)?.Value;
+	var codInstitucion = httpContextAccessor.HttpContext.User.FindFirst(TokenPropertiesContants.CodInstitucion)?.Value;
+	return new CreateAuditableInterceptor(int.Parse(codUsuario), int.Parse(codInstitucion));
+});
+
+builder.Services.AddScoped(provider =>
+{
+	var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+	var codUsuario = httpContextAccessor.HttpContext.User.FindFirst(TokenPropertiesContants.CodUsuario)?.Value;
+	return new UpdateAuditableInterceptor(int.Parse(codUsuario));
+});
 
 builder.Services.AddApplicationServices();
 

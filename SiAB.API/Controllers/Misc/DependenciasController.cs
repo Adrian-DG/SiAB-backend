@@ -38,7 +38,6 @@ namespace SiAB.API.Controllers.Misc
 			var dependencia = new Dependencia
 			{
 				Nombre = createDependenciaDto.Nombre,
-				Institucion = (InstitucionEnum)_codInstitucionUsuario,
 				EsExterna = createDependenciaDto.EsExterna
 			};
 

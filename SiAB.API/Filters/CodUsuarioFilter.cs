@@ -2,6 +2,7 @@
 using SiAB.API.Controllers;
 using SiAB.API.Helpers;
 using SiAB.Core.Abstraction;
+using SiAB.Core.Constants;
 
 namespace SiAB.API.Filters
 {
@@ -16,7 +17,7 @@ namespace SiAB.API.Filters
 
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
-			var codUsuario = context.HttpContext.User.FindFirst("CodUsuario")?.Value;
+			var codUsuario = context.HttpContext.User.FindFirst(TokenPropertiesContants.CodUsuario)?.Value;
 
 			if (codUsuario is null)
 			{
