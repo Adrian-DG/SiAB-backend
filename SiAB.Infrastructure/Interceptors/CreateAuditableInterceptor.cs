@@ -12,22 +12,29 @@ namespace SiAB.Infrastructure.Interceptors
 {
 	public sealed class CreateAuditableInterceptor : SaveChangesInterceptor
 	{
-		private readonly int CodUsuario;
-		private readonly int CodInstitucion;
-		public CreateAuditableInterceptor(int codUsuario, int codInstitucion)
+		private int? CodUsuario;
+		private int? CodInstitucion;
+		public CreateAuditableInterceptor(int? codUsuario = 0, int? codInstitucion = 0)
 		{
 			CodUsuario = codUsuario;
+			CodInstitucion = codInstitucion;
+		}
+
+		public void SetParameters(int codUsuario, int codInstitucion)
+		{
+			CodUsuario = codUsuario;
+			CodInstitucion = codInstitucion;
 		}
 
 		public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
 		{
-			var entries = eventData.Context.ChangeTracker.Entries<IAuditableEntityMetadata>().Where(e => e.State == EntityState.Added);
+			var entries = eventData.Context.ChangeTracker.Entries<IAuditableEntityMetadata>().Where(e => e.State == EntityState.Added && e.Entity.GetType() is IAuditableEntityMetadata);
 
 			foreach (var entry in entries)
 			{
 				if (entry.Entity is IAuditableEntityMetadata auditable)
 				{
-					auditable.UsuarioId = CodUsuario;
+					auditable.UsuarioId = CodUsuario ?? 0;
 					auditable.CodInstitucion = (InstitucionEnum)CodInstitucion;
 					auditable.FechaCreacion = DateTime.Now;
 				}

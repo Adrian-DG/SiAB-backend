@@ -5,7 +5,9 @@ using SiAB.API.Helpers;
 using SiAB.API.Middlewares;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
+using SiAB.Core.Constants;
 using SiAB.Infrastructure.Data;
+using SiAB.Infrastructure.Interceptors;
 using SiAB.Infrastructure.Repositories;
 using SiAB.Infrastructure.Repositories.JCE;
 
@@ -21,13 +23,18 @@ namespace SiAB.API.Services
 				.AddScoped<IRDCRepository, RDCRepository>()
 				.AddScoped<IJCERepository, JCERepository>()
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
+				.AddScoped<IUserContextService, UserContextService>()
 				.AddScoped<CodUsuarioFilter>()
 				.AddScoped<CodInstitucionFilter>()
-				.AddScoped<IUserContextService, UserContextService>()
-				.AddScoped<INamedService, NamedService>()
 				.AddScoped(typeof(NamedFilter<>))
+				.AddScoped<INamedService, NamedService>()
+				.AddScoped<CreateAuditableFilter>()
+				.AddScoped<UpdateAuditableFilter>()
+				.AddHttpContextAccessor() // Register IHttpContextAccessor
+				.AddScoped<CreateAuditableInterceptor>()
+				.AddScoped<UpdateAuditableInterceptor>()				
 				.AddSingleton<DapperContext>()
-				.AddTransient<ApiResponseMiddleware>(); // Register the middleware here
+				.AddTransient<ApiResponseMiddleware>();
 		}
 	}
 }
