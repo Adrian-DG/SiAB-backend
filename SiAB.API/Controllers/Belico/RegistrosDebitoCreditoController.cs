@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO.CargoDescargo;
@@ -17,6 +18,7 @@ namespace SiAB.API.Controllers.Belico
 		}
 
 		[HttpPost("create")]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
 		public async Task<IActionResult> Create([FromBody] CreateRDC_Dto cargoDescargoDto)
 		{
 			var registroCargoDescargo = _mapper.Map<RegistroDebitoCredito>(cargoDescargoDto);

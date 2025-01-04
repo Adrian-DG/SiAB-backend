@@ -38,7 +38,8 @@ namespace SiAB.API.Controllers.Misc
 			var dependencia = new Dependencia
 			{
 				Nombre = createDependenciaDto.Nombre,
-				EsExterna = createDependenciaDto.EsExterna
+				EsExterna = createDependenciaDto.EsExterna,
+				Institucion = (InstitucionEnum)_codInstitucionUsuario
 			};
 
 			await _uow.Repository<Dependencia>().AddAsync(dependencia);

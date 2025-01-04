@@ -3,9 +3,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
+using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 
@@ -36,6 +38,17 @@ namespace SiAB.API.Controllers.Misc
 
 			return new JsonResult(result);
 		}
-		
+
+		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Marca>))]
+		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
+		{
+			var marca = new Marca { Nombre = createNamedEntityDto.Nombre };
+
+			await _uow.Repository<Marca>().AddAsync(marca);
+
+			return Ok();
+		}
+
 	}
 }

@@ -13,7 +13,7 @@ namespace SiAB.Core.Entities.Belico
 {
 	[Table("Series", Schema = "Belico")]
 	public class Serie : EntityMetadata
-	{
+    {
 		[ForeignKey(nameof(ArticuloId))]
         public int ArticuloId { get; set; }
         public virtual Articulo? Articulo { get; set; }
@@ -26,8 +26,7 @@ namespace SiAB.Core.Entities.Belico
         public virtual Propiedad? Propiedad { get; set; }
 
         [DataType(DataType.MultilineText)]
-        public string? Comentario { get; set; }
-        
-        public virtual ICollection<Alerta>? Alertas { get; set; }
-    }
+        public string? Comentario { get; set; }        
+        public virtual ICollection<Alerta>? Alertas { get; set; }		
+	}
 }

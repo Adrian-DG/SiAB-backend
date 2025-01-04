@@ -2,9 +2,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
+using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 
@@ -36,6 +38,15 @@ namespace SiAB.API.Controllers.Misc
 
 			return new JsonResult(result);
 		}
-		
+
+		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Tipo>))]
+		public async Task<IActionResult> Create([FromBody] CreateTipoDto createTipoDto)
+		{
+			var tipo = new Tipo { Nombre = createTipoDto.Nombre, CategoriaId = createTipoDto.CategoriaId };
+			await _uow.Repository<Tipo>().AddAsync(tipo);
+			return Ok();
+		}
+
 	}
 }

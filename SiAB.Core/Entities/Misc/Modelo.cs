@@ -16,7 +16,7 @@ namespace SiAB.Core.Entities.Misc
         public virtual Marca? Marca { get; set; }
 
         [ForeignKey(nameof(FotoId))]
-        public int FotoId { get; set; }
+        public int? FotoId { get; set; }
         public virtual FotoModelo? Foto { get; set; }
 
         public virtual ICollection<Articulo>? Articulos { get; set; }

@@ -34,8 +34,14 @@ namespace SiAB.API.Controllers.Misc
 		{
 			var depositos = await _uow.Repository<Deposito>().GetListPaginateAsync(
 				includes: new Expression<Func<Deposito, object>>[] { m => m.Dependencia },
-				predicate: d => d.Nombre.Contains(filter.SearchTerm ?? "") && d.Dependencia.Institucion.Equals(_codInstitucionUsuario),
-				selector: d => new NamedModel { Id = d.Id, Nombre = d.Nombre },
+				predicate: d => d.Nombre.Contains(filter.SearchTerm ?? "") && d.Dependencia.Institucion == (InstitucionEnum)_codInstitucionUsuario,
+				selector: d => new 
+				{ 
+					Id = d.Id,
+					Nombre = d.Nombre,
+					EsFuncion = d.EsFuncion,
+					Dependencia = d.Dependencia.Nombre
+				},
 				orderBy: d => d.OrderBy(o => o.Nombre),
 				page: filter.Page,
 				pageSize: filter.Size
@@ -48,8 +54,8 @@ namespace SiAB.API.Controllers.Misc
 		public async Task<IActionResult> GetDepositos([FromQuery] string nombre)
 		{		
 			var depositos = await _uow.Repository<Deposito>().GetListAsync(
-				predicate: d => d.Nombre.Contains(nombre ?? string.Empty) && d.Dependencia.Institucion.Equals(_codInstitucionUsuario), 
 				includes: new Expression<Func<Deposito, object>>[] { m => m.Dependencia },
+				predicate: d => d.Nombre.Contains(nombre ?? string.Empty) && d.Dependencia.Institucion.Equals(_codInstitucionUsuario), 				
 				selector: d => new NamedModel { Id = d.Id, Nombre = d.Nombre },
 				orderBy: d => d.OrderBy(o => o.Nombre)
 			);
