@@ -39,6 +39,22 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(result);
 		}
 
+		[HttpGet("filter")]
+		public async Task<IActionResult> GetFilterMarcas([FromQuery] string nombre)
+		{
+			var result = await _uow.Repository<Marca>().GetListAsync<NamedModel>(
+				predicate: m => m.Nombre.Contains(nombre ?? ""),
+				selector: m => new MarcaDetaiModell
+				{
+					Id = m.Id,
+					Nombre = m.Nombre
+				},
+				orderBy: m => m.OrderBy(o => o.Nombre)
+			);
+
+			return new JsonResult(result);
+		}
+
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<Marca>))]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)

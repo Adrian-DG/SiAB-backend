@@ -171,7 +171,7 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
-        public DbSet<FotoModelo> FotoModelos { get; set; }
+
         #endregion
 
         #region Personal

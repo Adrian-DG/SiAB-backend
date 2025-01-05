@@ -10,6 +10,7 @@ namespace SiAB.Core.Enums
 	{
 		MIEMBRO = 1,
 		DEPOSITO,
+		FUNCION_S4,
 		CIVIL
 	}
 }

@@ -28,6 +28,7 @@ namespace SiAB.API.Controllers.Misc
 				selector: m => new 
 				{
 					Id = m.Id,
+					Foto = m.Foto,
 					Nombre = m.Nombre,
 					Marca = m.Marca.Nombre
 				},
@@ -45,6 +46,7 @@ namespace SiAB.API.Controllers.Misc
 		{
 			var modelo = new Modelo
 			{
+				Foto = createModeloDto.Foto,
 				Nombre = createModeloDto.Nombre,
 				MarcaId = createModeloDto.MarcaId
 			};
