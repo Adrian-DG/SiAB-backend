@@ -24,7 +24,7 @@ namespace SiAB.Infrastructure.Interceptors
 
 		public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
 		{
-			var entries = eventData.Context.ChangeTracker.Entries<IAuditableEntityMetadata>().Where(e => e.State == EntityState.Modified && e.Entity.GetType() is IAuditableEntityMetadata);
+			var entries = eventData.Context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
 
 			foreach (var entry in entries)
 			{
