@@ -20,27 +20,6 @@ namespace SiAB.Core.Entities.Belico
 		public DateTime FechaCreacion { get; set; }
 		public DateTime? FechaModificacion { get; set; }
 		public int? UsuarioIdModifico { get; set; }
-
-		//public void GenerarSecuencia()
-		//{
-		//	switch (CodInstitucion)
-		//	{
-		//		case InstitucionEnum.NO_DEFINIDO:
-		//			break;
-		//		case InstitucionEnum.MIDE:
-		//			this.SecuenciaCadena = $"{DateTime.Now.Year}-{this.SecuenciaNumero}";
-		//			break;
-		//		case InstitucionEnum.ERD:
-		//			break;
-		//		case InstitucionEnum.ARD:
-		//			break;
-		//		case InstitucionEnum.FARD:
-		//			break;
-		//		default:
-		//			break;
-		//	}
-
-		//	this.SecuenciaNumero++;
-		//}
+		
 	}
 }
