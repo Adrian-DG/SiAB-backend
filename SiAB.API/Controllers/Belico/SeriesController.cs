@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.Entities.Belico;
@@ -12,12 +13,12 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/series")]
 	[ApiController]
-	public class SeriesController : GenericController<Serie>
+	public class SeriesController : GenericController
 	{
-		public SeriesController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public SeriesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
-			
+
 		[HttpGet]
 		public async Task<IActionResult> GetSeriesPaginated([FromQuery] PaginationFilter filter)
 		{

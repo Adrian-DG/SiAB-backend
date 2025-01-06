@@ -22,15 +22,17 @@ namespace SiAB.API.Services
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var key = Encoding.ASCII.GetBytes(_secretKey);
-			var expiration = DateTime.UtcNow.AddHours(EXPIRATION_TIME);	
+			var expiration = DateTime.UtcNow.AddHours(EXPIRATION_TIME);
+			string CodInstitucion = ((int)usuario.Institucion).ToString();
 
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 			Subject = new ClaimsIdentity(new[]
 			{
-				new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-				new Claim(ClaimTypes.Name, usuario.UserName),
-				new Claim(ClaimTypes.Role, string.Join(",", roles)),			
+				new Claim("CodUsuario", usuario.Id.ToString()),
+				new Claim("Username", usuario.UserName),
+				new Claim("Roles", string.Join(",", roles)),		
+				new Claim("CodInstitucion", CodInstitucion)
 			}),
 			Expires = expiration,
 			SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -2,29 +2,33 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
+using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 
 namespace SiAB.API.Controllers.Misc
 {
     [Route("api/modelos")]
-	public class ModelosController : GenericController<Modelo>
+	public class ModelosController : GenericController
 	{
-		public ModelosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public ModelosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{
-			var result = await _uow.Repository<Modelo>().GetListPaginateAsync<ModeloDetailModel>(
+			var result = await _uow.Repository<Modelo>().GetListPaginateAsync(
 				predicate: m => m.Nombre.Contains(filter.SearchTerm ?? "") || m.Marca.Nombre.Contains(filter.SearchTerm ?? ""),
 				includes: new Expression<Func<Modelo, object>>[] { m => m.Marca },
-				selector: m => new ModeloDetailModel
+				selector: m => new 
 				{
 					Id = m.Id,
+					Foto = m.Foto,
 					Nombre = m.Nombre,
 					Marca = m.Marca.Nombre
 				},
@@ -34,6 +38,21 @@ namespace SiAB.API.Controllers.Misc
 			);
 
 			return new JsonResult(result);
+		}
+
+		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Modelo>))]
+		public async Task<IActionResult> Create([FromBody] CreateModeloDto createModeloDto)
+		{
+			var modelo = new Modelo
+			{
+				Foto = createModeloDto.Foto,
+				Nombre = createModeloDto.Nombre,
+				MarcaId = createModeloDto.MarcaId
+			};
+
+			await _uow.Repository<Modelo>().AddAsync(modelo);
+			return Ok();
 		}
 	}
 }

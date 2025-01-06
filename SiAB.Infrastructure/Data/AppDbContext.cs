@@ -30,16 +30,6 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
 			#region Relations configuration
-
-			builder.Entity<Usuario>()
-				.HasOne(u => u.Rango)
-				.WithOne(r => r.Usuario)
-				.HasForeignKey<Usuario>(u => u.RangoId);
-
-			builder.Entity<Rango>()
-				.HasOne(r => r.Usuario)
-				.WithOne(u => u.Rango)
-				.HasForeignKey<Rango>(r => r.UsuarioId);
 			
 			builder.Entity<Articulo>()
 				.HasOne(a => a.Modelo)
@@ -57,19 +47,7 @@ namespace SiAB.Infrastructure.Data
 				.HasOne(t => t.Categoria)
 				.WithMany(c => c.Tipos)
 				.HasForeignKey(t => t.CategoriaId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Dependencia>()
-				.HasMany(d => d.Funciones)
-				.WithOne(d => d.Dependencia)
-				.HasForeignKey(d => d.DependenciaId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Funcion>()
-				.HasOne(f => f.Dependencia)
-				.WithMany(d => d.Funciones)
-				.HasForeignKey(f => f.DependenciaId)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.NoAction);	
 			
 			builder.Entity<Alerta>()
 				.HasOne(a => a.Serie)
@@ -93,6 +71,12 @@ namespace SiAB.Infrastructure.Data
 				.HasOne(s => s.Propiedad)
 				.WithMany(p => p.Series)
 				.HasForeignKey(s => s.PropiedadId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Modelo>()
+				.HasOne(s => s.Marca)
+				.WithMany(p => p.Modelos)
+				.HasForeignKey(s => s.MarcaId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			#endregion
@@ -139,7 +123,8 @@ namespace SiAB.Infrastructure.Data
 				Apellido = "Admin",
 				UserName = "admin",
 				NormalizedUserName = "ADMIN",
-				PasswordHash = passwordHasher.HashPassword(null, "admin01")
+				Institucion = InstitucionEnum.MIDE,
+					PasswordHash = passwordHasher.HashPassword(null, "admin01")
 			});
 			
 			modelBuilder.Entity<IdentityUserRole<int>>().HasData(
@@ -173,6 +158,7 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Calibre> Calibres { get; set; }
         public DbSet<Serie> Series { get; set; }
         public DbSet<RegistroDebitoCredito> RegistrosDebitoCredito { get; set; }
+        public DbSet<Secuencia> Secuencias { get; set; }
 
         #endregion
 
@@ -185,11 +171,11 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
-		#endregion
 
-		#region Personal
-		public DbSet<Rango> Rangos { get; set; }
-		public DbSet<Funcion> Funciones { get; set; }
+        #endregion
+
+        #region Personal
+        public DbSet<Rango> Rangos { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
 		#endregion

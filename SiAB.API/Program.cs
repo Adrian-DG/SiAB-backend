@@ -1,11 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SiAB.API.Constants;
+using SiAB.API.Handlers;
 using SiAB.API.Middlewares;
 using SiAB.API.Services;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
 			builder
 				.AllowAnyOrigin()
 				.AllowAnyMethod()
-				.AllowAnyHeader();
+				.AllowAnyHeader()
+				.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
 		});
 });
 
@@ -89,6 +90,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ApiResponseMiddleware>();
 app.UseExceptionHandler();
 
 app.MapControllers();

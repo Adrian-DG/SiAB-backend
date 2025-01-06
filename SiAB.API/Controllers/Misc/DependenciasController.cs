@@ -1,20 +1,22 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Personal;
+using SiAB.Core.Enums;
 
 namespace SiAB.API.Controllers.Misc
 {
-	[Route("api/[controller]")]
+	[Route("api/dependencias")]
 	[ApiController]
-	public class DependenciasController : GenericController<Dependencia>
+	public class DependenciasController : GenericController
 	{
-		public DependenciasController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public DependenciasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
-			
 		}
 
 		[HttpGet]
@@ -22,7 +24,6 @@ namespace SiAB.API.Controllers.Misc
 		{
 			var result = await _uow.Repository<Dependencia>().GetListPaginateAsync(
 					predicate: d => d.Nombre.Contains(filter.SearchTerm ?? ""),
-					includes: null,
 					selector: d => new { Id = d.Id, Nombre = d.Nombre, Institucion = d.Institucion.ToString(), Externa = d.EsExterna },
 					orderBy: d => d.OrderBy(o => o.Nombre)
 				);
@@ -31,14 +32,19 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Dependencia>))]
 		public async Task<IActionResult> Create([FromBody] CreateDependenciaDto createDependenciaDto)
 		{
-			await _uow.Repository<Dependencia>().AddAsync(new Dependencia { 
-				Nombre = createDependenciaDto.Nombre, 
-				Institucion = createDependenciaDto.InstitucionEnum, 
-				EsExterna = createDependenciaDto.EsExterna });
+			var dependencia = new Dependencia
+			{
+				Nombre = createDependenciaDto.Nombre,
+				EsExterna = createDependenciaDto.EsExterna,
+				Institucion = (InstitucionEnum)_codInstitucionUsuario
+			};
 
+			await _uow.Repository<Dependencia>().AddAsync(dependencia);
 			return Ok();
 		}
+
 	}
 }

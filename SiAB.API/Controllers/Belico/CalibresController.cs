@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
+using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
@@ -11,9 +13,9 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/calibres")]
 	[ApiController]
-	public class CalibresController : GenericController<Calibre>
+	public class CalibresController : GenericController
 	{
-		public CalibresController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public CalibresController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 
@@ -32,10 +34,12 @@ namespace SiAB.API.Controllers.Belico
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto entity)
+		[ServiceFilter(typeof(NamedFilter<Calibre>))]
+		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
 		{
-			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = entity.Nombre });
+			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = createNamedEntityDto.Nombre });
 			return Ok();
 		}
+		
 	}
 }

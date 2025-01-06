@@ -1,5 +1,13 @@
-﻿using SiAB.Application.Contracts;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SiAB.API.Controllers;
+using SiAB.API.Filters;
+using SiAB.API.Helpers;
+using SiAB.API.Middlewares;
+using SiAB.Application.Contracts;
+using SiAB.Core.Abstraction;
+using SiAB.Core.Constants;
 using SiAB.Infrastructure.Data;
+using SiAB.Infrastructure.Interceptors;
 using SiAB.Infrastructure.Repositories;
 using SiAB.Infrastructure.Repositories.JCE;
 
@@ -11,11 +19,22 @@ namespace SiAB.API.Services
 		{
 			return services
 				.AddScoped<IUnitOfWork, UnitOfWork>()
-				.AddScoped(typeof(IRepository<>), typeof(Repository<>))	
-				.AddScoped<IRDCRepository, RDCRepository>()	
+				.AddScoped(typeof(IRepository<>), typeof(Repository<>))
+				.AddScoped<IRDCRepository, RDCRepository>()
 				.AddScoped<IJCERepository, JCERepository>()
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
-				.AddSingleton<DapperContext>();
+				.AddScoped<IUserContextService, UserContextService>()
+				.AddScoped<CodUsuarioFilter>()
+				.AddScoped<CodInstitucionFilter>()
+				.AddScoped(typeof(NamedFilter<>))
+				.AddScoped<INamedService, NamedService>()
+				.AddScoped<CreateAuditableFilter>()
+				.AddScoped<UpdateAuditableFilter>()
+				.AddHttpContextAccessor() // Register IHttpContextAccessor
+				.AddScoped<CreateAuditableInterceptor>()
+				.AddScoped<UpdateAuditableInterceptor>()				
+				.AddSingleton<DapperContext>()
+				.AddTransient<ApiResponseMiddleware>();
 		}
 	}
 }

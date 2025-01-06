@@ -8,6 +8,7 @@ namespace SiAB.Core.DTO.Misc
 {
 	public record CreateDepositoDto : CreateNamedEntityDto
 	{
-        public required int FuncionId { get; set; }
+        public required int DependenciaId { get; set; }
+        public bool EsFuncion { get; set; }
     }
 }

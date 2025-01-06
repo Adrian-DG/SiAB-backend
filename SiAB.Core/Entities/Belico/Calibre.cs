@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Belico
 {
 	[Table("Calibres", Schema = "Belico")]
-	public class Calibre : NamedMetadata
+	public class Calibre : NamedEntityMetadata
 	{
 	}
 }

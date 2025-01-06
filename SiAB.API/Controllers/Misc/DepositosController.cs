@@ -12,32 +12,37 @@ using SiAB.API.Attributes;
 using SiAB.Core.Enums;
 using SiAB.Core.DTO.Misc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SiAB.API.Helpers;
+using SiAB.Core.Exceptions;
+using System.Net;
+using SiAB.API.Extensions;
+using SiAB.API.Filters;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SiAB.API.Controllers.Misc
 {
-	[Route("api/depositos")]
+    [Route("api/depositos")]
 	[ApiController]
-	public class DepositosController : GenericController<Deposito>
+	public class DepositosController : GenericController
 	{
-		public DepositosController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+		public DepositosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetDepositosPaginated([FromQuery] PaginationFilter filter)
+		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{
-			var includeProps = new Expression<Func<Deposito, object>>[] { d => d.Funcion, d => d.Funcion.Dependencia };
-
 			var depositos = await _uow.Repository<Deposito>().GetListPaginateAsync(
-				predicate: d => d.Nombre.Contains(filter.SearchTerm ?? string.Empty),
-				includes: includeProps,
-				selector: d => new DepositoDetailModel
-				{
+				includes: new Expression<Func<Deposito, object>>[] { m => m.Dependencia },
+				predicate: d => d.Nombre.Contains(filter.SearchTerm ?? "") && d.Dependencia.Institucion == (InstitucionEnum)_codInstitucionUsuario,
+				selector: d => new 
+				{ 
 					Id = d.Id,
 					Nombre = d.Nombre,
-					Funcion = d.Funcion.Nombre ?? "Sin Función",
-					Dependencia = d.Funcion.Dependencia.Nombre ?? "Sin Dependencia"
+					EsFuncion = d.EsFuncion,
+					Dependencia = d.Dependencia.Nombre
 				},
+				orderBy: d => d.OrderBy(o => o.Nombre),
 				page: filter.Page,
 				pageSize: filter.Size
 			);
@@ -49,8 +54,8 @@ namespace SiAB.API.Controllers.Misc
 		public async Task<IActionResult> GetDepositos([FromQuery] string nombre)
 		{		
 			var depositos = await _uow.Repository<Deposito>().GetListAsync(
-				predicate: d => d.Nombre.Contains(nombre ?? string.Empty), 
-				includes: null,
+				includes: new Expression<Func<Deposito, object>>[] { m => m.Dependencia },
+				predicate: d => d.Nombre.Contains(nombre ?? string.Empty) && d.Dependencia.Institucion.Equals(_codInstitucionUsuario), 				
 				selector: d => new NamedModel { Id = d.Id, Nombre = d.Nombre },
 				orderBy: d => d.OrderBy(o => o.Nombre)
 			);
@@ -59,12 +64,20 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Deposito>))]
 		public async Task<IActionResult> Create([FromBody] CreateDepositoDto createDepositoDto)
 		{
-			await _uow.Repository<Deposito>().AddAsync(new Deposito { Nombre = createDepositoDto.Nombre, FuncionId = createDepositoDto.FuncionId });
+			var deposito = new Deposito
+			{
+				Nombre = createDepositoDto.Nombre,
+				DependenciaId = createDepositoDto.DependenciaId,
+				EsFuncion = createDepositoDto.EsFuncion
+			};
+
+			await _uow.Repository<Deposito>().AddAsync(deposito);
+
 			return Ok();
 		}
 
-		
 	}
 }

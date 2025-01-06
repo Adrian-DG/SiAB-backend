@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Abstraction
 {
-	public abstract class NamedMetadata : EntityMetadata
+	public abstract class NamedEntityMetadata : EntityMetadata
 	{
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
     }
 }
