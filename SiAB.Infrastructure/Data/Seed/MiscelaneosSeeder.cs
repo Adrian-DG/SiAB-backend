@@ -17,7 +17,7 @@ namespace SiAB.Infrastructure.Data.Seed
 			builder.Entity<Dependencia>().HasData(
 				new Dependencia { Id = 1, Nombre = "EJÉRCITO DE LA REPÚBLICA DOMINICANA (ERD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
 				new Dependencia { Id = 2, Nombre = "ARMADA DE LA REPÚBLICA DOMINICANA (ARD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
-				new Dependencia { Id = 3, Nombre = "FUERZA AEREA DE LA REPÚBLICA DOMINICANA (FARD)", Institucion = Core.Enums.InstitucionEnum.MIDE}
+				new Dependencia { Id = 3, Nombre = "FUERZA AEREA DE LA REPÚBLICA DOMINICANA (FARD)", Institucion = Core.Enums.InstitucionEnum.MIDE }
 			);
 
 			builder.Entity<Propiedad>().HasData(

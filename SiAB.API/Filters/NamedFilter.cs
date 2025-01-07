@@ -24,7 +24,7 @@ namespace SiAB.API.Filters
 			{
 				if (argument is CreateNamedEntityDto requestDto)
 				{
-					if (await _namedService.ExistByNameAsync<T>(requestDto.Nombre))
+					if (await _namedService.ExistByNameAsync<T>(requestDto.Nombre.Trim()))
 					{
 						throw new BaseException("Ya existe un registro con ese nombre", HttpStatusCode.BadRequest);
 					}
