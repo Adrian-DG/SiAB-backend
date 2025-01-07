@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
+using SiAB.Core.Entities.Personal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,12 @@ namespace SiAB.Infrastructure.Data.Seed
 	{
 		public static void Seed(ModelBuilder builder)
 		{
+			builder.Entity<Dependencia>().HasData(
+				new Dependencia { Id = 1, Nombre = "EJÉRCITO DE LA REPÚBLICA DOMINICANA (ERD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
+				new Dependencia { Id = 2, Nombre = "ARMADA DE LA REPÚBLICA DOMINICANA (ARD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
+				new Dependencia { Id = 3, Nombre = "FUERZA AEREA DE LA REPÚBLICA DOMINICANA (FARD)", Institucion = Core.Enums.InstitucionEnum.MIDE}
+			);
+
 			builder.Entity<Propiedad>().HasData(
 				new Propiedad { Id = 1, Nombre = "ARMA DE SU PROPIEDAD" },
 				new Propiedad { Id = 2, Nombre = "FF.AA" },
@@ -59,7 +66,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Marca { Id = 3, Nombre = "CARANDAI" },
 				new Marca { Id = 4, Nombre = "COLT" },
 				new Marca { Id = 5, Nombre = "GLOCK" },
-				new Marca { Id = 6, Nombre = "HECKLER & KOCH" },
+				new Marca { Id = 6, Nombre = "HECKLER & KOCH (H&K)" },
 				new Marca { Id = 7, Nombre = "MAVERICK" },
 				new Marca { Id = 8, Nombre = "MOSSBERG" },
 				new Marca { Id = 9, Nombre = "RAVEN" },
@@ -70,19 +77,6 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Marca { Id = 14, Nombre = "SMITH & WESSON (S&W)" },
 				new Marca { Id = 15, Nombre = "TAURUS" },
 				new Marca { Id = 16, Nombre = "WINCHESTER" }
-			);
-
-			builder.Entity<Modelo>().HasData(
-				new Modelo { Id = 1, Nombre = "92FS", MarcaId = 1 },
-				new Modelo { Id = 2, Nombre = "PX4 Storm", MarcaId = 1 },
-				new Modelo { Id = 3, Nombre = "Hi-Power", MarcaId = 2 },
-				new Modelo { Id = 4, Nombre = "BAR", MarcaId = 2 },
-				new Modelo { Id = 5, Nombre = "Carandai 1911", MarcaId = 3 },
-				new Modelo { Id = 6, Nombre = "Carandai 380", MarcaId = 3 },
-				new Modelo { Id = 7, Nombre = "M1911", MarcaId = 4 },
-				new Modelo { Id = 8, Nombre = "Python", MarcaId = 4 },
-				new Modelo { Id = 9, Nombre = "G17", MarcaId = 5 },
-				new Modelo { Id = 10, Nombre = "G19", MarcaId = 5 }
 			);
 
 			builder.Entity<Calibre>().HasData(
