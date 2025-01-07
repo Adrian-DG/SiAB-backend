@@ -93,6 +93,8 @@ namespace SiAB.Infrastructure.Data
 
 			#region Data seeding
 
+			RangoSeeder.Seed(builder);
+
 			MiscelaneosSeeder.Seed(builder);
 
 			RoleSeeder.Seed(builder);
