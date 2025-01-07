@@ -13,6 +13,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using SiAB.Core.Models.RegistroDebitoCredito;
 using SiAB.Core.Enums;
+using SiAB.Infrastructure.Data.Seed;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -83,9 +84,18 @@ namespace SiAB.Infrastructure.Data
 
 			ConfigureRegistroDebitoCreditoo(builder.Entity<RegistroDebitoCredito>());
 
-			SeedUserRoleData(builder);
-			
+			#region Data seeding
+
+			MiscelaneosSeeder.Seed(builder);
+
+			RoleSeeder.Seed(builder);
+
+			UserSeeder.Seed(builder);
+
 			SetGlobalQueryFilter(builder);
+
+			#endregion		
+			
 		}
 
 		public void ConfigureRegistroDebitoCreditoo(EntityTypeBuilder<RegistroDebitoCredito> builder)
@@ -102,34 +112,6 @@ namespace SiAB.Infrastructure.Data
 					v => v == null ? null : JsonConvert.SerializeObject(v, options),
 					v => v == null ? null : JsonConvert.DeserializeObject<IList<RegistroDebitoModel>>(v, options)
 				);				
-		}
-
-		// Metodo para insertar datos de roles y usuarios
-		private void SeedUserRoleData(ModelBuilder modelBuilder)
-		{
-			var passwordHasher = new PasswordHasher<Usuario>();
-			
-			modelBuilder.Entity<Role>().HasData(
-				new Role { Id = (int)UsuarioRole.ADMIN, Name = RoleConstant.ADMIN, NormalizedName = RoleConstant.ADMIN },
-				new Role { Id = (int)UsuarioRole.USER, Name = RoleConstant.USER, NormalizedName = RoleConstant.USER }
-			);
-
-			modelBuilder.Entity<Usuario>().HasData(
-				new Usuario 
-				{
-				Id = 1,
-				Cedula = "0000000000",
-				Nombre = "Admin",
-				Apellido = "Admin",
-				UserName = "admin",
-				NormalizedUserName = "ADMIN",
-				Institucion = InstitucionEnum.MIDE,
-					PasswordHash = passwordHasher.HashPassword(null, "admin01")
-			});
-			
-			modelBuilder.Entity<IdentityUserRole<int>>().HasData(
-				new IdentityUserRole<int> { UserId = 1, RoleId = (int)UsuarioRole.ADMIN }
-			);
 		}
 
 		// Configuramos un filtro global para las entidades, omitiendo registros borraddos (IsDeleted)
