@@ -27,8 +27,15 @@ namespace SiAB.Infrastructure.Data
 		{
 			base.OnModelCreating(builder);
 
+			#region Usuario/Role entity configuration
+
 			builder.Entity<Usuario>(e => e.ToTable("Usuarios", "accesos"));
+
+			builder.Entity<Usuario>().HasIndex(u => u.Cedula).IsUnique();
+
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
+
+			#endregion			
 
 			#region Relations configuration
 			

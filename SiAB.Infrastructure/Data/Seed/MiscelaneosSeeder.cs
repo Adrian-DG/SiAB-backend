@@ -27,21 +27,25 @@ namespace SiAB.Infrastructure.Data.Seed
 			);
 
 			builder.Entity<Categoria>().HasData(
-				new Categoria { Id = 1, Nombre = "ARMAS" }
+				new Categoria { Id = 1, Nombre = "ARMAS" },
+				new Categoria { Id = 2, Nombre = "EQUIPO" },
+				new Categoria { Id = 3, Nombre = "MUNICIONES" },
+				new Categoria { Id = 4, Nombre = "EXPLOSIVOS" },
+				new Categoria { Id = 5, Nombre = "ACCESORIOS" }
 			);
 
 			builder.Entity<Tipo>().HasData(
-				new Tipo { Id = 1, Nombre = "ACCESORIO(S) DE ARMAS" },
-				new Tipo { Id = 2, Nombre = "ARMAS BLANCAS" },
-				new Tipo { Id = 3, Nombre = "ARMAS CORTAS" },
-				new Tipo { Id = 4, Nombre = "ARMAS LARGAS" },
-				new Tipo { Id = 5, Nombre = "ARMAS PESADAS" },
-				new Tipo { Id = 6, Nombre = "EQUIPO DE COMUNICACION" },
-				new Tipo { Id = 7, Nombre = "EQUIPO DE PROTECCION" },
-				new Tipo { Id = 8, Nombre = "EQUIPO DE TRANSPORTE" },
-				new Tipo { Id = 9, Nombre = "EQUIPO DE VIGILANCIA" },
-				new Tipo { Id = 10, Nombre = "EXPLOSIVOS" },
-				new Tipo { Id = 11, Nombre = "MUNICIONES" }
+				new Tipo { Id = 1, Nombre = "ACCESORIO(S) DE ARMAS", CategoriaId = 5 },
+				new Tipo { Id = 2, Nombre = "ARMAS BLANCAS", CategoriaId = 1 },
+				new Tipo { Id = 3, Nombre = "ARMAS CORTAS", CategoriaId = 1 },
+				new Tipo { Id = 4, Nombre = "ARMAS LARGAS", CategoriaId = 1 },
+				new Tipo { Id = 5, Nombre = "ARMAS PESADAS", CategoriaId = 1 },
+				new Tipo { Id = 6, Nombre = "EQUIPO DE COMUNICACION", CategoriaId = 2 },
+				new Tipo { Id = 7, Nombre = "EQUIPO DE PROTECCION", CategoriaId = 2 },
+				new Tipo { Id = 8, Nombre = "EQUIPO DE TRANSPORTE", CategoriaId = 2 },
+				new Tipo { Id = 9, Nombre = "EQUIPO DE VIGILANCIA", CategoriaId = 2 },
+				new Tipo { Id = 10, Nombre = "EXPLOSIVOS", CategoriaId = 4 },
+				new Tipo { Id = 11, Nombre = "MUNICIONES", CategoriaId = 3 }
 			);
 
 			builder.Entity<SubTipo>().HasData(
