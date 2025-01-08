@@ -20,17 +20,11 @@ namespace SiAB.API.Filters
 
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
-			var jsonSerializerOptions = new JsonSerializerOptions
-			{
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-				AllowTrailingCommas = true
-			};
-
 			foreach (var argument in context.ActionArguments.Values)
 			{
 				if (argument is CreateNamedEntityDto requestDto)
 				{
-					if (await _namedService.ExistByNameAsync<T>(requestDto.Nombre))
+					if (await _namedService.ExistByNameAsync<T>(requestDto.Nombre.Trim()))
 					{
 						throw new BaseException("Ya existe un registro con ese nombre", HttpStatusCode.BadRequest);
 					}

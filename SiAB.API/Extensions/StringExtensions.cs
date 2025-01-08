@@ -7,8 +7,7 @@ namespace SiAB.API.Extensions
     {
         public static bool CompareStrings(string str1, string str2)
         {
-            if (str1 == null || str2 == null)
-                return false;
+            if (str1 == null || str2 == null) return false;
 
             string normalizedStr1 = Regex.Replace(str1, @"\s+", "").ToLower();
             string normalizedStr2 = Regex.Replace(str2, @"\s+", "").ToLower();

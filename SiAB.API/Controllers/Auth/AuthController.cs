@@ -34,33 +34,7 @@ namespace SiAB.API.Controllers.Auth
             }
 			_jwtService = new JwtService(jwtKey);
 		}
-
-        [HttpPost("register-user")]
-        public async Task<IActionResult> Register([FromBody] UsuarioRegisterDto registerDto)
-        {
-            var usuario = new Usuario
-            {
-                Cedula = registerDto.Cedula,
-                Nombre = registerDto.Nombre,
-                Apellido = registerDto.Apellido,
-                RangoId = registerDto.RangoId,
-                Institucion = registerDto.InstitucionEnum,
-                UserName = registerDto.Username
-            };
-
-            if (!(await _userManager.CreateAsync(usuario, registerDto.Password)).Succeeded)
-            {
-                throw new BaseException("Error registrando usuario", HttpStatusCode.BadRequest);
-            }
-
-            if(!(await _userManager.AddToRolesAsync(usuario, registerDto.Roles)).Succeeded)
-            {
-                throw new BaseException("Error asignando roles", HttpStatusCode.BadRequest);
-            }
-
-            return Created("register-user", true);
-        }
-
+        
         [HttpPost("login-user")]
         public async Task<IActionResult> Login([FromBody] UsuarioLoginDto loginDto)
         {

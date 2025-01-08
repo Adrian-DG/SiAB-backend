@@ -26,6 +26,10 @@ namespace SiAB.Infrastructure.Data
 
 		public IJCERepository JCERepository => new JCERepository();
 
+		public IUsuarioRepository UsuarioRepository => new UsuarioRepository(_context);
+
+		public IRoleRepository RoleRepository => new RoleRepository(_context);
+
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
 			repositories ??= [];

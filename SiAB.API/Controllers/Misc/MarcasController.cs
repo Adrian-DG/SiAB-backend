@@ -39,7 +39,7 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(result);
 		}
 
-		[HttpGet("filter")]
+		[HttpGet("filtrar")]
 		public async Task<IActionResult> GetFilterMarcas([FromQuery] string nombre)
 		{
 			var result = await _uow.Repository<Marca>().GetListAsync<NamedModel>(

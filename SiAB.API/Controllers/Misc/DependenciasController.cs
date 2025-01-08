@@ -8,6 +8,7 @@ using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Personal;
 using SiAB.Core.Enums;
+using SiAB.Core.Models;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -25,6 +26,18 @@ namespace SiAB.API.Controllers.Misc
 			var result = await _uow.Repository<Dependencia>().GetListPaginateAsync(
 					predicate: d => d.Nombre.Contains(filter.SearchTerm ?? ""),
 					selector: d => new { Id = d.Id, Nombre = d.Nombre, Institucion = d.Institucion.ToString(), Externa = d.EsExterna },
+					orderBy: d => d.OrderBy(o => o.Nombre)
+				);
+
+			return new JsonResult(result);
+		}
+
+		[HttpGet("filtrar")]
+		public async Task<IActionResult> GetDependencias([FromQuery] string nombre)
+		{
+			var result = await _uow.Repository<Dependencia>().GetListAsync(
+					predicate: d => d.Nombre.Contains(nombre ?? ""),
+					selector: d => new NamedModel { Id = d.Id, Nombre = d.Nombre },
 					orderBy: d => d.OrderBy(o => o.Nombre)
 				);
 
