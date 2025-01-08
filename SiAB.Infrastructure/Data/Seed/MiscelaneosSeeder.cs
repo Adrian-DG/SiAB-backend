@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using System;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Infrastructure.Data.Seed
 {
-	public static class MiscelaneosSeeder
+    public static class MiscelaneosSeeder
 	{
 		public static void Seed(ModelBuilder builder)
 		{

@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiAB.Core.Entities.Belico
+namespace SiAB.Core.Entities.Misc
 {
-	[Table("Calibres", Schema = "Belico")]
-	public class Calibre : NamedEntityMetadata
-	{
-	}
+    [Table("Calibres", Schema = "Misc")]
+    public class Calibre : NamedEntityMetadata
+    {
+    }
 }
