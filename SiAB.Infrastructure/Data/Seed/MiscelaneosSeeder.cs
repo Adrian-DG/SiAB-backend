@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using System;
@@ -10,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace SiAB.Infrastructure.Data.Seed
 {
-	public static class MiscelaneosSeeder
+    public static class MiscelaneosSeeder
 	{
 		public static void Seed(ModelBuilder builder)
 		{
 			builder.Entity<Dependencia>().HasData(
 				new Dependencia { Id = 1, Nombre = "EJÉRCITO DE LA REPÚBLICA DOMINICANA (ERD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
 				new Dependencia { Id = 2, Nombre = "ARMADA DE LA REPÚBLICA DOMINICANA (ARD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
-				new Dependencia { Id = 3, Nombre = "FUERZA AEREA DE LA REPÚBLICA DOMINICANA (FARD)", Institucion = Core.Enums.InstitucionEnum.MIDE }
+				new Dependencia { Id = 3, Nombre = "FUERZA AEREA DE LA REPÚBLICA DOMINICANA (FARD)", Institucion = Core.Enums.InstitucionEnum.MIDE },
+				new Dependencia { Id = 4, Nombre = "POLICIA NACIONAL (PN)", Institucion = Core.Enums.InstitucionEnum.MIDE }
 			);
 
 			builder.Entity<Propiedad>().HasData(

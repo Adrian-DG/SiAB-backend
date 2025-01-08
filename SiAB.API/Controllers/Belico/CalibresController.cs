@@ -6,12 +6,12 @@ using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
-using SiAB.Core.Entities.Belico;
+using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 
 namespace SiAB.API.Controllers.Belico
 {
-	[Route("api/calibres")]
+    [Route("api/calibres")]
 	[ApiController]
 	public class CalibresController : GenericController
 	{
