@@ -68,7 +68,7 @@ namespace SiAB.API.Controllers.Auth
                 Nombre = registerDto.Nombre,
                 Apellido = registerDto.Apellido,
                 RangoId = registerDto.RangoId,
-                Institucion = registerDto.Institucion,
+                Institucion = (InstitucionEnum)_codInstitucionUsuario,
                 UserName = registerDto.Username
             };
 
