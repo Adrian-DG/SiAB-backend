@@ -9,7 +9,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/alertas")]
 	[ApiController]
-	public class AlertasController : GenericController
+	public class AlertasController : GenericController<Alerta>
 	{
 		public AlertasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{

@@ -23,7 +23,7 @@ namespace SiAB.API.Controllers.Misc
 {
     [Route("api/depositos")]
 	[ApiController]
-	public class DepositosController : GenericController
+	public class DepositosController : GenericController<Deposito>
 	{
 		public DepositosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -40,6 +40,7 @@ namespace SiAB.API.Controllers.Misc
 					Id = d.Id,
 					Nombre = d.Nombre,
 					EsFuncion = d.EsFuncion,
+					DependenciaId = d.DependenciaId,
 					Dependencia = d.Dependencia.Nombre
 				},
 				orderBy: d => d.OrderBy(o => o.Nombre),
@@ -76,6 +77,18 @@ namespace SiAB.API.Controllers.Misc
 
 			await _uow.Repository<Deposito>().AddAsync(deposito);
 
+			return Ok();
+		}
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(NamedFilter<Deposito>))]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateDepositoDto updateDepositoDto)
+		{
+			var entity = await _uow.Repository<Deposito>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = updateDepositoDto.Nombre;
+			entity.DependenciaId = updateDepositoDto.DependenciaId;
+			await _uow.Repository<Deposito>().Update(entity);
 			return Ok();
 		}
 

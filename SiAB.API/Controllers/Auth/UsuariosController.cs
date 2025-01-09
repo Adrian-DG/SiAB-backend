@@ -1,10 +1,12 @@
 ﻿using System.Linq.Expressions;
 using System.Net;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
@@ -16,17 +18,38 @@ using SiAB.Core.Models.Auth;
 
 namespace SiAB.API.Controllers.Auth
 {
-	[Route("api/usuarios")]
+	[Authorize]
 	[ApiController]
-	public class UsuariosController : GenericController
+	[Route("api/usuarios")]
+	[TypeFilter(typeof(CodUsuarioFilter))]
+	[TypeFilter(typeof(CodInstitucionFilter))]
+	public class UsuariosController : ControllerBase
 	{
 		private readonly UserManager<Usuario> _userManager;
-		public UsuariosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService, UserManager<Usuario> userManager) : base(unitOfWork, mapper, userContextService)
-        {
-			_userManager = userManager;
+		private readonly IUnitOfWork _uow;
+		private readonly IUserContextService _userContextService;
+
+		public int _codUsuario
+		{
+			get => _userContextService.CodUsuario;
+			set => _userContextService.CodUsuario = value;
 		}
 
-        [HttpGet]
+		public int _codInstitucionUsuario
+		{
+			get => _userContextService.CodInstitucionUsuario;
+			set => _userContextService.CodInstitucionUsuario = value;
+		}
+
+		public UsuariosController(UserManager<Usuario> userManager, IUnitOfWork unitOfWork, IUserContextService userContextService)
+		{
+			_userManager = userManager;
+			_uow = unitOfWork;
+			_userContextService = userContextService;
+		}
+		
+
+		[HttpGet]
 		public async Task<IActionResult> Get([FromQuery] PaginationFilter filter)
 		{
 			var usuarios = await _uow.UsuarioRepository.GetListPaginateAsync(

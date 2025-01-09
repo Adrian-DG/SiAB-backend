@@ -9,7 +9,7 @@ using SiAB.Core.Entities.Personal;
 namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/rangos")]
-	public class RangosController : GenericController
+	public class RangosController : GenericController<Rango>
 	{
 		public RangosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{

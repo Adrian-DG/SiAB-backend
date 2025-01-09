@@ -12,7 +12,7 @@ using System.Net;
 namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/secuencias")]
-	public class SecuenciasController : GenericController
+	public class SecuenciasController : GenericController<Secuencia>
 	{
 		public SecuenciasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{

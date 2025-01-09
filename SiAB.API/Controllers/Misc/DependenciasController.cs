@@ -6,6 +6,7 @@ using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
+using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using SiAB.Core.Enums;
 using SiAB.Core.Models;
@@ -14,7 +15,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/dependencias")]
 	[ApiController]
-	public class DependenciasController : GenericController
+	public class DependenciasController : GenericController<Dependencia>
 	{
 		public DependenciasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -56,6 +57,17 @@ namespace SiAB.API.Controllers.Misc
 			};
 
 			await _uow.Repository<Dependencia>().AddAsync(dependencia);
+			return Ok();
+		}
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(NamedFilter<Dependencia>))]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateNamedEntityDto updateNamedEntityDto)
+		{
+			var entity = await _uow.Repository<Dependencia>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = updateNamedEntityDto.Nombre;
+			await _uow.Repository<Dependencia>().Update(entity);
 			return Ok();
 		}
 

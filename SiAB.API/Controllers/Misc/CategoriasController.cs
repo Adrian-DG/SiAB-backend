@@ -13,7 +13,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/categorias")]
 	[ApiController]
-	public class CategoriasController : GenericController
+	public class CategoriasController : GenericController<Categoria>
 	{
 		public CategoriasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -41,6 +41,17 @@ namespace SiAB.API.Controllers.Misc
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
 		{
 			await _uow.Repository<Categoria>().AddAsync(new Categoria { Nombre = createNamedEntityDto.Nombre });
+			return Ok();
+		}
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(NamedFilter<Categoria>))]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateNamedEntityDto createNamedEntityDto)
+		{
+			var entity = await _uow.Repository<Categoria>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = createNamedEntityDto.Nombre;
+			await _uow.Repository<Categoria>().Update(entity);
 			return Ok();
 		}
 	}

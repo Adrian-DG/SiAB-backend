@@ -16,7 +16,7 @@ namespace SiAB.API.Controllers.Misc
 {
     [Route("api/propiedades")]
 	[ApiController]
-	public class PropiedadesController : GenericController
+	public class PropiedadesController : GenericController<Propiedad>
 	{
 		public PropiedadesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{

@@ -15,7 +15,7 @@ namespace SiAB.API.Controllers.Misc
 {
     [ApiController]
 	[Route("api/marcas")]
-	public class MarcasController : GenericController
+	public class MarcasController : GenericController<Marca>
 	{
 		public MarcasController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -63,6 +63,17 @@ namespace SiAB.API.Controllers.Misc
 
 			await _uow.Repository<Marca>().AddAsync(marca);
 
+			return Ok();
+		}
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(NamedFilter<Marca>))]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateNamedEntityDto createNamedEntityDto)
+		{
+			var entity = await _uow.Repository<Marca>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = createNamedEntityDto.Nombre;
+			await _uow.Repository<Marca>().Update(entity);
 			return Ok();
 		}
 

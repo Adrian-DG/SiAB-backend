@@ -1,16 +1,38 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
+using SiAB.Core.Entities.Auth;
 
 namespace SiAB.API.Controllers.Auth
 {
+	[Authorize]
+	[ApiController]
 	[Route("api/permisos")]
-	public class RolesController : GenericController
+	[TypeFilter(typeof(CodUsuarioFilter))]
+	[TypeFilter(typeof(CodInstitucionFilter))]
+	public class RolesController : ControllerBase
 	{
-		public RolesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
+		private readonly IUnitOfWork _uow;
+		private readonly IUserContextService _userContextService;
+		public int _codUsuario
 		{
+			get => _userContextService.CodUsuario;
+			set => _userContextService.CodUsuario = value;
+		}
+
+		public int _codInstitucionUsuario
+		{
+			get => _userContextService.CodInstitucionUsuario;
+			set => _userContextService.CodInstitucionUsuario = value;
+		}
+		public RolesController(IUnitOfWork unitOfWork, IUserContextService userContextService)
+		{
+			_uow = unitOfWork;
+			_userContextService = userContextService;
 		}
 
 		[HttpGet]

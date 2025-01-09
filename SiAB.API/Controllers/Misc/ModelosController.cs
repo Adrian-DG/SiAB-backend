@@ -13,7 +13,7 @@ using SiAB.Core.Models;
 namespace SiAB.API.Controllers.Misc
 {
     [Route("api/modelos")]
-	public class ModelosController : GenericController
+	public class ModelosController : GenericController<Modelo>
 	{
 		public ModelosController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -52,6 +52,19 @@ namespace SiAB.API.Controllers.Misc
 			};
 
 			await _uow.Repository<Modelo>().AddAsync(modelo);
+			return Ok();
+		}
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(NamedFilter<Modelo>))]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateModeloDto updateModeloDto)
+		{
+			var entity = await _uow.Repository<Modelo>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Foto = updateModeloDto.Foto;
+			entity.Nombre = updateModeloDto.Nombre;
+			entity.MarcaId = updateModeloDto.MarcaId;
+			await _uow.Repository<Modelo>().Update(entity);
 			return Ok();
 		}
 	}
