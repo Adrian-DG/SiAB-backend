@@ -30,6 +30,7 @@ namespace SiAB.API.Controllers.Misc
 					Id = m.Id,
 					Foto = m.Foto,
 					Nombre = m.Nombre,
+					MarcaId = m.MarcaId,
 					Marca = m.Marca.Nombre
 				},
 				orderBy: m => m.OrderBy(o => o.Nombre),
