@@ -30,6 +30,7 @@ namespace SiAB.API.Controllers.Misc
 					{
 						Id = st.Id,
 						Nombre = st.Nombre,
+						TipoId = st.TipoId,
 						Tipo = st.Tipo.Nombre
 					},
 					page: filter.Page,

@@ -67,7 +67,6 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPut("{id:int}")]
-		[ServiceFilter(typeof(NamedFilter<Marca>))]
 		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateNamedEntityDto createNamedEntityDto)
 		{
 			var entity = await _uow.Repository<Marca>().GetByIdAsync(id);

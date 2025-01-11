@@ -14,10 +14,11 @@ namespace SiAB.Core.Profiles.Miscelaneos
 	{
 		public MiscelaneosProfile() 
 		{
+			#region Depositos
 			CreateMap<Deposito, NamedModel>()
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
 				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
-
+			#endregion
 
 			#region Propiedades
 
@@ -25,6 +26,21 @@ namespace SiAB.Core.Profiles.Miscelaneos
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
 				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
 
+			#endregion
+
+			#region Categorias
+			CreateMap<Categoria, NamedModel>()
+				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
+
+			CreateMap<List<Categoria>, List<NamedModel>>();				
+
+			#endregion
+
+			#region Tipos
+			CreateMap<Tipo, NamedModel>()
+				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
 			#endregion
 		}
 	}

@@ -20,7 +20,7 @@ namespace SiAB.API.Controllers
 	[Route("api/[controller]")]
 	[TypeFilter(typeof(CodUsuarioFilter))]
 	[TypeFilter(typeof(CodInstitucionFilter))]
-	public class GenericController<T> : ControllerBase where T : EntityMetadata
+	public abstract class GenericController<T> : ControllerBase where T : EntityMetadata
 	{
 		protected readonly IUnitOfWork _uow;
 		protected readonly IMapper _mapper;
@@ -42,7 +42,8 @@ namespace SiAB.API.Controllers
 			_uow = unitOfWork;
 			_mapper = mapper;
 			_userContextService = userContextService;
-		}
+		}	
+
 
 		[HttpDelete("{id:int}")]
 		public async Task<IActionResult> Delete([FromRoute] int id)

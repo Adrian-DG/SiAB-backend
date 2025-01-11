@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SiAB.Core.Models;
 using AutoMapper.Configuration.Annotations;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SiAB.Infrastructure.Repositories
 {
@@ -85,13 +86,12 @@ namespace SiAB.Infrastructure.Repositories
 				query = query.Include(include);
 			}
 
-			IQueryable<TResult> query2 = query.Where(predicate).Select(selector);
+			if (predicate is not null) query = query.Where(predicate);
 
-			if (orderBy is not null)
-			{
-				query2 = orderBy(query2);
-			}
+			IQueryable<TResult> query2 = query.Select(selector);
 
+			if (orderBy is not null) query2 = orderBy(query2);
+			
 			var result = await query2.Take(5).ToListAsync();
 
 			return result;
@@ -106,14 +106,12 @@ namespace SiAB.Infrastructure.Repositories
 				query = query.Include(include);
 			}
 
-			IQueryable<TResult> query2 = query.Where(predicate).Select(selector); //.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+			if (predicate is not null) query = query.Where(predicate);
 
-			if (orderBy is not null)
-			{
-				query2 = orderBy(query2);
-			}
+			IQueryable<TResult> query2 = query.Select(selector);
 
-			
+			if (orderBy is not null) query2 = orderBy(query2);
+						
 			var result = await query2.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 			
 			return new PagedData<TResult>

@@ -36,6 +36,20 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(categorias);
 		}
 
+		[HttpGet("filtrar")]
+		public async Task<IActionResult> GetAll()
+		{
+			var result = await _uow.Repository<Categoria>().GetAllAsync();
+
+			var formatedResult = result.Select(c => new NamedModel
+			{
+				Id = c.Id,
+				Nombre = c.Nombre
+			}).OrderBy(c => c.Nombre);
+
+			return new JsonResult(formatedResult);
+		}
+
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<Categoria>))]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)
@@ -45,7 +59,6 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPut("{id:int}")]
-		[ServiceFilter(typeof(NamedFilter<Categoria>))]
 		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateNamedEntityDto createNamedEntityDto)
 		{
 			var entity = await _uow.Repository<Categoria>().GetByIdAsync(id);
