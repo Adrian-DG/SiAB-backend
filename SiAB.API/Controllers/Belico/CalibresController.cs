@@ -13,7 +13,7 @@ namespace SiAB.API.Controllers.Belico
 {
     [Route("api/calibres")]
 	[ApiController]
-	public class CalibresController : GenericController
+	public class CalibresController : GenericController<Calibre>
 	{
 		public CalibresController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -40,6 +40,17 @@ namespace SiAB.API.Controllers.Belico
 			await _uow.Repository<Calibre>().AddAsync(new Calibre { Nombre = createNamedEntityDto.Nombre });
 			return Ok();
 		}
-		
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(NamedFilter<Calibre>))]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateNamedEntityDto updateNamedEntityDto)
+		{
+			var entity = await _uow.Repository<Calibre>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = updateNamedEntityDto.Nombre;
+			await _uow.Repository<Calibre>().Update(entity);
+			return Ok();
+		}
+
 	}
 }

@@ -11,7 +11,7 @@ namespace SiAB.API.Controllers.Belico
 {
 	[Route("api/registros")]
 	[ApiController]
-	public class RegistrosDebitoCreditoController : GenericController
+	public class RegistrosDebitoCreditoController : GenericController<RegistroDebitoCredito>
 	{
 		public RegistrosDebitoCreditoController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{

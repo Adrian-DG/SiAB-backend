@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using SiAB.API.Controllers;
+using SiAB.Core.Abstraction;
 using SiAB.Core.Constants;
 using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Interceptors;
@@ -32,7 +33,7 @@ namespace SiAB.API.Filters
 				throw new BaseException("No se encontró el código de usuario o de institución en el token.", System.Net.HttpStatusCode.BadRequest);
 			}
 
-			if (isAuthenticated && context.Controller is GenericController controller && context.HttpContext.Request.Method == HttpMethods.Put)
+			if (isAuthenticated && context.Controller is GenericController<EntityMetadata> controller && context.HttpContext.Request.Method == HttpMethods.Put)
 			{
 				_updateAuditableInterceptor.SetParameters(int.Parse(codUsuario));
 			}

@@ -14,7 +14,7 @@ namespace SiAB.API.Controllers.Misc
 {
 	[Route("api/subtipos")]
 	[ApiController]
-	public class SubTiposController : GenericController
+	public class SubTiposController : GenericController<SubTipo>
 	{
 		public SubTiposController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
@@ -30,6 +30,7 @@ namespace SiAB.API.Controllers.Misc
 					{
 						Id = st.Id,
 						Nombre = st.Nombre,
+						TipoId = st.TipoId,
 						Tipo = st.Tipo.Nombre
 					},
 					page: filter.Page,
@@ -45,6 +46,17 @@ namespace SiAB.API.Controllers.Misc
 		{
 			var subTipo = new SubTipo { Nombre = createSubTipoDto.Nombre, TipoId = createSubTipoDto.TipoId };
 			await _uow.Repository<SubTipo>().AddAsync(subTipo);
+			return Ok();
+		}
+
+		[HttpPut("{id:int}")]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateSubTipoDto updateSubTipoDto)
+		{
+			var entity = await _uow.Repository<SubTipo>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = updateSubTipoDto.Nombre;
+			entity.TipoId = updateSubTipoDto.TipoId;
+			await _uow.Repository<SubTipo>().Update(entity);
 			return Ok();
 		}
 	}
