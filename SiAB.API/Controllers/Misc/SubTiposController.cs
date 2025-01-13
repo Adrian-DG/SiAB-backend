@@ -48,5 +48,16 @@ namespace SiAB.API.Controllers.Misc
 			await _uow.Repository<SubTipo>().AddAsync(subTipo);
 			return Ok();
 		}
+
+		[HttpPut("{id:int}")]
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateSubTipoDto updateSubTipoDto)
+		{
+			var entity = await _uow.Repository<SubTipo>().GetByIdAsync(id);
+			if (entity is null) return NotFound();
+			entity.Nombre = updateSubTipoDto.Nombre;
+			entity.TipoId = updateSubTipoDto.TipoId;
+			await _uow.Repository<SubTipo>().Update(entity);
+			return Ok();
+		}
 	}
 }
