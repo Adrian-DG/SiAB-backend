@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Attributes;
 using SiAB.Core.Models;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 
@@ -10,6 +12,18 @@ namespace SiAB.API.Middlewares
 		
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
+			var endpoint = context.GetEndpoint();
+			if (endpoint != null)
+			{
+				var endpointMetadata = endpoint.Metadata.OfType<AvoidCustomResponse>().Any();
+
+				if (endpointMetadata)
+				{
+					await next(context);
+					return;
+				}
+			}			
+
 			// Capture the request body
 			context.Request.EnableBuffering();
 			var requestBodyStream = new MemoryStream();
