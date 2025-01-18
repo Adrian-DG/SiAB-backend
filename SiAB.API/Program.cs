@@ -14,13 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-	options.AddDefaultPolicy(
+	options.AddPolicy("AllowSpecificOrigin",
 		builder =>
 		{
 			builder
-				.AllowAnyOrigin()
+				.WithOrigins("http://localhost:4200", "https://192.168.4.34")
 				.AllowAnyMethod()
 				.AllowAnyHeader()
+				.WithExposedHeaders("content-disposition")
 				.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
 		});
 });
@@ -44,7 +45,7 @@ builder.Services.AddAuthentication(options => {
 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options => {
-	options.RequireHttpsMetadata = true;
+	options.RequireHttpsMetadata = false;
 	options.SaveToken = true;
 	options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -87,7 +88,7 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ApiResponseMiddleware>();
