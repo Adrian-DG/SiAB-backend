@@ -72,6 +72,25 @@ namespace SiAB.API.Controllers.Auth
 			return Ok(usuarios);
 		}
 
+		[HttpGet("{id}")]
+		public async Task<IActionResult> Get([FromRoute] int id)
+		{
+			var usuario = await _uow.UsuarioRepository.GetByIdAsync(id);
+			 
+			if (usuario is null) throw new BaseException("Usuario no encontrado", HttpStatusCode.NotFound);
+
+			var userRoles = await _userManager.GetRolesAsync(usuario);
+
+			return new JsonResult(new UsuarioUpdateModel
+			{
+				Cedula = usuario.Cedula,
+				Nombre = usuario.Nombre,
+				Apellido = usuario.Apellido,
+				RangoId = usuario.RangoId ?? 0,
+				Roles = userRoles.ToArray()
+			});
+		}
+
 		[HttpPost]
         public async Task<IActionResult> Create([FromBody] UsuarioRegisterDto registerDto)
         {
@@ -92,7 +111,8 @@ namespace SiAB.API.Controllers.Auth
                 Apellido = registerDto.Apellido,
                 RangoId = registerDto.RangoId,
                 Institucion = (InstitucionEnum)_codInstitucionUsuario,
-                UserName = registerDto.Username
+                UserName = registerDto.Username,
+				SecurityStamp = Guid.NewGuid().ToString()
             };
 
             if (!(await _userManager.CreateAsync(usuario, registerDto.Password)).Succeeded)
@@ -113,7 +133,38 @@ namespace SiAB.API.Controllers.Auth
             return Ok();
         }
 
-	}
 
+		[HttpPut("{id:int}")]
+		public async Task<IActionResult> Update([FromRoute] int Id, [FromBody] UsuarioUpdateDto usuarioUpdateDto)
+		{
+			var usuario = await _uow.UsuarioRepository.GetByIdAsync(Id);
+
+			if (usuario is null) throw new BaseException("", HttpStatusCode.NotFound);
+
+			usuario.Nombre = usuarioUpdateDto.Nombre;
+			usuario.Apellido = usuarioUpdateDto.Apellido;
+			usuario.Cedula = usuarioUpdateDto.Cedula;
+			usuario.RangoId = usuarioUpdateDto.RangoId;
+			usuario.SecurityStamp = usuario.SecurityStamp ?? Guid.NewGuid().ToString();
+
+			await _uow.UsuarioRepository.Update(usuario);
+
+			var roles =
+				await _uow.RoleRepository.GetListAsync(predicate: r => usuarioUpdateDto.Roles.Contains(r.Id), selector: r => r.Name)
+				?? throw new BaseException("No se encontraron roles para asignar", HttpStatusCode.NotFound);
+
+			foreach (var role in roles)
+			{
+				if (!await _userManager.IsInRoleAsync(usuario, role))
+				{
+					await _userManager.AddToRoleAsync(usuario, role);
+				}
+			}
+
+			return Ok();
+		}
+
+
+	}
 	
 }
