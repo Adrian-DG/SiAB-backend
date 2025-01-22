@@ -20,7 +20,6 @@ namespace SiAB.API.Services
 			return services
 				.AddScoped<IUnitOfWork, UnitOfWork>()
 				.AddScoped(typeof(IRepository<>), typeof(Repository<>))
-				.AddScoped<IRDCRepository, RDCRepository>()
 				.AddScoped<IJCERepository, JCERepository>()
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
 				.AddScoped<IUserContextService, UserContextService>()

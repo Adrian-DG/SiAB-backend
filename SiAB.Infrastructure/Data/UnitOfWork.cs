@@ -22,8 +22,6 @@ namespace SiAB.Infrastructure.Data
 			_context = context;
 		}
 
-		public IRDCRepository RDCRepository => new RDCRepository(_context);
-
 		public IJCERepository JCERepository => new JCERepository();
 
 		public IUsuarioRepository UsuarioRepository => new UsuarioRepository(_context);
