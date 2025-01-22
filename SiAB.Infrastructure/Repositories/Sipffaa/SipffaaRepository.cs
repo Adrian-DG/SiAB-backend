@@ -38,20 +38,32 @@ namespace SiAB.Infrastructure.Repositories
 
 		}
 
-		public async Task<IEnumerable<MiembroListDetail>> GetMiembrosByCedula(string cedula)
+		public async Task<IEnumerable<MiembroListDetail>> GetMiembrosByCedulaNombre(string param)
 		{
 			var query = @$"SELECT TOP 10 
+					      M2.foto as Foto,
 						  M.Rango,
 						  M.Cedula,
 						  M.NombreApellidoCompleto,
 						  M.EstadoMiembro
 						  FROM Consultas.Miembros AS M
-						  WHERE M.Cedula LIKE '%{cedula}%' ORDER BY M.CodRango ASC";
+						  LEFT JOIN miembros.MIEMBROS AS M2 ON M2.CodMiembro = M.CodMiembro AND M2.CodInstitucion = M.CodInstitucion
+						  WHERE M.Cedula LIKE '%{param}%' OR M.NombreApellidoCompleto LIKE '%{param}%' ORDER BY M.CodRango ASC";
 
 			using (var connection = _context.CreateConnection())
 			{
-				var result = await connection.QueryAsync<MiembroListDetail>(query);
-				return result;
+				var result = await connection.QueryAsync<MiembroListQueryResult>(query);
+
+				var list = result.Select(x => new MiembroListDetail
+				{
+					Foto = (x.Foto is null) ? null : Convert.ToBase64String(x.Foto),
+					Rango = x.Rango,
+					Cedula = x.Cedula,
+					NombreApellidoCompleto = x.NombreApellidoCompleto,
+					EstadoMiembro = x.EstadoMiembro
+				}).ToList();
+
+				return list;
 			}
 		}
 
