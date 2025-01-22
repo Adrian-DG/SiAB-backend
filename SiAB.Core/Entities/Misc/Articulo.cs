@@ -1,5 +1,6 @@
 ﻿using SiAB.Core.Abstraction;
 using SiAB.Core.Entities.Belico;
+using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Misc
 {
 	[Table("Articulos", Schema = "Misc")]
-	public class Articulo : NamedEntityMetadata
+	public class Articulo : EntityMetadata, IAuditableEntityMetadata
 	{
 		[ForeignKey(nameof(CategoriaId))]
         public int CategoriaId { get; set; }
@@ -31,14 +32,23 @@ namespace SiAB.Core.Entities.Misc
         [ForeignKey(nameof(ModeloId))]
         public int ModeloId { get; set; }
         public virtual Modelo? Modelo { get; set; }
+		public string? Serie { get; set; }
 
-        [ForeignKey(nameof(CalibreId))]
+		[ForeignKey(nameof(CalibreId))]
         public int CalibreId { get; set; }
         public virtual Calibre? Calibre { get; set; }
 
-        public bool EsSeriado { get; set; } = false;
+        [ForeignKey(nameof(PropiedadId))]
+		public int PropiedadId { get; set; }
+		public virtual Propiedad? Propiedad { get; set; }
+		public EstadoEnum Estado { get; set; }
 
-        public virtual ICollection<Serie>? Series { get; set; }
-        public virtual ICollection<Alerta>? Alertas { get; set; }
-    }
+        // Auditables
+
+		public int UsuarioId { get; set; }
+		public InstitucionEnum CodInstitucion { get; set; }
+		public DateTime FechaCreacion { get; set; }
+		public int? UsuarioIdModifico { get; set; }
+		public DateTime? FechaModificacion { get; set; }
+	}
 }

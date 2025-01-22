@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Enums
 {
-	public enum TipoDebitoCreditoEnum
+	public enum TipoTransaccionEnum
 	{
 		MIEMBRO = 1,
 		DEPOSITO,

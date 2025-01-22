@@ -50,36 +50,6 @@ namespace SiAB.Infrastructure.Data
 				.WithMany(t => t.SubTipos)
 				.HasForeignKey(st => st.TipoId)
 				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Tipo>()
-				.HasOne(t => t.Categoria)
-				.WithMany(c => c.Tipos)
-				.HasForeignKey(t => t.CategoriaId)
-				.OnDelete(DeleteBehavior.NoAction);	
-			
-			builder.Entity<Alerta>()
-				.HasOne(a => a.Serie)
-				.WithMany(s => s.Alertas)
-				.HasForeignKey(a => a.SerieId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Alerta>()
-				.HasOne(a => a.Articulo)
-				.WithMany(a => a.Alertas)
-				.HasForeignKey(a => a.ArticuloId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Serie>()
-				.HasOne(s => s.Articulo)
-				.WithMany(a => a.Series)
-				.HasForeignKey(s => s.ArticuloId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Serie>()
-				.HasOne(s => s.Propiedad)
-				.WithMany(p => p.Series)
-				.HasForeignKey(s => s.PropiedadId)
-				.OnDelete(DeleteBehavior.NoAction);
 
 			builder.Entity<Modelo>()
 				.HasOne(s => s.Marca)
@@ -88,8 +58,6 @@ namespace SiAB.Infrastructure.Data
 				.OnDelete(DeleteBehavior.NoAction);
 
 			#endregion
-
-			ConfigureRegistroDebitoCreditoo(builder.Entity<RegistroDebitoCredito>());
 
 			#region Data seeding
 
@@ -105,23 +73,7 @@ namespace SiAB.Infrastructure.Data
 
 			#endregion		
 			
-		}
-
-		public void ConfigureRegistroDebitoCreditoo(EntityTypeBuilder<RegistroDebitoCredito> builder)
-		{
-			var options = new JsonSerializerSettings
-			{
-				NullValueHandling = NullValueHandling.Ignore,
-				Formatting = Formatting.Indented,
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-			};
-
-			builder.Property<IList<RegistroDebitoModel>?>(p => p.Articulos)
-				.HasConversion(
-					v => v == null ? null : JsonConvert.SerializeObject(v, options),
-					v => v == null ? null : JsonConvert.DeserializeObject<IList<RegistroDebitoModel>>(v, options)
-				);				
-		}
+		}		
 
 		// Configuramos un filtro global para las entidades, omitiendo registros borraddos (IsDeleted)
 		private void SetGlobalQueryFilter(ModelBuilder modelBuilder)
@@ -147,14 +99,14 @@ namespace SiAB.Infrastructure.Data
 		#region Belico
 		public DbSet<Alerta> Alertas { get; set; }
 		public DbSet<Calibre> Calibres { get; set; }
-        public DbSet<Serie> Series { get; set; }
-        public DbSet<RegistroDebitoCredito> RegistrosDebitoCredito { get; set; }
         public DbSet<Secuencia> Secuencias { get; set; }
+		public DbSet<Transaccion> Transacciones { get; set; }
+		public DbSet<DetalleArticuloTransaccion> DetallesArticuloTransaccion { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Miscelaneos
-        public DbSet<Articulo> Articulos { get; set; }
+		#region Miscelaneos
+		public DbSet<Articulo> Articulos { get; set; }
 		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<Deposito> Depositos { get; set; }
 		public DbSet<Marca> Marcas { get; set; }
