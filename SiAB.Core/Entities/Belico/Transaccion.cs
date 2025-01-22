@@ -18,8 +18,6 @@ namespace SiAB.Core.Entities.Belico
 
 		public TipoTransaccionEnum TipoDestino { get; set; }
 		public required string Destino { get; set; }
-		public int NoDocumento { get; set; }
-		public required byte[] Documento { get; set; }
 
 		[StringLength(11)]
 		public required string Intendente { get; set; }
@@ -39,6 +37,8 @@ namespace SiAB.Core.Entities.Belico
 		[StringLength(11)]
 		public required string FirmadoPor { get; set; }
 
+		public DateOnly FechaEfectividad { get; set; }
+
 		// auditables 
 
 		public int UsuarioId { get; set; }
@@ -46,5 +46,8 @@ namespace SiAB.Core.Entities.Belico
 		public DateTime FechaCreacion { get; set; }
 		public int? UsuarioIdModifico { get; set; }
 		public DateTime? FechaModificacion { get; set; }
+
+		public virtual ICollection<DetalleArticuloTransaccion>? DetallesTransaccion { get; set; }
+		public virtual ICollection<DocumentoTransaccion>? DocumentosTransaccion { get; set; }
 	}
 }

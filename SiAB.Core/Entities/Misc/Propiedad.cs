@@ -12,6 +12,5 @@ namespace SiAB.Core.Entities.Misc
 	[Table("Propiedades", Schema = "Misc")]
 	public class Propiedad : NamedEntityMetadata
 	{
-		public virtual ICollection<Serie>? Series { get; set; }
 	}
 }

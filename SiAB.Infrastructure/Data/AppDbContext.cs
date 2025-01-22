@@ -35,16 +35,64 @@ namespace SiAB.Infrastructure.Data
 
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
-			#endregion			
+			#endregion
 
 			#region Relations configuration
-			
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Categoria)
+				.WithMany(c => c.Articulos)
+				.HasForeignKey(a => a.CategoriaId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Tipo)
+				.WithMany(t => t.Articulos)
+				.HasForeignKey(a => a.TipoId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.SubTipo)
+				.WithMany(t => t.Articulos)
+				.HasForeignKey(a => a.SubTipoId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Marca)
+				.WithMany(t => t.Articulos)
+				.HasForeignKey(a => a.MarcaId)
+				.OnDelete(DeleteBehavior.NoAction);
+
 			builder.Entity<Articulo>()
 				.HasOne(a => a.Modelo)
 				.WithMany(m => m.Articulos)
 				.HasForeignKey(a => a.ModeloId)
 				.OnDelete(DeleteBehavior.NoAction);
-			
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Calibre)
+				.WithMany(m => m.Articulos)
+				.HasForeignKey(a => a.CalibreId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<DetalleArticuloTransaccion>().HasOne(d => d.Articulo);
+
+			builder.Entity<DetalleArticuloTransaccion>()
+				.HasOne(d => d.Transaccion)
+				.WithMany(d => d.DetallesTransaccion)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<DocumentoTransaccion>()
+				.HasOne(d => d.Transaccion)
+				.WithMany(d => d.DocumentosTransaccion)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Tipo>()
+				.HasOne(t => t.Categoria)
+				.WithMany(c => c.Tipos)
+				.HasForeignKey(t => t.CategoriaId)
+				.OnDelete(DeleteBehavior.NoAction);
+
 			builder.Entity<SubTipo>()
 				.HasOne(st => st.Tipo)
 				.WithMany(t => t.SubTipos)
@@ -55,7 +103,7 @@ namespace SiAB.Infrastructure.Data
 				.HasOne(s => s.Marca)
 				.WithMany(p => p.Modelos)
 				.HasForeignKey(s => s.MarcaId)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.NoAction);			
 
 			#endregion
 
@@ -102,6 +150,7 @@ namespace SiAB.Infrastructure.Data
         public DbSet<Secuencia> Secuencias { get; set; }
 		public DbSet<Transaccion> Transacciones { get; set; }
 		public DbSet<DetalleArticuloTransaccion> DetallesArticuloTransaccion { get; set; }
+		public DbSet<DocumentoTransaccion> DocumentosTransaccion { get; set; }
 
 		#endregion
 

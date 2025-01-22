@@ -14,5 +14,6 @@ namespace SiAB.Core.Entities.Misc
         [ForeignKey(nameof(TipoId))]
         public int TipoId { get; set; }
         public virtual Tipo? Tipo { get; set; }
-    }
+		public virtual ICollection<Articulo>? Articulos { get; set; }
+	}
 }

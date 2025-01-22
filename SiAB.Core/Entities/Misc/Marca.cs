@@ -12,5 +12,6 @@ namespace SiAB.Core.Entities.Misc
     public class Marca : NamedEntityMetadata
     {
         public virtual ICollection<Modelo>? Modelos { get; set; }
+		public virtual ICollection<Articulo>? Articulos { get; set; }
 	}
 }

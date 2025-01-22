@@ -32,7 +32,6 @@ namespace SiAB.Core.Entities.Misc
         [ForeignKey(nameof(ModeloId))]
         public int ModeloId { get; set; }
         public virtual Modelo? Modelo { get; set; }
-		public string? Serie { get; set; }
 
 		[ForeignKey(nameof(CalibreId))]
         public int CalibreId { get; set; }
@@ -41,6 +40,7 @@ namespace SiAB.Core.Entities.Misc
         [ForeignKey(nameof(PropiedadId))]
 		public int PropiedadId { get; set; }
 		public virtual Propiedad? Propiedad { get; set; }
+		public string? Serie { get; set; }
 		public EstadoEnum Estado { get; set; }
 
         // Auditables
