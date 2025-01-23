@@ -15,7 +15,7 @@ namespace SiAB.Core.Entities.Belico
 		[ForeignKey(nameof(TransaccionId))]
 		public int TransaccionId { get; set; }
 		public virtual Transaccion? Transaccion { get; set; }
-		public required string Descripcion { get; set; }
+		public required string Nombre { get; set; }
 		public byte[]? Adjunto { get; set; }
 
 		// auditables
