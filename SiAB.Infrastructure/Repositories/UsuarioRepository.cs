@@ -2,8 +2,10 @@
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Core.DTO;
+using SiAB.Core.DTO.Auth;
 using SiAB.Core.Entities.Auth;
 using SiAB.Core.Models;
+using SiAB.Core.Models.Auth;
 using SiAB.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,11 @@ namespace SiAB.Infrastructure.Repositories
 		{
 			_context = context;
 			_repository = context.Set<Usuario>();
+		}
+
+		public async  Task<Usuario?> GetByIdAsync(int Id)
+		{
+			return await _repository.FindAsync(Id);
 		}
 
 		public async Task<PagedData<TResult>> GetListPaginateAsync<TResult>(Expression<Func<Usuario, bool>> predicate, Expression<Func<Usuario, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, int page = 1, int pageSize = 10, params Expression<Func<Usuario, object>>[] includes) where TResult : class
@@ -50,6 +57,13 @@ namespace SiAB.Infrastructure.Repositories
 				TotalCount = await _repository.CountAsync(predicate),
 				Rows = result
 			};
+		}
+
+		public async Task Update(Usuario usuario)
+		{			
+			_context.Attach<Usuario>(usuario);
+			_context.Entry(usuario).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
 		}
 	}
 }

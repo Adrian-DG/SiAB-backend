@@ -15,5 +15,6 @@ namespace SiAB.Core.Entities.Misc
         public int CategoriaId { get; set; }
         public virtual Categoria? Categoria { get; set; }
         public virtual ICollection<SubTipo>? SubTipos { get; set; }
-    }
+		public virtual ICollection<Articulo>? Articulos { get; set; }
+	}
 }

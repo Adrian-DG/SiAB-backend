@@ -20,7 +20,6 @@ namespace SiAB.API.Services
 			return services
 				.AddScoped<IUnitOfWork, UnitOfWork>()
 				.AddScoped(typeof(IRepository<>), typeof(Repository<>))
-				.AddScoped<IRDCRepository, RDCRepository>()
 				.AddScoped<IJCERepository, JCERepository>()
 				.AddScoped<ISipffaaRepository, SipffaaRepository>()
 				.AddScoped<IUserContextService, UserContextService>()
@@ -30,6 +29,7 @@ namespace SiAB.API.Services
 				.AddScoped<CodInstitucionFilter>()
 				.AddScoped(typeof(NamedFilter<>))
 				.AddScoped<INamedService, NamedService>()
+				.AddScoped<IDatabaseConnectionService, DatabaseConnectionService>()
 				.AddScoped<CreateAuditableFilter>()
 				.AddScoped<UpdateAuditableFilter>()
 				.AddHttpContextAccessor() // Register IHttpContextAccessor

@@ -11,5 +11,6 @@ namespace SiAB.Core.Entities.Misc
     [Table("Calibres", Schema = "Misc")]
     public class Calibre : NamedEntityMetadata
     {
-    }
+		public virtual ICollection<Articulo>? Articulos { get; set; }
+	}
 }

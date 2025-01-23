@@ -17,10 +17,6 @@ namespace SiAB.Core.Entities.Belico
         public string? Cedula { get; set; }
         public AlertaEstatusEnum Estatus { get; set; }
 
-        [ForeignKey(nameof(SerieId))]
-        public int SerieId { get; set; }
-        public virtual Serie? Serie { get; set; }
-
         [ForeignKey(nameof(ArticuloId))]
         public int ArticuloId { get; set; }
         public virtual Articulo? Articulo { get; set; }

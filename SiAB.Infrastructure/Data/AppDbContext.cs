@@ -35,61 +35,77 @@ namespace SiAB.Infrastructure.Data
 
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
-			#endregion			
+			#endregion
 
 			#region Relations configuration
-			
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Categoria)
+				.WithMany(c => c.Articulos)
+				.HasForeignKey(a => a.CategoriaId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Tipo)
+				.WithMany(t => t.Articulos)
+				.HasForeignKey(a => a.TipoId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.SubTipo)
+				.WithMany(t => t.Articulos)
+				.HasForeignKey(a => a.SubTipoId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Marca)
+				.WithMany(t => t.Articulos)
+				.HasForeignKey(a => a.MarcaId)
+				.OnDelete(DeleteBehavior.NoAction);
+
 			builder.Entity<Articulo>()
 				.HasOne(a => a.Modelo)
 				.WithMany(m => m.Articulos)
 				.HasForeignKey(a => a.ModeloId)
 				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<SubTipo>()
-				.HasOne(st => st.Tipo)
-				.WithMany(t => t.SubTipos)
-				.HasForeignKey(st => st.TipoId)
+
+			builder.Entity<Articulo>()
+				.HasOne(a => a.Calibre)
+				.WithMany(m => m.Articulos)
+				.HasForeignKey(a => a.CalibreId)
 				.OnDelete(DeleteBehavior.NoAction);
-			
+
+			builder.Entity<DetalleArticuloTransaccion>().HasOne(d => d.Articulo);
+
+			builder.Entity<DetalleArticuloTransaccion>()
+				.HasOne(d => d.Transaccion)
+				.WithMany(d => d.DetallesTransaccion)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<DocumentoTransaccion>()
+				.HasOne(d => d.Transaccion)
+				.WithMany(d => d.DocumentosTransaccion)
+				.OnDelete(DeleteBehavior.NoAction);
+
 			builder.Entity<Tipo>()
 				.HasOne(t => t.Categoria)
 				.WithMany(c => c.Tipos)
 				.HasForeignKey(t => t.CategoriaId)
-				.OnDelete(DeleteBehavior.NoAction);	
-			
-			builder.Entity<Alerta>()
-				.HasOne(a => a.Serie)
-				.WithMany(s => s.Alertas)
-				.HasForeignKey(a => a.SerieId)
 				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Alerta>()
-				.HasOne(a => a.Articulo)
-				.WithMany(a => a.Alertas)
-				.HasForeignKey(a => a.ArticuloId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Serie>()
-				.HasOne(s => s.Articulo)
-				.WithMany(a => a.Series)
-				.HasForeignKey(s => s.ArticuloId)
-				.OnDelete(DeleteBehavior.NoAction);
-			
-			builder.Entity<Serie>()
-				.HasOne(s => s.Propiedad)
-				.WithMany(p => p.Series)
-				.HasForeignKey(s => s.PropiedadId)
+
+			builder.Entity<SubTipo>()
+				.HasOne(st => st.Tipo)
+				.WithMany(t => t.SubTipos)
+				.HasForeignKey(st => st.TipoId)
 				.OnDelete(DeleteBehavior.NoAction);
 
 			builder.Entity<Modelo>()
 				.HasOne(s => s.Marca)
 				.WithMany(p => p.Modelos)
 				.HasForeignKey(s => s.MarcaId)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.NoAction);			
 
 			#endregion
-
-			ConfigureRegistroDebitoCreditoo(builder.Entity<RegistroDebitoCredito>());
 
 			#region Data seeding
 
@@ -105,23 +121,7 @@ namespace SiAB.Infrastructure.Data
 
 			#endregion		
 			
-		}
-
-		public void ConfigureRegistroDebitoCreditoo(EntityTypeBuilder<RegistroDebitoCredito> builder)
-		{
-			var options = new JsonSerializerSettings
-			{
-				NullValueHandling = NullValueHandling.Ignore,
-				Formatting = Formatting.Indented,
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-			};
-
-			builder.Property<IList<RegistroDebitoModel>?>(p => p.Articulos)
-				.HasConversion(
-					v => v == null ? null : JsonConvert.SerializeObject(v, options),
-					v => v == null ? null : JsonConvert.DeserializeObject<IList<RegistroDebitoModel>>(v, options)
-				);				
-		}
+		}		
 
 		// Configuramos un filtro global para las entidades, omitiendo registros borraddos (IsDeleted)
 		private void SetGlobalQueryFilter(ModelBuilder modelBuilder)
@@ -147,14 +147,15 @@ namespace SiAB.Infrastructure.Data
 		#region Belico
 		public DbSet<Alerta> Alertas { get; set; }
 		public DbSet<Calibre> Calibres { get; set; }
-        public DbSet<Serie> Series { get; set; }
-        public DbSet<RegistroDebitoCredito> RegistrosDebitoCredito { get; set; }
         public DbSet<Secuencia> Secuencias { get; set; }
+		public DbSet<Transaccion> Transacciones { get; set; }
+		public DbSet<DetalleArticuloTransaccion> DetallesArticuloTransaccion { get; set; }
+		public DbSet<DocumentoTransaccion> DocumentosTransaccion { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Miscelaneos
-        public DbSet<Articulo> Articulos { get; set; }
+		#region Miscelaneos
+		public DbSet<Articulo> Articulos { get; set; }
 		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<Deposito> Depositos { get; set; }
 		public DbSet<Marca> Marcas { get; set; }

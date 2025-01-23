@@ -17,12 +17,12 @@ namespace SiAB.API.Controllers.Sipffaa
 		/// </summary>
 		/// <param name="cedula">La cédula del miembro.</param>
 		/// <returns>Una lista de miembros que coinciden con la cédula proporcionada.</returns>
-		[HttpGet("filtrar-miembros-por-cedula/{cedula}")]
-		public async Task<IActionResult> GetMiembrosByCedula([FromRoute] string cedula)
+		[HttpGet("filtrar-miembros-por-cedula-nombre")]
+		public async Task<IActionResult> GetMiembrosByCedula([FromQuery] string param)
 		{
-			if (string.IsNullOrEmpty(cedula)) return BadRequest();
+			if (string.IsNullOrEmpty(param)) return BadRequest();
 
-			var miembros = await _repository.GetMiembrosByCedula(cedula.Replace("-", ""));
+			var miembros = await _repository.GetMiembrosByCedulaNombre(param.Replace("-", ""));
 
 			return new JsonResult(miembros);
 		}

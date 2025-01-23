@@ -12,5 +12,6 @@ namespace SiAB.Core.Entities.Misc
 	public class Categoria : NamedEntityMetadata
 	{
 		public virtual ICollection<Tipo>? Tipos { get; set; }
+		public virtual ICollection<Articulo>? Articulos { get; set; }
 	}
 }

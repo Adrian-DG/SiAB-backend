@@ -17,7 +17,7 @@ namespace SiAB.API.Controllers.Reports
 		}
 
 		[HttpGet("plantilla-relacion-armas")]
-		public IActionResult GetPlantillaRelacionArmas()
+		public IActionResult GetPlantillaRelacionArmasMilitares()
 		{
 			using (ExcelPackage excel = new ExcelPackage())
 			{				
@@ -25,7 +25,7 @@ namespace SiAB.API.Controllers.Reports
 
 				// Header
 
-				var columns = new string[] { "cedula", "tipo", "marca", "modelo", "calibre", "serie", "formulario53", "fechaEfectividad" };
+				var columns = new string[] { "cedula", "categoria", "tipo", "subtipo", "marca", "modelo", "calibre", "serie", "propiedad", "formulario53", "cantidad", "fechaEfectividad" };
 				var header = workSheet.Cells[1, 1, 1, columns.Length];
 
 				for (var i = 0; i < columns.Length; i++)
@@ -41,10 +41,11 @@ namespace SiAB.API.Controllers.Reports
 				{ 
 					excel.SaveAs(ms);
 					byte[] file = ms.ToArray();
-					return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "plantilla_relacion_armas.xlsx");
+					return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "plantilla_relacion_armas_militares.xlsx");
 				}
 			}
 		}
+		
 
 	}
 }
