@@ -25,7 +25,7 @@ namespace SiAB.API.Controllers.Reports
 
 				// Header
 
-				var columns = new string[] { "cedula", "categoria", "tipo", "marca", "modelo", "calibre", "serie", "propiedad", "formulario53", "cantidad", "fechaEfectividad" };
+				var columns = new string[] { "cedula", "categoria", "tipo", "subtipo", "marca", "modelo", "calibre", "serie", "propiedad", "formulario53", "cantidad", "fechaEfectividad" };
 				var header = workSheet.Cells[1, 1, 1, columns.Length];
 
 				for (var i = 0; i < columns.Length; i++)
