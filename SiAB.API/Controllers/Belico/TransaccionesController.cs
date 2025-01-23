@@ -13,6 +13,7 @@ using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
+using System.Data;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -72,7 +73,9 @@ namespace SiAB.API.Controllers.Belico
 							var propiedad = worksheet.Cells[row, 9].Value?.ToString();
 							var formulario53 = worksheet.Cells[row, 10].Value?.ToString();
 							var cantidad = worksheet.Cells[row, 11].Value?.ToString();
-							var fechaEfectividad = worksheet.Cells[row, 12].Value;
+							var fechaValue = worksheet.Cells[row, 12].Value?.ToString();
+
+							DateTime fechaEfectividad = DateTime.Parse(fechaValue); /*DateTime.FromOADate(Convert.ToDouble(fechaValue));*/
 
 							var articuloId = await InsertArticulo(
 									categoria: categoria,
@@ -88,14 +91,14 @@ namespace SiAB.API.Controllers.Belico
 								tipoOrigen: TipoTransaccionEnum.DEPOSITO,
 								origen: "N/A",
 								tipoDestino: TipoTransaccionEnum.MIEMBRO,
-								destino: cedula,
+								destino: cedula.Replace("-", ""),
 								intendente: "00000000000",
 								encargadoGeneral: "00000000000",
 								encargadoDeposito: "00000000000",
 								entregadoA: "00000000000",
 								recibidoPor: "00000000000",
 								firmadoPor: "00000000000",
-								fechaEfectividad: DateTime.Now);
+								fechaEfectividad: fechaEfectividad);
 
 							articulosData.Add(new ArticuloItemMetadata { ArticuloId = articuloId, TransaccionId = transaccionId, Cantidad = int.Parse(cantidad) });
 						}
@@ -173,19 +176,33 @@ namespace SiAB.API.Controllers.Belico
 			}
 		}
 
+		internal class ArticuloListItem
+		{
+			public int ArticuloId { get; set; }
+			public int Cantidad { get; set; }
+			public int TransaccionId { get; set; }
+		}
+
 		private async Task InsertDetalleTransaccion(List<ArticuloItemMetadata> data)
 		{
-			var parameters = new SqlParameter[] { 
-				new SqlParameter("@Articulos", data),
-				new SqlParameter("@UsuarioId", _codUsuario),
-				new SqlParameter("@CodInstitucion", _codInstitucionUsuario)
-			};
-
-			using (var context = new AppDbContext(optionsBuilder.Options))
+			foreach (var item in data)
 			{
-				await context.Database.ExecuteSqlRawAsync("EXEC [Belico].[registrar_detalle_transaccion] @Articulos, @UsuarioId, @CodInstitucion", parameters);
+				var parameters = new SqlParameter[]
+				{
+					new SqlParameter("@ArticuloId", item.ArticuloId),
+					new SqlParameter("@TransaccionId", item.TransaccionId),
+					new SqlParameter("@Cantidad", item.Cantidad),
+					new SqlParameter("@UsuarioId", _codUsuario),
+					new SqlParameter("@CodInstitucion", _codInstitucionUsuario)
+				};
+
+				using (var context = new AppDbContext(optionsBuilder.Options))
+				{
+					await context.Database.ExecuteSqlRawAsync("EXEC [Belico].[registrar_detalle_transaccion] @ArticuloId, @TransaccionId, @Cantidad, @UsuarioId, @CodInstitucion", parameters);
+				}
 			}
-		}	
+			
+		}
 
 
 	}
