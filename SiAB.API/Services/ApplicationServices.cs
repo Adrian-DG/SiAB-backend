@@ -29,6 +29,7 @@ namespace SiAB.API.Services
 				.AddScoped<CodInstitucionFilter>()
 				.AddScoped(typeof(NamedFilter<>))
 				.AddScoped<INamedService, NamedService>()
+				.AddScoped<IDatabaseConnectionService, DatabaseConnectionService>()
 				.AddScoped<CreateAuditableFilter>()
 				.AddScoped<UpdateAuditableFilter>()
 				.AddHttpContextAccessor() // Register IHttpContextAccessor
