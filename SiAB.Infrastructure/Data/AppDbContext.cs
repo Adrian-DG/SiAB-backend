@@ -23,10 +23,6 @@ namespace SiAB.Infrastructure.Data
 		{
 		}
 
-		public AppDbContext()
-		{
-		}
-
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
