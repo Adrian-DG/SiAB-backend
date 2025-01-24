@@ -8,6 +8,7 @@ using OfficeOpenXml;
 using SiAB.API.Attributes;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
+using SiAB.Core.DTO.Transacciones;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
@@ -40,14 +41,18 @@ namespace SiAB.API.Controllers.Belico
 			public int Cantidad { get; set; }
 		}
 
-		[HttpPost("upload-relacion-articulos")]
-		public async Task<IActionResult> UploadRelacionArticulos(IFormFile file)
+
+		[HttpPost("upload-excel-relacion-articulos")]
+		public async Task<IActionResult> UploadRelacionArticulos(IFormFile File, [FromQuery] InputOrigenDestinoDto inputOrigenDestinoDto)
 		{
-			if (file is null || file.Length == 0) throw new BaseException("No se ha enviado un archivo", HttpStatusCode.BadRequest);
+			if (File is null || File.Length == 0)
+			{
+				throw new BaseException("No se ha enviado un archivo", HttpStatusCode.BadRequest);
+			}
 
 			using (var stream = new MemoryStream())
 			{
-				await file.CopyToAsync(stream);
+				await File.CopyToAsync(stream);
 
 				using (ExcelPackage excel = new ExcelPackage(stream))
 				{
@@ -62,7 +67,7 @@ namespace SiAB.API.Controllers.Belico
 
 						for (int row = start_row; row <= row_dimmession; row++)
 						{
-							var cedula = worksheet.Cells[row, 1].Value?.ToString();
+							var origen = worksheet.Cells[row, 1].Value?.ToString();
 							var categoria = worksheet.Cells[row, 2].Value?.ToString();
 							var tipo = worksheet.Cells[row, 3].Value?.ToString();
 							var subtipo = worksheet.Cells[row, 4].Value?.ToString();
@@ -75,8 +80,10 @@ namespace SiAB.API.Controllers.Belico
 							var cantidad = worksheet.Cells[row, 11].Value?.ToString();
 							var fechaValue = worksheet.Cells[row, 12].Value?.ToString();
 
-							DateTime fechaEfectividad = DateTime.Parse(fechaValue); /*DateTime.FromOADate(Convert.ToDouble(fechaValue));*/
-
+							DateTime fechaEfectividad = int.TryParse(fechaValue, out int result) 
+								? DateTime.FromOADate(Convert.ToDouble(fechaValue)) 
+								: DateTime.Parse(fechaValue); 
+												
 							var articuloId = await InsertArticulo(
 									categoria: categoria,
 									tipo: tipo,
@@ -88,10 +95,10 @@ namespace SiAB.API.Controllers.Belico
 									propiedad: propiedad);
 
 							var transaccionId = await InsertTransaccion(
-								tipoOrigen: TipoTransaccionEnum.DEPOSITO,
+								tipoOrigen: inputOrigenDestinoDto.Origen,
 								origen: "N/A",
-								tipoDestino: TipoTransaccionEnum.MIEMBRO,
-								destino: cedula.Replace("-", ""),
+								tipoDestino: inputOrigenDestinoDto.Destino,
+								destino: origen.Replace("-", ""),
 								intendente: "00000000000",
 								encargadoGeneral: "00000000000",
 								encargadoDeposito: "00000000000",
@@ -176,13 +183,7 @@ namespace SiAB.API.Controllers.Belico
 			}
 		}
 
-		internal class ArticuloListItem
-		{
-			public int ArticuloId { get; set; }
-			public int Cantidad { get; set; }
-			public int TransaccionId { get; set; }
-		}
-
+		
 		private async Task InsertDetalleTransaccion(List<ArticuloItemMetadata> data)
 		{
 			foreach (var item in data)
