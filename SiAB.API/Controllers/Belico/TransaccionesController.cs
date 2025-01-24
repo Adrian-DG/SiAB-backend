@@ -8,11 +8,13 @@ using OfficeOpenXml;
 using SiAB.API.Attributes;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
+using SiAB.Core.DTO.Transacciones;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
+using System.Data;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -39,14 +41,18 @@ namespace SiAB.API.Controllers.Belico
 			public int Cantidad { get; set; }
 		}
 
-		[HttpPost("upload-relacion-articulos")]
-		public async Task<IActionResult> UploadRelacionArticulos(IFormFile file)
+
+		[HttpPost("upload-excel-relacion-articulos")]
+		public async Task<IActionResult> UploadRelacionArticulos(IFormFile File, [FromQuery] InputOrigenDestinoDto inputOrigenDestinoDto)
 		{
-			if (file is null || file.Length == 0) throw new BaseException("No se ha enviado un archivo", HttpStatusCode.BadRequest);
+			if (File is null || File.Length == 0)
+			{
+				throw new BaseException("No se ha enviado un archivo", HttpStatusCode.BadRequest);
+			}
 
 			using (var stream = new MemoryStream())
 			{
-				await file.CopyToAsync(stream);
+				await File.CopyToAsync(stream);
 
 				using (ExcelPackage excel = new ExcelPackage(stream))
 				{
@@ -61,7 +67,7 @@ namespace SiAB.API.Controllers.Belico
 
 						for (int row = start_row; row <= row_dimmession; row++)
 						{
-							var cedula = worksheet.Cells[row, 1].Value?.ToString();
+							var origen = worksheet.Cells[row, 1].Value?.ToString();
 							var categoria = worksheet.Cells[row, 2].Value?.ToString();
 							var tipo = worksheet.Cells[row, 3].Value?.ToString();
 							var subtipo = worksheet.Cells[row, 4].Value?.ToString();
@@ -72,8 +78,12 @@ namespace SiAB.API.Controllers.Belico
 							var propiedad = worksheet.Cells[row, 9].Value?.ToString();
 							var formulario53 = worksheet.Cells[row, 10].Value?.ToString();
 							var cantidad = worksheet.Cells[row, 11].Value?.ToString();
-							var fechaEfectividad = worksheet.Cells[row, 12].Value;
+							var fechaValue = worksheet.Cells[row, 12].Value?.ToString();
 
+							DateTime fechaEfectividad = int.TryParse(fechaValue, out int result) 
+								? DateTime.FromOADate(Convert.ToDouble(fechaValue)) 
+								: DateTime.Parse(fechaValue); 
+												
 							var articuloId = await InsertArticulo(
 									categoria: categoria,
 									tipo: tipo,
@@ -85,17 +95,17 @@ namespace SiAB.API.Controllers.Belico
 									propiedad: propiedad);
 
 							var transaccionId = await InsertTransaccion(
-								tipoOrigen: TipoTransaccionEnum.DEPOSITO,
+								tipoOrigen: inputOrigenDestinoDto.Origen,
 								origen: "N/A",
-								tipoDestino: TipoTransaccionEnum.MIEMBRO,
-								destino: cedula,
+								tipoDestino: inputOrigenDestinoDto.Destino,
+								destino: origen.Replace("-", ""),
 								intendente: "00000000000",
 								encargadoGeneral: "00000000000",
 								encargadoDeposito: "00000000000",
 								entregadoA: "00000000000",
 								recibidoPor: "00000000000",
 								firmadoPor: "00000000000",
-								fechaEfectividad: DateTime.Now);
+								fechaEfectividad: fechaEfectividad);
 
 							articulosData.Add(new ArticuloItemMetadata { ArticuloId = articuloId, TransaccionId = transaccionId, Cantidad = int.Parse(cantidad) });
 						}
@@ -173,19 +183,27 @@ namespace SiAB.API.Controllers.Belico
 			}
 		}
 
+		
 		private async Task InsertDetalleTransaccion(List<ArticuloItemMetadata> data)
 		{
-			var parameters = new SqlParameter[] { 
-				new SqlParameter("@Articulos", data),
-				new SqlParameter("@UsuarioId", _codUsuario),
-				new SqlParameter("@CodInstitucion", _codInstitucionUsuario)
-			};
-
-			using (var context = new AppDbContext(optionsBuilder.Options))
+			foreach (var item in data)
 			{
-				await context.Database.ExecuteSqlRawAsync("EXEC [Belico].[registrar_detalle_transaccion] @Articulos, @UsuarioId, @CodInstitucion", parameters);
+				var parameters = new SqlParameter[]
+				{
+					new SqlParameter("@ArticuloId", item.ArticuloId),
+					new SqlParameter("@TransaccionId", item.TransaccionId),
+					new SqlParameter("@Cantidad", item.Cantidad),
+					new SqlParameter("@UsuarioId", _codUsuario),
+					new SqlParameter("@CodInstitucion", _codInstitucionUsuario)
+				};
+
+				using (var context = new AppDbContext(optionsBuilder.Options))
+				{
+					await context.Database.ExecuteSqlRawAsync("EXEC [Belico].[registrar_detalle_transaccion] @ArticuloId, @TransaccionId, @Cantidad, @UsuarioId, @CodInstitucion", parameters);
+				}
 			}
-		}	
+			
+		}
 
 
 	}
