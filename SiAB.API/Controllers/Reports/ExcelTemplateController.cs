@@ -32,10 +32,10 @@ namespace SiAB.API.Controllers.Reports
 				{
 					workSheet.Cells[1, i + 1].Value = columns[i];
 
-					//if (columns[i] == "fechaEfectividad")
-					//{
-					//	workSheet.Column(i + 1).Style.Numberformat.Format = "dd/MM/yyyy";
-					//}
+					if (columns[i] == "fechaEfectividad")
+					{
+						workSheet.Column(i + 1).Style.Numberformat.Format = "dd/MM/yyyy";
+					}
 				}
 
 				header.Style.Font.Bold = true;
