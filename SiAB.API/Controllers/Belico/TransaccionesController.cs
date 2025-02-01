@@ -32,6 +32,21 @@ namespace SiAB.API.Controllers.Belico
 		{
 			_connectionService = databaseConnectionService;
 			optionsBuilder.UseSqlServer(_connectionService.GetConnectionString());
+		}		
+
+
+		[HttpGet("filter-articulos-origen-transaccion")]
+		public async Task<IActionResult> GetArticulosOrigenTransaccion([FromQuery] TipoTransaccionEnum tipoOrigen, [FromQuery] string origen)
+		{
+			using (var context = new AppDbContext(optionsBuilder.Options))
+			{
+				var result = await context.SP_Obtener_Articulos_Origen_Transaccion.FromSqlRaw("EXEC [Belico].[obtener_articulos_origen_transaccion] @TipoOrigen, @Origen, @CodInstitucion",
+						new SqlParameter("@TipoOrigen", (int)tipoOrigen),
+						new SqlParameter("@Origen", origen.Replace("-", "")),
+						new SqlParameter("@CodInstitucion", _codInstitucionUsuario)).ToListAsync();
+
+				return Ok(result);
+			}
 		}
 
 		internal sealed class ArticuloItemMetadata
@@ -100,7 +115,7 @@ namespace SiAB.API.Controllers.Belico
 								tipoOrigen: inputOrigenDestinoDto.Origen,
 								origen: origen,
 								tipoDestino: inputOrigenDestinoDto.Destino,
-								destino: destino.ToString(),
+								destino: destino.ToString().Replace("-", ""),
 								intendente: "00000000000",
 								encargadoGeneral: "00000000000",
 								encargadoDeposito: "00000000000",

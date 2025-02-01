@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using SiAB.Core.Models.RegistroDebitoCredito;
 using SiAB.Core.Enums;
 using SiAB.Infrastructure.Data.Seed;
+using SiAB.Core.ProcedureResults;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -34,6 +35,8 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<Usuario>().HasIndex(u => u.Cedula).IsUnique();
 
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
+
+			builder.Entity<ArticuloTransaccionItem>().HasNoKey();
 
 			#endregion
 
@@ -143,6 +146,12 @@ namespace SiAB.Infrastructure.Data
 		}
 
 		#region Entities
+
+		#region Procedures
+
+		public DbSet<ArticuloTransaccionItem> SP_Obtener_Articulos_Origen_Transaccion { get; set; }
+
+		#endregion
 
 		#region Belico
 		public DbSet<Alerta> Alertas { get; set; }
