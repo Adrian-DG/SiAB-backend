@@ -99,6 +99,14 @@ namespace SiAB.Infrastructure.Data.Seed
 					new Calibre { Id = 5, Nombre = "5.56mm" }
 				);
 
+			builder.Entity<TipoDocumento>().HasData(
+					new TipoDocumento { Id = 1, Nombre = "NO DEFINIDO" },
+					new TipoDocumento { Id = 2, Nombre = "FORMULARIO #53" },
+					new TipoDocumento { Id = 3, Nombre = "LICENCIA EXPORTACION" },
+					new TipoDocumento { Id = 4, Nombre = "LICENCIA IMPORTACION" },
+					new TipoDocumento { Id = 5, Nombre = "LICENCIA EXPORTACION-IMPORTACION" }
+				);
+
 
 		}
 	}
