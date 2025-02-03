@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Inventario
 {
+	[Table("Licencias", Schema = "Inv")]
 	public class LicenciaProveedor : EntityMetadata, IAuditableEntityMetadata
 	{
 		public TipoLicenciaEnum TipoLicencia { get; set; }
