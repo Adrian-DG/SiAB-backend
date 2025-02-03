@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SiAB.Core.Enums
+{
+	public enum UsuarioRolesEnum
+	{
+		ADMINISTRADOR_GENERAL = 1,
+		CONSULTA_GENERAL = 2,
+		CONSULTA_GENERAL_MILITAR = 3,
+		CONSULTA_GENERAL_CIVIL = 4,
+		CONSULTA_GENERAL_DEPOSITO = 5,
+		CONSULTA_GENERAL_FUNCION_S4 = 6,
+		GENERAR_REPORTE_CONSULTA = 7,
+		MODULO_MANTENIMIENTO = 8,
+		MODULO_USUARIOS = 9,
+		ASIGNACION_DEPOSITO_USUARIO = 10,
+		MODULO_ESTADISTICAS = 11,
+		MODULO_ALERTAS = 12,
+		CREAR_ALERTA = 13,
+		MODULO_REPORTERIA = 14
+	}
+}
