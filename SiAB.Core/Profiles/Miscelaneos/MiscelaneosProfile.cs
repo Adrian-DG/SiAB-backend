@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SiAB.Core.DTO.Misc;
+using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 using System;
