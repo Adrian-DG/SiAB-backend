@@ -1,4 +1,6 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Entities.Belico;
+using SiAB.Core.Entities.Inventario;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

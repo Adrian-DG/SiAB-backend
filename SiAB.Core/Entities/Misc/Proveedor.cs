@@ -1,6 +1,4 @@
 ﻿using SiAB.Core.Abstraction;
-using SiAB.Core.Entities.Belico;
-using SiAB.Core.Entities.Inventario;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Misc
 {
-	[Table("Calibres", Schema = "Misc")]
-    public class Calibre : NamedEntityMetadata
-    {
-		public virtual ICollection<Articulo>? Articulos { get; set; }
+	[Table("Proveedores", Schema = "Misc")]
+	public class Proveedor : NamedEntityMetadata
+	{
+		public string? RNC { get; set; }
+		public string? Telefono { get; set; }
 	}
 }
