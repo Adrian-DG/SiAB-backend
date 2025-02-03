@@ -16,7 +16,6 @@ using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
 using System.Data;
 using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SiAB.API.Controllers.Belico
 {
@@ -247,3 +246,4 @@ namespace SiAB.API.Controllers.Belico
 
 	}
 }
+
