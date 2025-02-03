@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
@@ -12,14 +10,10 @@ using SiAB.Core.Enums;
 using SiAB.Core.DTO.Misc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SiAB.API.Helpers;
-using SiAB.Core.Exceptions;
-using System.Net;
-using SiAB.API.Extensions;
 using SiAB.API.Filters;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using SiAB.Core.Entities.Inventario;
 
-namespace SiAB.API.Controllers.Misc
+namespace SiAB.API.Controllers.Inventario
 {
 	[Route("api/depositos")]
 	[ApiController]
@@ -35,12 +29,12 @@ namespace SiAB.API.Controllers.Misc
 			var depositos = await _uow.Repository<Deposito>().GetListPaginateAsync(
 				includes: new Expression<Func<Deposito, object>>[] { m => m.Dependencia },
 				predicate: d => d.Nombre.Contains(filter.SearchTerm ?? "") && d.Dependencia.Institucion == (InstitucionEnum)_codInstitucionUsuario,
-				selector: d => new 
-				{ 
-					Id = d.Id,
-					Nombre = d.Nombre,
-					EsFuncion = d.EsFuncion,
-					DependenciaId = d.DependenciaId,
+				selector: d => new
+				{
+					d.Id,
+					d.Nombre,
+					d.EsFuncion,
+					d.DependenciaId,
 					Dependencia = d.Dependencia.Nombre
 				},
 				orderBy: d => d.OrderBy(o => o.Nombre),
@@ -53,10 +47,10 @@ namespace SiAB.API.Controllers.Misc
 
 		[HttpGet("filtrar")]
 		public async Task<IActionResult> GetDepositos([FromQuery] string nombre)
-		{		
+		{
 			var depositos = await _uow.Repository<Deposito>().GetListAsync(
 				includes: new Expression<Func<Deposito, object>>[] { m => m.Dependencia },
-				predicate: d => d.Nombre.Contains(nombre ?? string.Empty) && d.Dependencia.Institucion.Equals(_codInstitucionUsuario), 				
+				predicate: d => d.Nombre.Contains(nombre ?? string.Empty) && d.Dependencia.Institucion.Equals(_codInstitucionUsuario),
 				selector: d => new NamedModel { Id = d.Id, Nombre = d.Nombre },
 				orderBy: d => d.OrderBy(o => o.Nombre)
 			);

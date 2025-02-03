@@ -4,7 +4,7 @@ using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.Entities.Inventario;
 
-namespace SiAB.API.Controllers.Misc
+namespace SiAB.API.Controllers.Inventario
 {
 	[Route("api/articulos")]
 	[ApiController]
