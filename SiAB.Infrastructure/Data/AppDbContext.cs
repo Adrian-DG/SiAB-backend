@@ -15,10 +15,11 @@ using SiAB.Core.Models.RegistroDebitoCredito;
 using SiAB.Core.Enums;
 using SiAB.Infrastructure.Data.Seed;
 using SiAB.Core.ProcedureResults;
+using SiAB.Core.Entities.Inventario;
 
 namespace SiAB.Infrastructure.Data
 {
-    public class AppDbContext : IdentityDbContext<Usuario, Role, int>
+	public class AppDbContext : IdentityDbContext<Usuario, Role, int>
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
@@ -163,20 +164,29 @@ namespace SiAB.Infrastructure.Data
 
 		#endregion
 
-		#region Miscelaneos
+		#region Inventario
 		public DbSet<Articulo> Articulos { get; set; }
-		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<Deposito> Depositos { get; set; }
+		public DbSet<HistorialUbicacion> HistoricoUbicacion { get; set; }
+		public DbSet<StockArticulo> StockArticulos { get; set; }
+		public DbSet<LicenciaProveedor> Licencias { get; set; }
+
+		#endregion
+
+		#region Miscelaneos		
+		public DbSet<Categoria> Categorias { get; set; }		
 		public DbSet<Marca> Marcas { get; set; }
 		public DbSet<Modelo> Modelos { get; set; }
 		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
+		public DbSet<Proveedor> Proveedores { get; set; }
+		public DbSet<TipoDocumento> TipoDocumentos { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Personal
-        public DbSet<Rango> Rangos { get; set; }
+		#region Personal
+		public DbSet<Rango> Rangos { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
 		#endregion
