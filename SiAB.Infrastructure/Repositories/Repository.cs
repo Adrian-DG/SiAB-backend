@@ -25,10 +25,11 @@ namespace SiAB.Infrastructure.Repositories
 			_repository = _context.Set<T>();
 		}
 
-		public async Task AddAsync(T entity)
+		public async Task<int> AddAsync(T entity)
 		{
 			await _repository.AddAsync(entity);
 			await CommitChangeAsync();
+			return entity.Id;
 		}
 
 		public async Task CommitChangeAsync()

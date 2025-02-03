@@ -2,6 +2,7 @@
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Repositories;
+using SiAB.Infrastructure.Repositories.Belico;
 using SiAB.Infrastructure.Repositories.JCE;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace SiAB.Infrastructure.Data
 		public IUsuarioRepository UsuarioRepository => new UsuarioRepository(_context);
 
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
+
+		public IProveedorRepository ProveedorRepository => new ProveedorRepository(_context);
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{

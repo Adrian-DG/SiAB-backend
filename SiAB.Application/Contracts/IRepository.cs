@@ -13,7 +13,7 @@ namespace SiAB.Application.Contracts
 	{
 		Task<IEnumerable<T>> GetAllAsync(bool ignoreFilter = false);
 		Task<T> GetByIdAsync(int id);
-		Task AddAsync(T entity);
+		Task<int> AddAsync(T entity);
 		Task Update(T entity);
 		Task DeleteById(int id);
 		Task<TResult> FindWhereAsync<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> selector);
