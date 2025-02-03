@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
-using SiAB.Core.Entities.Misc;
+using SiAB.Core.Entities.Belico;
 using SiAB.Core.Enums;
 
 namespace SiAB.API.Controllers.Misc

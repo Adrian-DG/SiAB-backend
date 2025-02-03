@@ -146,9 +146,9 @@ namespace SiAB.API.Controllers.Belico
 			{
 				await context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
 				{
-					Nombre = $"F-53-{numero}",
+					NumeracionDocumento = $"F-53-{numero}",
 					TransaccionId = transaccionId,
-					Adjunto = null,
+					Archivo = null,
 					UsuarioId = _codUsuario,
 					CodInstitucion = (InstitucionEnum)_codInstitucionUsuario
 				});

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
-using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 using SiAB.Core.Models.miscelaneos;
 using System.Linq.Expressions;
@@ -18,10 +17,11 @@ using System.Net;
 using SiAB.API.Extensions;
 using SiAB.API.Filters;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using SiAB.Core.Entities.Inventario;
 
 namespace SiAB.API.Controllers.Misc
 {
-    [Route("api/depositos")]
+	[Route("api/depositos")]
 	[ApiController]
 	public class DepositosController : GenericController<Deposito>
 	{
