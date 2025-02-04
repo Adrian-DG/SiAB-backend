@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
 using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Entities.Misc;
+using SiAB.Core.Entities.Personal;
 
 namespace SiAB.API.Controllers.Misc
 {
@@ -18,6 +20,8 @@ namespace SiAB.API.Controllers.Misc
 		}
 
 		[HttpPost]
+		[ServiceFilter(typeof(NamedFilter<Proveedor>))]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
 		public async Task<IActionResult> Create([FromBody] CreateProveedorDto createProveedorDto)
 		{
 			await _uow.ProveedorRepository.CreateProveedor_Licencia(createProveedorDto);
@@ -42,6 +46,28 @@ namespace SiAB.API.Controllers.Misc
 				);
 
 			return new JsonResult(proveedores);
+		}
+
+		[HttpGet("{id:int}/licencias")]
+		public async Task<IActionResult> GetById([FromRoute] int id)
+		{
+			var licencias = await _uow.Repository<LicenciaProveedor>().GetListAsync(
+					predicate: p => p.ProveedorId == id,
+					selector: p => new
+					{
+						p.Id,
+						p.FechaEmision,
+						p.FechaVencimiento,
+						p.Numeracion,
+						p.TipoLicencia,
+						p.Archivo,
+						p.DiasRestantes,
+						p.StatusLicencia,
+					},
+					orderBy: p => p.OrderByDescending(o => o.FechaVencimiento)
+				);
+
+			return new JsonResult(licencias);
 		}
 	}
 }

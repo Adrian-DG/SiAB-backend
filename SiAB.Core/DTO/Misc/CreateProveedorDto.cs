@@ -13,6 +13,8 @@ namespace SiAB.Core.DTO.Misc
 		public string? RNC { get; set; }
 		public string? Numeracion { get; set; }
 		public TipoLicenciaEnum TipoLicencia { get; set; }
-		public byte[]? Archivo { get; set; }
+		public string? Archivo { get; set; }
+		public DateTime FechaEmision { get; set; }
+		public DateTime FechaVencimiento { get; set; }
 	}
 }
