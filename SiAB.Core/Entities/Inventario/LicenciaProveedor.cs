@@ -15,7 +15,7 @@ namespace SiAB.Core.Entities.Inventario
 	{
 		public TipoLicenciaEnum TipoLicencia { get; set; }
 		public required string Numeracion { get; set; }
-		public byte[]? Archivo { get; set; }
+		public string? Archivo { get; set; }
 
 		[ForeignKey(nameof(ProveedorId))]
 		public int ProveedorId { get; set; }
@@ -30,6 +30,9 @@ namespace SiAB.Core.Entities.Inventario
 		public DateTime FechaCreacion { get; set; }
 		public int? UsuarioIdModifico { get; set; }
 		public DateTime? FechaModificacion { get; set; }
+
+		[NotMapped]
+		public string StatusLicencia => DateTime.Parse(FechaVencimiento.ToString("dd-MM-yyyy")) > DateTime.Now ? "ACTIVA" : "VENCIDA";
 
 		[NotMapped]
 		public int DiasRestantes => (DateTime.Parse(FechaVencimiento.ToString("dd-MM-yyyy")) - DateTime.Now).Days;
