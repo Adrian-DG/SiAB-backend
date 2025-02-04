@@ -18,6 +18,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 		private readonly AppDbContext _context;
 		public ProveedorRepository(AppDbContext dbContext) : base(dbContext)
 		{
+			_context = dbContext;
 		}
 
 		public async Task CreateProveedor_Licencia(CreateProveedorDto createProveedorDto)
@@ -36,7 +37,9 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				Numeracion = createProveedorDto.Numeracion,
 				TipoLicencia = createProveedorDto.TipoLicencia,
 				Archivo = createProveedorDto.Archivo,
-				ProveedorId = proveedor.Entity.Id
+				ProveedorId = proveedor.Entity.Id,
+				FechaEmision = DateOnly.FromDateTime(createProveedorDto.FechaEmision),
+				FechaVencimiento = DateOnly.FromDateTime(createProveedorDto.FechaVencimiento),
 			});
 
 			await _context.SaveChangesAsync();
