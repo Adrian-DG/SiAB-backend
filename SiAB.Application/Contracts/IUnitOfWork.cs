@@ -13,6 +13,6 @@ namespace SiAB.Application.Contracts
 		IJCERepository JCERepository { get; }
 		IUsuarioRepository UsuarioRepository { get; }
 		IRoleRepository RoleRepository { get; }
-		IProveedorRepository ProveedorRepository { get; }
+		IEmpresaRepository EmpresaRepository { get; }
 	}
 }

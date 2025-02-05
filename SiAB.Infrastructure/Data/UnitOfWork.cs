@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace SiAB.Infrastructure.Data
 {
 	public class UnitOfWork : IUnitOfWork
-	{
+    {
 		private Dictionary<string, object> repositories;
 
 		private readonly AppDbContext _context;		
@@ -29,7 +29,7 @@ namespace SiAB.Infrastructure.Data
 
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
 
-		public IProveedorRepository ProveedorRepository => new ProveedorRepository(_context);
+		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{

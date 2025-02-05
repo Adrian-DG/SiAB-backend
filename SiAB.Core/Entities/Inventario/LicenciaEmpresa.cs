@@ -11,18 +11,21 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Inventario
 {
 	[Table("Licencias", Schema = "Inv")]
-	public class LicenciaProveedor : EntityMetadata, IAuditableEntityMetadata
+	public class LicenciaEmpresa : EntityMetadata, IAuditableEntityMetadata
 	{
-		public TipoLicenciaEnum TipoLicencia { get; set; }
+		[ForeignKey(nameof(TipoDocumentoId))]
+        public int TipoDocumentoId { get; set; }
+        public virtual TipoDocumento? TipoDocumento { get; set; }
 		public required string Numeracion { get; set; }
 		public string? Archivo { get; set; }
 
-		[ForeignKey(nameof(ProveedorId))]
-		public int ProveedorId { get; set; }
-		public virtual Proveedor? Proveedor { get; set; }
+		[ForeignKey(nameof(EmpresaId))]
+		public int EmpresaId { get; set; }
+		public virtual Empresa? Proveedor { get; set; }
 
 		public DateOnly FechaEmision { get; set; }
-		public DateOnly FechaVencimiento { get; set; }
+        public DateOnly FechaVigencia { get; set; }
+        public DateOnly FechaVencimiento { get; set; }
 
 		// auditables
 		public int UsuarioId { get; set; }
@@ -31,11 +34,13 @@ namespace SiAB.Core.Entities.Inventario
 		public int? UsuarioIdModifico { get; set; }
 		public DateTime? FechaModificacion { get; set; }
 
-		[NotMapped]
-		public string StatusLicencia => DateTime.Parse(FechaVencimiento.ToString("dd-MM-yyyy")) > DateTime.Now ? "ACTIVA" : "VENCIDA";
+        public LicenciaEstatusEnum LicenciaEstatusEnum { get; set; }
+
+        [NotMapped]
+		public int DiasDeVigencia => FechaVencimiento.DayNumber - FechaVigencia.DayNumber;
 
 		[NotMapped]
-		public int DiasRestantes => (DateTime.Parse(FechaVencimiento.ToString("dd-MM-yyyy")) - DateTime.Now).Days;
+		public int DiasRestantes => FechaVencimiento.DayNumber - DateOnly.FromDateTime(DateTime.Now).DayNumber;
 
 	}
 }

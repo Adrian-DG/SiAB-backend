@@ -12,5 +12,6 @@ namespace SiAB.Core.Entities.Misc
 	[Table("Propiedades", Schema = "Misc")]
 	public class Propiedad : NamedEntityMetadata
 	{
+	
 	}
 }

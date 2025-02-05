@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Enums
 {
-	public enum TipoLicenciaEnum
+	public enum LicenciaEstatusEnum
 	{
-		IMPORTAR = 1,
-		EXPORTAR = 2,
-		IMPORTAR_EXPORTAR = 3
+		ACTIVA = 1,
+		EXPIRADA,
+		PENDIENTE,
+		CANCELADA
 	}
 }

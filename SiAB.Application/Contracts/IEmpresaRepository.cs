@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SiAB.Application.Contracts
 {
-	public interface IProveedorRepository
+	public interface IEmpresaRepository
 	{
-		Task CreateProveedor_Licencia(CreateProveedorDto createProveedorDto);
+		Task CreateEmpresa_Licencia(CreateEmpresaDto createEmpresaDto);
 	}
 }

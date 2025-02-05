@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace SiAB.Core.Entities.Misc
 {
-	[Table("Proveedores", Schema = "Misc")]
-	public class Proveedor : NamedEntityMetadata, IAuditableEntityMetadata
+	[Table("Empresas", Schema = "Misc")]
+	public class Empresa : NamedEntityMetadata, IAuditableEntityMetadata
 	{
 		public string? RNC { get; set; }
 		public string? Telefono { get; set; }
+		public string? Titular { get; set; }
 
 		public int UsuarioId { get  ; set  ; }
 		public InstitucionEnum CodInstitucion { get  ; set  ; }
