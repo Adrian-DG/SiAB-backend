@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Attributes;
 using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
@@ -74,6 +75,7 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(licencias);
 		}
 
+		[AvoidCustomResponse]
 		[HttpGet("tipos-licencias")]
 		public async Task<IActionResult> GetTipoDocumentosLicencias()
 		{

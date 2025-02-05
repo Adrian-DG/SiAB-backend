@@ -102,9 +102,7 @@ namespace SiAB.Infrastructure.Data.Seed
 			builder.Entity<TipoDocumento>().HasData(
 					new TipoDocumento { Id = 1, Nombre = "NO DEFINIDO" },
 					new TipoDocumento { Id = 2, Nombre = "FORMULARIO #53" },
-					new TipoDocumento { Id = 3, Nombre = "LICENCIA" },
-					new TipoDocumento { Id = 4, Nombre = "AUTORIZACIÓN IMPORTACIÓN" },
-					new TipoDocumento { Id = 5, Nombre = "AUTORIZACIÓN RETIRO ADUANAL" }
+					new TipoDocumento { Id = 3, Nombre = "LICENCIA" }
 				);
 
 
