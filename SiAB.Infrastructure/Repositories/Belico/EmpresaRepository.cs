@@ -35,8 +35,8 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				TipoDocumentoId = createEmpresaDto.TipoDocumentoId,
 				Archivo = createEmpresaDto.Archivo,
 				EmpresaId = proveedor.Entity.Id,
-				FechaEmision = DateOnly.FromDateTime(createEmpresaDto.FechaEmision),
-				FechaVencimiento = DateOnly.FromDateTime(createEmpresaDto.FechaVencimiento),
+				FechaEmision = createEmpresaDto.FechaEmision,
+				FechaVencimiento = createEmpresaDto.FechaVencimiento,
 			});
 
 			await _context.SaveChangesAsync();

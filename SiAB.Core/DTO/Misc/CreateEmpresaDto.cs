@@ -15,7 +15,8 @@ namespace SiAB.Core.DTO.Misc
 		public string? Titular { get; set; }
         public int TipoDocumentoId { get; set; }
         public string? Archivo { get; set; }
-		public DateTime FechaEmision { get; set; }
-		public DateTime FechaVencimiento { get; set; }
+		public DateOnly FechaEmision { get; set; }
+		public DateOnly FechaVigencia { get; set; }
+		public DateOnly FechaVencimiento { get; set; }
 	}
 }

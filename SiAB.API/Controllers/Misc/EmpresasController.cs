@@ -73,5 +73,21 @@ namespace SiAB.API.Controllers.Misc
 
 			return new JsonResult(licencias);
 		}
+
+		[HttpGet("tipos-licencias")]
+		public async Task<IActionResult> GetTipoDocumentosLicencias()
+		{
+			var tipos = await _uow.Repository<TipoDocumento>().GetListAsync(
+					predicate: t => t.Id >= 3 && t.Id <= 5,
+					selector: t => new
+					{
+						Id = t.Id,
+						Nombre = t.Nombre,
+					},
+					orderBy: t => t.OrderBy(o => o.Nombre)
+				);
+
+			return new JsonResult(tipos);
+		}
 	}
 }
