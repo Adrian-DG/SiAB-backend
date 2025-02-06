@@ -32,18 +32,16 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 			await _context.SaveChangesAsync();
 
-			foreach (var item in createEmpresaDto.Archivos)
+			foreach (var item in createEmpresaDto.DataArchivos)
 			{
 				await _context.Licencias.AddAsync(new LicenciaEmpresa
 				{
-					Numeracion = createEmpresaDto.Numeracion,
-					TipoDocumentoId = LICENCIA_DOCUMENTO_ID,
-					Archivo = item,
+					Numeracion = item.Numeracion,
+					FechaEmision = DateOnly.FromDateTime(item.FechaEmision),
+					FechaVigencia = DateOnly.FromDateTime(item.FechaVigencia),
+					FechaVencimiento = DateOnly.FromDateTime(item.FechaVencimiento),
 					EmpresaId = proveedor.Entity.Id,
-					FechaEmision = DateOnly.FromDateTime(createEmpresaDto.FechaEmision),
-					FechaVigencia = DateOnly.FromDateTime(createEmpresaDto.FechaVigencia),
-					FechaVencimiento = DateOnly.FromDateTime(createEmpresaDto.FechaVencimiento),
-					LicenciaEstatusEnum = LicenciaEstatusEnum.ACTIVA,
+					TipoDocumentoId = item.TipoDocumentoId,
 				});
 
 				await _context.SaveChangesAsync();
