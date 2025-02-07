@@ -64,7 +64,7 @@ namespace SiAB.API.Controllers.Misc
 						FechaVigencia = l.FechaVigencia,
 						FechaVencimiento = l.FechaVencimiento,
 						Numeracion = l.Numeracion,
-						documento = l.TipoDocumento.Nombre,
+						TipoDocumento = l.TipoDocumento.Nombre,
 						Archivo = l.Archivo,
 						DiasDeVigencia = l.DiasDeVigencia,
 						DiasRestantes = l.DiasRestantes

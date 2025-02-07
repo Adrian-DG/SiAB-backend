@@ -42,6 +42,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 					FechaVencimiento = DateOnly.FromDateTime(item.FechaVencimiento),
 					EmpresaId = proveedor.Entity.Id,
 					TipoDocumentoId = item.TipoDocumentoId,
+					Archivo = item.Archivo
 				});
 
 				await _context.SaveChangesAsync();
