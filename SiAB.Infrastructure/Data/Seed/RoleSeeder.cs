@@ -27,7 +27,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Role { Id = 12, Name = "MODULO ALERTAS", NormalizedName = "MODULO ALERTAS", Descripcion = "Acceso al listado de las alertas." },
 				new Role { Id = 13, Name = "CREAR ALERTA", NormalizedName = "CREAR ALERTA", Descripcion = "Creación de una nueva alerta para un miembro o civil." },
 				new Role { Id = 14, Name = "MODULO REPORTERIA", NormalizedName = "MODULO REPORTERIA", Descripcion = "Acceso a la generación de reportes genericos." },
-				new Role { Id = 15, Name = "MODULO PROVEEDORES", NormalizedName = "MODULO PROVEEDORES",Descripcion = "Acceso al modulo de proveedores y registro de licencias" }
+				new Role { Id = 15, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS",Descripcion = "Acceso al modulo de empresas y registro de licencias" }
 			);
 		}
 	}

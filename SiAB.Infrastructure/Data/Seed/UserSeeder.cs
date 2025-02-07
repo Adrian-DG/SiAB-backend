@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using SiAB.Core.Enums;
 
 namespace SiAB.Infrastructure.Data.Seed
 {
@@ -72,15 +73,29 @@ namespace SiAB.Infrastructure.Data.Seed
 					NormalizedUserName = "FARD",
 					Institucion = InstitucionEnum.FARD,
 					PasswordHash = passwordHasher.HashPassword(null, "fard01")
+				},
+				new Usuario
+				{
+					Id = 6,
+					Cedula = "0000000005",
+					Nombre = "EXPLOSIVOS",
+					Apellido = "EXPLOSIVOS",
+					UserName = "explosivos",
+					NormalizedUserName = "EXPLOSIVOS",
+					Institucion = InstitucionEnum.MIDE,
+					PasswordHash = passwordHasher.HashPassword(null, "explosivos01")
 				}
 				);
 
+				
+
 			builder.Entity<IdentityUserRole<int>>().HasData(
-				new IdentityUserRole<int> { UserId = 1, RoleId = 1 },
-				new IdentityUserRole<int> { UserId = 2, RoleId = 1 },
-				new IdentityUserRole<int> { UserId = 3, RoleId = 1 },
-				new IdentityUserRole<int> { UserId = 4, RoleId = 1 },
-				new IdentityUserRole<int> { UserId = 5, RoleId = 1 }
+				new IdentityUserRole<int> { UserId = 1, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
+				new IdentityUserRole<int> { UserId = 2, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
+				new IdentityUserRole<int> { UserId = 3, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
+				new IdentityUserRole<int> { UserId = 4, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
+				new IdentityUserRole<int> { UserId = 5, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MODULO_EMPRESAS }
 			);
 		}
 	}
