@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,12 @@ namespace SiAB.Core.Entities.Belico
 	[Table("Transacciones", Schema = "Belico")]
 	public class Transaccion : EntityMetadata, IAuditableEntityMetadata
 	{
-		public TipoTransaccionEnum TipoOrigen { get; set; }
+		public TipoOrigenDestinoEnum TipoOrigen { get; set; }
 		public required string Origen { get; set; }
 
-		public TipoTransaccionEnum TipoDestino { get; set; }
+		public TipoOrigenDestinoEnum TipoDestino { get; set; }
 		public required string Destino { get; set; }
+		public TipoTransaccionEnum TipoTransaccion { get; set; }
 
 		[StringLength(11)]
 		public required string Intendente { get; set; }

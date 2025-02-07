@@ -52,7 +52,7 @@ namespace SiAB.API.Controllers.Belico
 				throw new BaseException("Ya existe una secuencia para esta institución", HttpStatusCode.BadRequest);
 			}
 
-			var secuencia = new Secuencia { SecuenciaCadena = GenerarSecuencia(SecuenciaNumero), SecuenciaNumero = SecuenciaNumero };			
+			var secuencia = new Secuencia { SecuenciaCadena = GenerarSecuencia(SecuenciaNumero), SecuenciaNumero = SecuenciaNumero, CodInstitucion = (InstitucionEnum)_codInstitucionUsuario, UsuarioId = _codUsuario};			
 
 			await _uow.Repository<Secuencia>().AddAsync(secuencia);
 			return Ok();

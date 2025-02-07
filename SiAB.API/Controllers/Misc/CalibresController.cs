@@ -9,9 +9,9 @@ using SiAB.Core.DTO.Misc;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
 
-namespace SiAB.API.Controllers.Belico
+namespace SiAB.API.Controllers.Misc
 {
-    [Route("api/calibres")]
+	[Route("api/calibres")]
 	[ApiController]
 	public class CalibresController : GenericController<Calibre>
 	{

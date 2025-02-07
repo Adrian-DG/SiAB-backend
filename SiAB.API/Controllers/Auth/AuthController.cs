@@ -51,8 +51,8 @@ namespace SiAB.API.Controllers.Auth
             return Ok(token);
         }
 
-        [AuthorizeRole(UsuarioRole.USER, UsuarioRole.ADMIN)]
-        [HttpGet("is-authenticated")]
+        [AuthorizeRole(UsuarioRolesEnum.ADMINISTRADOR_GENERAL)]
+		[HttpGet("is-authenticated")]
         public IActionResult IsAuthenticated()
         {
             return Ok("Authenticated");

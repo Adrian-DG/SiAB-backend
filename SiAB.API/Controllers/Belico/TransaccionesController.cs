@@ -16,7 +16,6 @@ using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
 using System.Data;
 using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SiAB.API.Controllers.Belico
 {
@@ -32,6 +31,21 @@ namespace SiAB.API.Controllers.Belico
 		{
 			_connectionService = databaseConnectionService;
 			optionsBuilder.UseSqlServer(_connectionService.GetConnectionString());
+		}		
+
+
+		[HttpGet("filter-articulos-origen-transaccion")]
+		public async Task<IActionResult> GetArticulosOrigenTransaccion([FromQuery] TipoTransaccionEnum tipoOrigen, [FromQuery] string origen)
+		{
+			using (var context = new AppDbContext(optionsBuilder.Options))
+			{
+				var result = await context.SP_Obtener_Articulos_Origen_Transaccion.FromSqlRaw("EXEC [Belico].[obtener_articulos_origen_transaccion] @TipoOrigen, @Origen, @CodInstitucion",
+						new SqlParameter("@TipoOrigen", (int)tipoOrigen),
+						new SqlParameter("@Origen", origen.Replace("-", "")),
+						new SqlParameter("@CodInstitucion", _codInstitucionUsuario)).ToListAsync();
+
+				return Ok(result);
+			}
 		}
 
 		internal sealed class ArticuloItemMetadata
@@ -67,18 +81,20 @@ namespace SiAB.API.Controllers.Belico
 
 						for (int row = start_row; row <= row_dimmession; row++)
 						{
-							var origen = worksheet.Cells[row, 1].Value?.ToString();
-							var categoria = worksheet.Cells[row, 2].Value?.ToString();
-							var tipo = worksheet.Cells[row, 3].Value?.ToString();
-							var subtipo = worksheet.Cells[row, 4].Value?.ToString();
-							var marca = worksheet.Cells[row, 5].Value?.ToString();
-							var modelo = worksheet.Cells[row, 6].Value?.ToString();
-							var calibre = worksheet.Cells[row, 7].Value?.ToString();
-							var serie = worksheet.Cells[row, 8].Value?.ToString();
-							var propiedad = worksheet.Cells[row, 9].Value?.ToString();
-							var formulario53 = worksheet.Cells[row, 10].Value?.ToString();
-							var cantidad = worksheet.Cells[row, 11].Value?.ToString();
-							var fechaValue = worksheet.Cells[row, 12].Value?.ToString();
+							var propiedad = worksheet.Cells[row, 1].Value.ToString(); // Institucion
+							var origen = worksheet.Cells[row, 2].Value?.ToString(); // Deposito 
+							var destino = worksheet.Cells[row, 3].Value?.ToString(); // Cedula/RNC
+
+							var categoria = worksheet.Cells[row, 4].Value?.ToString();
+							var tipo = worksheet.Cells[row, 5].Value?.ToString();
+							var subtipo = worksheet.Cells[row, 6].Value?.ToString();
+							var marca = worksheet.Cells[row, 7].Value?.ToString();
+							var modelo = worksheet.Cells[row, 8].Value?.ToString();
+							var calibre = worksheet.Cells[row, 9].Value?.ToString();
+							var serie = worksheet.Cells[row, 10].Value?.ToString();
+							var formulario53 = worksheet.Cells[row, 11].Value?.ToString();
+							var cantidad = worksheet.Cells[row, 12].Value?.ToString();
+							var fechaValue = worksheet.Cells[row, 13].Value?.ToString();
 
 							DateTime fechaEfectividad = int.TryParse(fechaValue, out int result) 
 								? DateTime.FromOADate(Convert.ToDouble(fechaValue)) 
@@ -96,9 +112,9 @@ namespace SiAB.API.Controllers.Belico
 
 							var transaccionId = await InsertTransaccion(
 								tipoOrigen: inputOrigenDestinoDto.Origen,
-								origen: "N/A",
+								origen: origen,
 								tipoDestino: inputOrigenDestinoDto.Destino,
-								destino: origen.Replace("-", ""),
+								destino: destino.ToString().Replace("-", ""),
 								intendente: "00000000000",
 								encargadoGeneral: "00000000000",
 								encargadoDeposito: "00000000000",
@@ -107,15 +123,37 @@ namespace SiAB.API.Controllers.Belico
 								firmadoPor: "00000000000",
 								fechaEfectividad: fechaEfectividad);
 
+							await InsertDocumentoTransaccion(numero: formulario53, transaccionId: transaccionId);
+
 							articulosData.Add(new ArticuloItemMetadata { ArticuloId = articuloId, TransaccionId = transaccionId, Cantidad = int.Parse(cantidad) });
+						
 						}
 
 						await InsertDetalleTransaccion(articulosData);
+
+						
 					}
 				}
 			}
 
 			return Ok();
+		}
+
+		private async Task InsertDocumentoTransaccion(string numero, int transaccionId)
+		{
+			using (var context = new AppDbContext(optionsBuilder.Options))
+			{
+				await context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
+				{
+					NumeracionDocumento = $"F-53-{numero}",
+					TransaccionId = transaccionId,
+					Archivo = null,
+					UsuarioId = _codUsuario,
+					CodInstitucion = (InstitucionEnum)_codInstitucionUsuario
+				});
+
+				await context.SaveChangesAsync();
+			}
 		}
 
 
@@ -208,3 +246,4 @@ namespace SiAB.API.Controllers.Belico
 
 	}
 }
+

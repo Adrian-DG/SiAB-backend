@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
-using SiAB.Core.Entities.Auth;
 
 namespace SiAB.API.Controllers.Auth
 {

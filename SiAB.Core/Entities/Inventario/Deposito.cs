@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiAB.Core.Entities.Misc
+namespace SiAB.Core.Entities.Inventario
 {
-	[Table("Depositos", Schema = "Misc")]
+	[Table("Depositos", Schema = "Inv")]
 	public class Deposito : NamedEntityMetadata
 	{
 		public bool EsFuncion { get; set; } = false;
 
-        [ForeignKey(nameof(DependenciaId))]
+		[ForeignKey(nameof(DependenciaId))]
 		public int DependenciaId { get; set; }
 		public virtual Dependencia? Dependencia { get; set; }
 	}

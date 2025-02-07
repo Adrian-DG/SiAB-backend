@@ -7,17 +7,13 @@ using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Text.Json;
-using Newtonsoft.Json;
-using SiAB.Core.Models.RegistroDebitoCredito;
-using SiAB.Core.Enums;
 using SiAB.Infrastructure.Data.Seed;
+using SiAB.Core.ProcedureResults;
+using SiAB.Core.Entities.Inventario;
 
 namespace SiAB.Infrastructure.Data
 {
-    public class AppDbContext : IdentityDbContext<Usuario, Role, int>
+	public class AppDbContext : IdentityDbContext<Usuario, Role, int>
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
@@ -34,6 +30,8 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<Usuario>().HasIndex(u => u.Cedula).IsUnique();
 
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
+
+			builder.Entity<ArticuloTransaccionItem>().HasNoKey();
 
 			#endregion
 
@@ -144,6 +142,12 @@ namespace SiAB.Infrastructure.Data
 
 		#region Entities
 
+		#region Procedures
+
+		public DbSet<ArticuloTransaccionItem> SP_Obtener_Articulos_Origen_Transaccion { get; set; }
+
+		#endregion
+
 		#region Belico
 		public DbSet<Alerta> Alertas { get; set; }
 		public DbSet<Calibre> Calibres { get; set; }
@@ -154,20 +158,29 @@ namespace SiAB.Infrastructure.Data
 
 		#endregion
 
-		#region Miscelaneos
+		#region Inventario
 		public DbSet<Articulo> Articulos { get; set; }
-		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<Deposito> Depositos { get; set; }
+		public DbSet<HistorialUbicacion> HistoricoUbicacion { get; set; }
+		public DbSet<StockArticulo> StockArticulos { get; set; }
+		public DbSet<LicenciaEmpresa> Licencias { get; set; }
+
+		#endregion
+
+		#region Miscelaneos		
+		public DbSet<Categoria> Categorias { get; set; }		
 		public DbSet<Marca> Marcas { get; set; }
 		public DbSet<Modelo> Modelos { get; set; }
 		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
+		public DbSet<Empresa> Empresas { get; set; }
+		public DbSet<TipoDocumento> TipoDocumentos { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Personal
-        public DbSet<Rango> Rangos { get; set; }
+		#region Personal
+		public DbSet<Rango> Rangos { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
 		#endregion

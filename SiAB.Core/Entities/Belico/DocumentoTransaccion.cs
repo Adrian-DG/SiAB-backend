@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,13 @@ namespace SiAB.Core.Entities.Belico
 		[ForeignKey(nameof(TransaccionId))]
 		public int TransaccionId { get; set; }
 		public virtual Transaccion? Transaccion { get; set; }
-		public required string Nombre { get; set; }
-		public byte[]? Adjunto { get; set; }
+
+		[ForeignKey(nameof(TipoDocuemntoId))]
+		public int TipoDocuemntoId { get; set; }
+		public virtual TipoDocumento? TipoDocumento { get; set; }
+
+		public required string NumeracionDocumento { get; set; }
+		public byte[]? Archivo { get; set; }
 
 		// auditables
 		public int UsuarioId { get; set; }

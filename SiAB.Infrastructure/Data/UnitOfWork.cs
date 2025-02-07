@@ -2,6 +2,7 @@
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Repositories;
+using SiAB.Infrastructure.Repositories.Belico;
 using SiAB.Infrastructure.Repositories.JCE;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace SiAB.Infrastructure.Data
 {
 	public class UnitOfWork : IUnitOfWork
-	{
+    {
 		private Dictionary<string, object> repositories;
 
 		private readonly AppDbContext _context;		
@@ -27,6 +28,8 @@ namespace SiAB.Infrastructure.Data
 		public IUsuarioRepository UsuarioRepository => new UsuarioRepository(_context);
 
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
+
+		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
