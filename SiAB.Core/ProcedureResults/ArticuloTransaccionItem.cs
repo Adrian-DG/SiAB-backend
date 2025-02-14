@@ -14,5 +14,6 @@ namespace SiAB.Core.ProcedureResults
 		public string Serie { get; set; }
 		public int Cantidad { get; set; }
 		public string Formulario { get; set; }
+		public DateTime? FechaEfectividad { get; set; }
 	}
 }

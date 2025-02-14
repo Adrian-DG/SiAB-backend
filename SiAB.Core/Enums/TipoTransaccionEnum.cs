@@ -9,20 +9,22 @@ namespace SiAB.Core.Enums
 {
 	public enum TipoTransaccionEnum
 	{
+		[Description("Actualizacion de inventario, registros antiguos")]
+		ACTUALIZACION_INVENTARIO = 1,
 		[Description("Venta de un artículo a una persona (CIVIL).")]
-		VENTA = 1,
+		VENTA,
 		[Description("Compra de un artículo a un proveedor.")]
-		COMPRA = 2,
+		COMPRA,
 		[Description("Transferencia de un artículo desde el inventario de la armería a una persona (militar, civil o cargo).")]
-		ASIGNACION = 3,
+		ASIGNACION,
 		[Description("Transferencia de un artículo desde una persona (militar, civil o cargo) al inventario de la armería.")]
-		DEVOLUCION = 4,
+		DEVOLUCION,
 		[Description("Transferencia de un artículo entre dos personas (militar, civil o cargo).")]
-		TRANSFERENCIA = 5,
+		TRANSFERENCIA,
 		[Description("Préstamo de un artículo a una persona (militar, civil o cargo).")]
-		PRESTAMO = 6,
+		PRESTAMO,
 		[Description("Recuperación de un artículo prestado a una persona (militar, civil o cargo).")]
-		RECUPERACION = 7,
+		RECUPERACION,
 		[Description("Retiro de un artículo del inventario de la armería.")]
 		RETIRO
 	}
