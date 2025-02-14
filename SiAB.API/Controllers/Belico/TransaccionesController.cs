@@ -31,7 +31,21 @@ namespace SiAB.API.Controllers.Belico
 		{
 			_connectionService = databaseConnectionService;
 			optionsBuilder.UseSqlServer(_connectionService.GetConnectionString());
-		}		
+		}
+
+		[HttpGet("filter-transacciones-serie")]
+		public async Task<IActionResult> GetTransaccionesBySerie([FromQuery] string serie)
+		{
+			using (var context = new AppDbContext(optionsBuilder.Options))
+			{
+				var result = await context.SP_Obtener_Transacciones_Serie.FromSqlRaw("EXEC [Belico].[obtener_transacciones_serie] @Serie, @CodInstitucion",
+						new SqlParameter("@Serie", serie),
+						new SqlParameter("@CodInstitucion", _codInstitucionUsuario)).ToListAsync();
+
+				return new JsonResult(result);
+
+			}
+		}
 
 
 		[HttpGet("filter-articulos-origen-transaccion")]
@@ -44,7 +58,7 @@ namespace SiAB.API.Controllers.Belico
 						new SqlParameter("@Origen", origen.Replace("-", "")),
 						new SqlParameter("@CodInstitucion", _codInstitucionUsuario)).ToListAsync();
 
-				return Ok(result);
+				return new JsonResult(result);
 			}
 		}
 

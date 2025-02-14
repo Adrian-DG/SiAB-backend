@@ -33,6 +33,8 @@ namespace SiAB.Infrastructure.Data
 
 			builder.Entity<ArticuloTransaccionItem>().HasNoKey();
 
+			builder.Entity<SerieTransaccionItem>().HasNoKey();
+
 			#endregion
 
 			#region Relations configuration
@@ -145,6 +147,7 @@ namespace SiAB.Infrastructure.Data
 		#region Procedures
 
 		public DbSet<ArticuloTransaccionItem> SP_Obtener_Articulos_Origen_Transaccion { get; set; }
+		public DbSet<SerieTransaccionItem> SP_Obtener_Transacciones_Serie { get; set; }
 
 		#endregion
 
