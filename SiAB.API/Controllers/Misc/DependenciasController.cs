@@ -27,7 +27,7 @@ namespace SiAB.API.Controllers.Misc
 			var result = await _uow.Repository<Dependencia>().GetListPaginateAsync(
 					predicate: d => d.Nombre.Contains(filter.SearchTerm ?? ""),
 					selector: d => new { Id = d.Id, Nombre = d.Nombre, Institucion = d.Institucion.ToString(), Externa = d.EsExterna },
-					orderBy: d => d.OrderBy(o => o.Nombre)
+					orderBy: d => d.OrderBy(o => o.Id)
 				);
 
 			return new JsonResult(result);
