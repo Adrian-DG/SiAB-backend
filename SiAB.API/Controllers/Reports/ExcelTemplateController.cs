@@ -18,7 +18,7 @@ namespace SiAB.API.Controllers.Reports
 
 
 		[HttpGet("download-plantilla-relacion-armas")]
-		public IActionResult GetPlantillaRelacionArmasMilitares()
+		public IActionResult GetPlantillaRelacionArmasMilitares([FromQuery] string origen)
 		{
 			using (ExcelPackage excel = new ExcelPackage())
 			{				
@@ -42,6 +42,12 @@ namespace SiAB.API.Controllers.Reports
 				header.Style.Font.Bold = true;
 				header.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
 				header.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+
+				// Institucion
+				workSheet.Cells[2, 1].Value = "MIDE";
+
+				// Dependencia
+				workSheet.Cells[2, 2].Value = origen;
 
 				using (MemoryStream ms = new MemoryStream()) 
 				{ 
