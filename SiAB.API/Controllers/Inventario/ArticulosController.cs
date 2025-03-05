@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO;
+using SiAB.Core.DTO.Inventario;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
@@ -44,6 +46,31 @@ namespace SiAB.API.Controllers.Inventario
 				);
 
 			return new JsonResult(result);
+		}
+
+		[HttpPut("{id:int}")]
+		[ServiceFilter(typeof(UpdateAuditableFilter))]
+		public async Task<IActionResult> UpdateArticulo([FromRoute] int id, [FromBody] UpdateArticuloDto updateArticuloDto)
+		{
+			var articulo = await _uow.Repository<Articulo>().GetByIdAsync(id);
+
+			if (articulo == null) return NotFound();
+
+			if (articulo.CategoriaId > 0) articulo.CategoriaId = updateArticuloDto.CategoriaId;
+
+			if (articulo.TipoId > 0) articulo.TipoId = updateArticuloDto.TipoId;
+
+			if (articulo.SubTipoId > 0) articulo.SubTipoId = updateArticuloDto.SubTipoId;
+
+			if (articulo.MarcaId > 0) articulo.MarcaId = updateArticuloDto.MarcaId;
+
+			if (articulo.ModeloId > 0) articulo.ModeloId = updateArticuloDto.ModeloId;
+
+			if (!string.IsNullOrEmpty(updateArticuloDto.Serie) && articulo.Serie != updateArticuloDto.Serie) articulo.Serie = updateArticuloDto.Serie;
+
+			await _uow.Repository<Articulo>().Update(articulo);
+
+			return Ok();
 		}
 	}
 }

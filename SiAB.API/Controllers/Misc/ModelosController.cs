@@ -41,6 +41,22 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(result);
 		}
 
+		[HttpGet("filtrar-por-marca")]
+		public async Task<IActionResult> GetModelosByMarca([FromQuery] int marca)
+		{
+			var result = await _uow.Repository<Modelo>().GetListAsync(
+				predicate: m => m.MarcaId == marca,
+				selector: m => new NamedModel
+				{
+					Id = m.Id,
+					Nombre = m.Nombre
+				},
+				orderBy: m => m.OrderBy(o => o.Nombre)
+			);
+			return new JsonResult(result);
+		}
+
+
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<Modelo>))]
 		public async Task<IActionResult> Create([FromBody] CreateModeloDto createModeloDto)

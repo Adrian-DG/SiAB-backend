@@ -54,6 +54,22 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(formatedResult);
 		}
 
+		[HttpGet("filtrar-por-categoria")]
+		public async Task<IActionResult> GetAll([FromQuery] int categoria)
+		{
+			var result = await _uow.Repository<Tipo>().GetListAsync(
+				predicate: t => t.CategoriaId == categoria,
+				selector: t => new NamedModel
+				{
+					Id = t.Id,
+					Nombre = t.Nombre
+				},
+				orderBy: t => t.OrderBy(o => o.Nombre)
+			);
+
+			return new JsonResult(result);
+		}
+
 
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<Tipo>))]
