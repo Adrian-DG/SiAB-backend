@@ -14,5 +14,7 @@ namespace SiAB.Application.Contracts
 		IUsuarioRepository UsuarioRepository { get; }
 		IRoleRepository RoleRepository { get; }
 		IEmpresaRepository EmpresaRepository { get; }
+		IReportRepository ReportRepository { get; }
+		ISipffaaRepository SipffaaRepository { get; }
 	}
 }

@@ -16,11 +16,13 @@ namespace SiAB.Infrastructure.Data
     {
 		private Dictionary<string, object> repositories;
 
-		private readonly AppDbContext _context;		
+		private readonly AppDbContext _context;
+		private DapperContext _dapper;
 
 		public UnitOfWork(AppDbContext context)
 		{
 			_context = context;
+			_dapper = new DapperContext();
 		}
 
 		public IJCERepository JCERepository => new JCERepository();
@@ -30,6 +32,10 @@ namespace SiAB.Infrastructure.Data
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
 
 		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
+
+		public IReportRepository ReportRepository => new ReportRepository(_context);
+
+		public ISipffaaRepository SipffaaRepository => new SipffaaRepository(_dapper);
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{

@@ -25,6 +25,7 @@ namespace SiAB.API.Services
 				.AddScoped<IUserContextService, UserContextService>()
 				.AddScoped<IUsuarioRepository, UsuarioRepository>()
 				.AddScoped<IRoleRepository, RoleRepository>()
+				.AddScoped<IReportRepository, ReportRepository>()
 				.AddScoped<CodUsuarioFilter>()
 				.AddScoped<CodInstitucionFilter>()
 				.AddScoped(typeof(NamedFilter<>))

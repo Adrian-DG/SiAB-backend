@@ -23,7 +23,7 @@ namespace SiAB.Infrastructure.Repositories
 			_context = context;
 		}
 
-		private async Task<byte[]?> GetMiembroFoto(string cedula)
+		public async Task<byte[]?> GetMiembroFoto(string cedula)
 		{
 			var query = $@"SELECT TOP 1 M.foto AS Foto
 						   FROM miembros.MIEMBROS AS M
