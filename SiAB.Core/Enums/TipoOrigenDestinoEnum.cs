@@ -9,10 +9,8 @@ namespace SiAB.Core.Enums
 {
 	public enum TipoOrigenDestinoEnum
 	{
-		[Description("Empresa")]
-		EMPRESA = 1,
 		[Description("MILITAR")]
-		MILITAR,
+		MILITAR = 1,
 		[Description("CIVIL")]
 		CIVIL,
 		[Description("DEPOSITO")]

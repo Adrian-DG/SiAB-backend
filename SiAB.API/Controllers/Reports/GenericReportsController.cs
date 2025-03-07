@@ -19,6 +19,7 @@ using System.Drawing;
 
 namespace SiAB.API.Controllers.Reports
 {
+	[AllowAnonymous]
 	[Route("api/reports")]
 	[TypeFilter(typeof(CodUsuarioFilter))]
 	[TypeFilter(typeof(CodInstitucionFilter))]
@@ -31,7 +32,7 @@ namespace SiAB.API.Controllers.Reports
 			_connectionService = connectionService;
 		}
 
-		[AllowAnonymous]
+		
 		[HttpGet("miembro/historial-armas-cargadas")]
 		public async Task GetHistorialArmasCargadas([FromQuery] string cedula)
 		{
@@ -43,7 +44,7 @@ namespace SiAB.API.Controllers.Reports
 
 			var foto = await _uow.SipffaaRepository.GetMiembroFoto(cedula);
 
-			var image = System.IO.File.ReadAllBytes(Path.Combine("Images", "Mini_Logo_Principal_MIDE.png"));;
+			var image = System.IO.File.ReadAllBytes(Path.Combine("Images", "Mini_Logo_Principal_MIDE.png"));
 
 			await Document.Create(container =>
 			{
@@ -72,6 +73,7 @@ namespace SiAB.API.Controllers.Reports
 						.Bold();
 					});
 
+					// Content 
 					page.Content()
 					.PaddingVertical(1, Unit.Centimetre)
 					.Column(c =>
@@ -183,10 +185,9 @@ namespace SiAB.API.Controllers.Reports
 
 						});
 
-					});
-					
-					
+					});				
 
+					// Footer 
 					page.Footer()
 						.AlignCenter()
 						.Text(x =>
@@ -196,38 +197,6 @@ namespace SiAB.API.Controllers.Reports
 						});
 				});
 			}).ShowInCompanionAsync();
-
-
-			//await Document.Create(container =>
-			//{
-			//	container.Page(page =>
-			//	{
-			//		page.Size(PageSizes.A4);
-			//		page.Margin(20, Unit.Centimetre);
-			//		page.PageColor(Colors.White);
-
-			//		// Font configuration
-			//		page.DefaultTextStyle(x => x.FontSize(12));
-
-			//		// Header
-
-			//		page.Header()
-			//		.Text("Historial de armas cargadas")
-			//		.FontFamily("Arial")
-			//		.FontSize(16)
-			//		.Bold()
-			//		.AlignCenter();
-
-
-			//		// Body
-			//		//page.Content()
-			//		//.PaddingVertical(10, Unit.Centimetre)
-			//		//.PaddingHorizontal(10, Unit.Centimetre);
-
-			//	});
-			//}).ShowInCompanionAsync();
-
-
 
 
 		}
