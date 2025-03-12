@@ -1,4 +1,5 @@
-﻿using SiAB.Core.Entities.Sipffaa;
+﻿using SiAB.Core.DTO.Transacciones;
+using SiAB.Core.Entities.Sipffaa;
 using System;
 using System.Collections.Generic;
 using System.Linq;

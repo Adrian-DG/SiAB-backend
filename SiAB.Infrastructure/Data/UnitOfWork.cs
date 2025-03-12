@@ -37,6 +37,8 @@ namespace SiAB.Infrastructure.Data
 
 		public ISipffaaRepository SipffaaRepository => new SipffaaRepository(_dapper);
 
+		public ITransaccionRepository TransaccionRepository => new TrasaccionRepository(_context);
+
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
 			repositories ??= [];

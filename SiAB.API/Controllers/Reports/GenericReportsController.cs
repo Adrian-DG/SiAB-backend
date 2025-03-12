@@ -14,6 +14,8 @@ using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
+using SiAB.Core.DTO.Transacciones;
+using SiAB.Core.Entities.Belico;
 using SiAB.Core.Enums;
 using System.Drawing;
 
@@ -21,14 +23,13 @@ namespace SiAB.API.Controllers.Reports
 {
 	[AllowAnonymous]
 	[Route("api/reports")]
-	[TypeFilter(typeof(CodUsuarioFilter))]
-	[TypeFilter(typeof(CodInstitucionFilter))]
 	public class GenericReportsController : GenericController<EntityMetadata>
 	{
 		private readonly TransaccionesController _transaccionesCtrl;
 		private readonly IDatabaseConnectionService _connectionService;
 		public GenericReportsController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService, IDatabaseConnectionService connectionService) : base(unitOfWork, mapper, userContextService)
 		{
+			QuestPDF.Settings.License = LicenseType.Community;
 			_connectionService = connectionService;
 		}
 
@@ -200,5 +201,6 @@ namespace SiAB.API.Controllers.Reports
 
 
 		}
+
 	}
 }

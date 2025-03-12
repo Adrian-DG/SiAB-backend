@@ -8,6 +8,7 @@ namespace SiAB.Core.ProcedureResults
 {
 	public sealed class ArticuloTransaccionItem
 	{
+		public int Id { get; set; }
 		public string Marca { get; set; }
 		public string Modelo { get; set; }
 		public string SubTipo { get; set; }

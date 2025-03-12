@@ -11,6 +11,7 @@ using QuestPDF.Infrastructure;
 using QuestPDF.Helpers;
 using QuestPDF.Previewer;
 using QuestPDF.Companion;
+using SiAB.Core.DTO.Transacciones;
 
 namespace SiAB.Infrastructure.Repositories
 {

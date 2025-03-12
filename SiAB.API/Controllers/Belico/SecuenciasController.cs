@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
+using SiAB.Core.DTO.Secuencias;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
@@ -45,14 +46,16 @@ namespace SiAB.API.Controllers.Belico
 
 		[HttpPost]
 		[ServiceFilter(typeof(CreateAuditableFilter))]
-		public async Task<IActionResult> Create([FromBody] int SecuenciaNumero)
+		public async Task<IActionResult> Create([FromBody] CreateSecuenciaDto createSecuenciaDto)
 		{
 			if (await _uow.Repository<Secuencia>().ConfirmExistsAsync(s => s.CodInstitucion == (InstitucionEnum)_codInstitucionUsuario && s.FechaCreacion.Year ==  DateTime.Now.Year))
 			{
 				throw new BaseException("Ya existe una secuencia para esta institución", HttpStatusCode.BadRequest);
 			}
 
-			var secuencia = new Secuencia { SecuenciaCadena = GenerarSecuencia(SecuenciaNumero), SecuenciaNumero = SecuenciaNumero, CodInstitucion = (InstitucionEnum)_codInstitucionUsuario, UsuarioId = _codUsuario};			
+			var secuencia = String.IsNullOrEmpty(createSecuenciaDto.Secuencia) 
+				? throw new BaseException("La secuencia no puede ser nula o vacía", HttpStatusCode.BadRequest)
+				: new Secuencia { SecuenciaCadena = GenerarSecuencia(int.Parse(createSecuenciaDto.Secuencia)), SecuenciaNumero = int.Parse(createSecuenciaDto.Secuencia), CodInstitucion = (InstitucionEnum)_codInstitucionUsuario, UsuarioId = _codUsuario };			
 
 			await _uow.Repository<Secuencia>().AddAsync(secuencia);
 			return Ok();

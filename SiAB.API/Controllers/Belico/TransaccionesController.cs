@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using SiAB.API.Attributes;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO.Transacciones;
@@ -69,6 +70,17 @@ namespace SiAB.API.Controllers.Belico
 			public int Cantidad { get; set; }
 		}
 
+		
+		[HttpPost("registrar-cargo-descargo")]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
+		public async Task<IActionResult> CreateTransaccionCargoDescargo([FromBody] CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
+		{
+			var transaccion = await _uow.TransaccionRepository.CreateTransaccionCargoDescargo(transaccionCargoDescargoDto);
+
+			await _uow.TransaccionRepository.GenerateFormulario53(transaccionCargoDescargoDto);
+
+			return Ok(transaccion);
+		}
 
 		[HttpPost("upload-excel-relacion-articulos")]
 		public async Task<IActionResult> UploadRelacionArticulos(IFormFile File, [FromQuery] InputOrigenDestinoDto inputOrigenDestinoDto)
