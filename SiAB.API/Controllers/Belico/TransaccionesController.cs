@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using QuestPDF.Companion;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using SiAB.API.Attributes;
 using SiAB.API.Filters;
 using SiAB.API.Helpers;
@@ -30,6 +34,7 @@ namespace SiAB.API.Controllers.Belico
 
 		public TransaccionesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService, IDatabaseConnectionService databaseConnectionService) : base(unitOfWork, mapper, userContextService)
 		{
+			QuestPDF.Settings.License = LicenseType.Community;
 			_connectionService = databaseConnectionService;
 			optionsBuilder.UseSqlServer(_connectionService.GetConnectionString());
 		}
@@ -77,9 +82,140 @@ namespace SiAB.API.Controllers.Belico
 		{
 			var transaccion = await _uow.TransaccionRepository.CreateTransaccionCargoDescargo(transaccionCargoDescargoDto);
 
-			await _uow.TransaccionRepository.GenerateFormulario53(transaccionCargoDescargoDto);
+			await GenerateFormulario53(transaccionCargoDescargoDto);
 
 			return Ok(transaccion);
+		}
+
+		[HttpPost("generar-formulario-53")]
+		public async Task GenerateFormulario53([FromBody] CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
+		{
+			await Document.Create(container =>
+			{
+				container.Page(page =>
+				{
+					page.Size(PageSizes.A4);
+					page.Margin(1, Unit.Centimetre);
+					page.PageColor(Colors.White);
+					page.DefaultTextStyle(x => x.FontSize(12));
+
+					// Header 
+
+					page.Header()
+					.Column(column =>
+					{
+						column.Item()
+						.AlignLeft()
+						.Row(row =>
+						{
+							row.RelativeItem(1)
+							.AlignMiddle()
+							.Text($"Form. No.53A");
+
+							row.RelativeItem(10)
+							.AlignCenter()
+							.Column(col1 =>
+							{
+								var image = System.IO.File.ReadAllBytes(Path.Combine("Images", "Mini_Logo_Principal_MIDE.png"));
+
+								col1.Item()
+								.AlignCenter()
+								.Width(150)
+								.Height(100)
+								.Image(image);
+
+								col1.Item()
+								.AlignCenter()
+								.Text("REPÚBLICA DOMINICANA");
+
+								col1.Item()
+								.AlignCenter()
+								.Text("INTENDECIA GENERAL DEL MATERIAL BELICO, FF.AA.");
+
+								col1.Item()
+								.AlignCenter()
+								.Text("DIRECCION GENERAL DEL MATERIAL BELICO");
+
+							});
+
+						});
+
+					});
+
+					// Content 
+
+					page.Content()
+					.PaddingVertical(2, Unit.Centimetre)
+					.Column(column =>
+					{
+						column.Spacing(2);
+
+						column.Item()
+						.Row(row =>
+						{
+							row.Spacing(335);
+
+							row.ConstantItem(100)
+							.AlignLeft()
+							.Text($"No. {transaccionCargoDescargoDto.Secuencia}");
+
+							row.ConstantItem(100)
+							.AlignRight()
+							.Text(transaccionCargoDescargoDto.Fecha);
+						});
+
+						column.Item()
+						.Border(2)
+						.BorderColor(Colors.Black)
+						.Text(t =>
+						{
+							t.Span("1.- LAS PROPIEDADES DETALLADAS A CONTINUACIÓn FUERON: Recibida al Mayor Generla, \nEN LA FECHA CITADA Y CUYA CONFORMIDAD CERTIFICO: ");
+							t.Span("(NOMBRE_QUIEN_CERTIFICA").Bold();
+							t.Justify();
+						});
+
+						column.Item()	
+						.Table(table =>
+						{
+							static IContainer CellStyle(IContainer container)
+							{
+								return container
+								.Background(Colors.White)
+								.DefaultTextStyle(x => x.FontColor(Colors.Black).Bold())
+								.Border(1)
+								.BorderColor(Colors.Black);
+							}
+
+							table.ColumnsDefinition(d =>
+							{
+								d.RelativeColumn();
+								d.RelativeColumn();
+								d.RelativeColumn();
+								d.RelativeColumn();
+							});
+
+							table.Header(header =>
+							{								
+								header.Cell().Element(CellStyle).AlignCenter().Text("Cantidad");
+								header.Cell().Element(CellStyle).AlignCenter().Text("Unidad");
+								header.Cell().Element(CellStyle).AlignCenter().Text("Detalle");
+								header.Cell().Element(CellStyle).AlignCenter().Text("Observaciones");
+							});
+
+							foreach (var item in transaccionCargoDescargoDto.Articulos)
+							{
+								table.Cell().Element(CellStyle).AlignCenter().Text(item.Cantidad.ToString());
+								table.Cell().Element(CellStyle).AlignCenter().Text("UNA");
+								table.Cell().Element(CellStyle).AlignLeft().PaddingLeft(3).Text($"{item.SubTipo} {item.Marca}");
+								table.Cell().Element(CellStyle).AlignCenter().Text(item.Serie);								
+							}
+
+						});
+
+					});
+
+				});
+			}).ShowInCompanionAsync();
 		}
 
 		[HttpPost("upload-excel-relacion-articulos")]
