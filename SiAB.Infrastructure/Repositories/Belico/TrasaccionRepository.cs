@@ -7,6 +7,7 @@ using SiAB.Core.DTO.Transacciones;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Enums;
 using SiAB.Infrastructure.Data;
+using SiAB.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,12 +52,15 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 					await _context.SaveChangesAsync();
 
+					var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(transaccionCargoDescargoDto.Documento);
+					var archivoByte = Convert.FromBase64String(archivoBase64);
+
 					await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
 					{
 						TransaccionId = transaccion.Entity.Id,
 						TipoDocuemntoId = 1,
-						NumeracionDocumento = transaccionCargoDescargoDto.Documento,
-						Archivo = null //Convert.FromBase64String(transaccionCargoDescargoDto.Documento),						
+						NumeracionDocumento = transaccionCargoDescargoDto.NoDocumento,
+						Archivo = archivoByte,						
 					});
 
 					await _context.SaveChangesAsync();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OfficeOpenXml;
 using QuestPDF.Companion;
 using QuestPDF.Fluent;
@@ -82,13 +83,11 @@ namespace SiAB.API.Controllers.Belico
 		{
 			var transaccion = await _uow.TransaccionRepository.CreateTransaccionCargoDescargo(transaccionCargoDescargoDto);
 
-			await GenerateFormulario53(transaccionCargoDescargoDto);
-
 			return Ok(transaccion);
 		}
 
 		[HttpPost("generar-formulario-53")]
-		public async Task GenerateFormulario53([FromBody] CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
+		public async Task GenerateFormulario53([FromBody] InputTransaccionReport53 InputTransaccionReport53)
 		{
 			await Document.Create(container =>
 			{
@@ -145,7 +144,7 @@ namespace SiAB.API.Controllers.Belico
 					// Content 
 
 					page.Content()
-					.PaddingVertical(2, Unit.Centimetre)
+					.PaddingVertical(1, Unit.Centimetre)
 					.Column(column =>
 					{
 						column.Spacing(2);
@@ -153,15 +152,15 @@ namespace SiAB.API.Controllers.Belico
 						column.Item()
 						.Row(row =>
 						{
-							row.Spacing(335);
+							row.Spacing(300);
 
-							row.ConstantItem(100)
+							row.RelativeItem()
 							.AlignLeft()
-							.Text($"No. {transaccionCargoDescargoDto.Secuencia}");
+							.Text($"No. {InputTransaccionReport53.Secuencia}");
 
-							row.ConstantItem(100)
+							row.RelativeItem()
 							.AlignRight()
-							.Text(transaccionCargoDescargoDto.Fecha);
+							.Text(InputTransaccionReport53.Fecha);
 						});
 
 						column.Item()
@@ -170,7 +169,7 @@ namespace SiAB.API.Controllers.Belico
 						.Text(t =>
 						{
 							t.Span("1.- LAS PROPIEDADES DETALLADAS A CONTINUACIÓn FUERON: Recibida al Mayor Generla, \nEN LA FECHA CITADA Y CUYA CONFORMIDAD CERTIFICO: ");
-							t.Span("(NOMBRE_QUIEN_CERTIFICA").Bold();
+							t.Span(InputTransaccionReport53.RecibidoPor).Bold();
 							t.Justify();
 						});
 
@@ -188,9 +187,9 @@ namespace SiAB.API.Controllers.Belico
 
 							table.ColumnsDefinition(d =>
 							{
-								d.RelativeColumn();
-								d.RelativeColumn();
-								d.RelativeColumn();
+								d.ConstantColumn(2, Unit.Centimetre);
+								d.ConstantColumn(2, Unit.Centimetre);
+								d.ConstantColumn(10, Unit.Centimetre);
 								d.RelativeColumn();
 							});
 
@@ -199,20 +198,48 @@ namespace SiAB.API.Controllers.Belico
 								header.Cell().Element(CellStyle).AlignCenter().Text("Cantidad");
 								header.Cell().Element(CellStyle).AlignCenter().Text("Unidad");
 								header.Cell().Element(CellStyle).AlignCenter().Text("Detalle");
-								header.Cell().Element(CellStyle).AlignCenter().Text("Observaciones");
+								header.Cell().Element(CellStyle).AlignLeft().Text("Observaciones");
+								
 							});
 
-							foreach (var item in transaccionCargoDescargoDto.Articulos)
+							foreach (var item in InputTransaccionReport53.Articulos)
 							{
 								table.Cell().Element(CellStyle).AlignCenter().Text(item.Cantidad.ToString());
 								table.Cell().Element(CellStyle).AlignCenter().Text("UNA");
-								table.Cell().Element(CellStyle).AlignLeft().PaddingLeft(3).Text($"{item.SubTipo} {item.Marca}");
-								table.Cell().Element(CellStyle).AlignCenter().Text(item.Serie);								
+								table.Cell().Element(CellStyle).AlignLeft().PaddingLeft(3).Text($"{item.SubTipo} {item.Marca} Cal.0.0 {item.Serie}");
+								table.Cell().Element(CellStyle).AlignLeft().Text("");
 							}
 
 						});
 
+						column.Item()
+						.Row(row =>
+						{
+							row.Spacing(300);	
+
+							row.RelativeItem()
+							.AlignLeft()
+							.Text(t =>
+							{
+								t.Span(InputTransaccionReport53.EncargadoArmas).Bold();
+								t.Span("\nMayor ERD"); // Rango encargado armas
+								t.Span("\nEnc. Rec. Y Ent. de Armas IGMBFA.");
+								t.AlignCenter();
+							});
+
+							row.RelativeItem()
+							.AlignRight()
+							.Text(t =>
+							{
+								t.Span(InputTransaccionReport53.EncargadoArmas).Bold();
+								t.Span("\nMayor ERD"); // Rango encargado armas
+								t.Span("\nEnc. Depto. Armas EF y P/C. IGMBFA.");
+								t.AlignCenter();
+							});
+						});					
+						
 					});
+					
 
 				});
 			}).ShowInCompanionAsync();
