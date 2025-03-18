@@ -207,6 +207,47 @@ namespace SiAB.API.Controllers.Belico
 								table.Cell().Element(CellStyle).AlignCenter().Text(item.Cantidad.ToString());
 								table.Cell().Element(CellStyle).AlignCenter().Text("UNA");
 								table.Cell().Element(CellStyle).AlignLeft().PaddingLeft(3).Text($"{item.SubTipo} {item.Marca} Cal.0.0 {item.Serie}");
+								table.Cell().Element(CellStyle).AlignLeft().Text("XXXXX");	
+							}
+
+							foreach (var item in Enumerable.Range(2, 11))
+							{
+								table.Cell().Element(CellStyle).AlignCenter().Text("");
+
+								if (item.Equals(5))
+								{
+									table.Cell().Element(CellStyle).AlignCenter().Text("NOTA: ").Bold();
+								}
+								else
+								{
+									table.Cell().Element(CellStyle).AlignCenter().Text("");
+								}
+
+								if (item.Equals(6))
+								{
+									table.Cell()
+									.Column(3)
+									.Row((uint)item)
+									.RowSpan(7)
+									.Text(t =>
+									{
+										t.DefaultTextStyle(st => st.FontSize(10));
+										t.Span(InputTransaccionReport53.Comentarios);
+									});
+								}
+								else if (item < 6 || item > 12)
+								{
+									table.Cell().Element(CellStyle);									
+								}
+								else if (item.Equals(12))
+								{
+									table.Cell()
+									.Column(3)
+									.Row(12)
+									.BorderBottom(1)
+									.BorderColor(Colors.Black);
+								}
+
 								table.Cell().Element(CellStyle).AlignLeft().Text("");
 							}
 

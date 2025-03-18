@@ -16,5 +16,6 @@ namespace SiAB.Core.DTO.Transacciones
 		public required string EncargadoDepositos { get; set; }
 		public required string Fecha { get; set; }
 		public required List<CreateArticuloItemDto> Articulos { get; set; }
+		public string? Comentarios { get; set; }
 	}
 }
