@@ -107,17 +107,23 @@ namespace SiAB.API.Controllers.Belico
 						.AlignLeft()
 						.Row(row =>
 						{
-							row.RelativeItem(1)
+							row.ConstantItem(80)
 							.AlignMiddle()
-							.Text($"Form. No.53A");
+							.Text(t =>
+							{
+								t.Span("Form. No.53-A\n");
+								t.Span("I.G.M.B. FF.AA");
+							});
 
 							row.RelativeItem(10)
+							.PaddingRight(100)
 							.AlignCenter()
 							.Column(col1 =>
 							{
 								var image = System.IO.File.ReadAllBytes(Path.Combine("Images", "Mini_Logo_Principal_MIDE.png"));
 
 								col1.Item()
+								.PaddingLeft(30)
 								.AlignCenter()
 								.Width(150)
 								.Height(100)
@@ -152,7 +158,7 @@ namespace SiAB.API.Controllers.Belico
 						column.Item()
 						.Row(row =>
 						{
-							row.Spacing(300);
+							row.Spacing(200);
 
 							row.RelativeItem()
 							.AlignLeft()
