@@ -35,10 +35,10 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 					var transaccion = await _context.Transacciones.AddAsync(new Transaccion
 					{
-						TipoOrigen = transaccionCargoDescargoDto.TipoCargoDebito,
-						Origen = transaccionCargoDescargoDto.Debito,
-						TipoDestino = transaccionCargoDescargoDto.TipoCargoCredito,
-						Destino = transaccionCargoDescargoDto.Credito,
+						TipoOrigen = transaccionCargoDescargoDto.TipoCargoCredito,
+						Origen = transaccionCargoDescargoDto.Credito,
+						TipoDestino = transaccionCargoDescargoDto.TipoCargoDebito,
+						Destino = transaccionCargoDescargoDto.Debito,
 						FechaEfectividad = DateOnly.Parse(transaccionCargoDescargoDto.Fecha),
 
 						Intendente = transaccionCargoDescargoDto.Intendente,

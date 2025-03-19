@@ -87,6 +87,7 @@ namespace SiAB.API.Controllers.Belico
 		}
 
 		[HttpPost("adjuntar-formulario-53")]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
 		public async Task<IActionResult> AdjuntarFormulario53([FromBody] AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
 		{
 			await _uow.TransaccionRepository.SaveFormulario53(adjuntarFormulario53Dto.Id, adjuntarFormulario53Dto.Url);
