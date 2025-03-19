@@ -193,7 +193,7 @@ namespace SiAB.API.Controllers.Belico
 
 							table.ColumnsDefinition(d =>
 							{
-								d.ConstantColumn(2, Unit.Centimetre);
+								d.ConstantColumn(3, Unit.Centimetre);
 								d.ConstantColumn(2, Unit.Centimetre);
 								d.ConstantColumn(10, Unit.Centimetre);
 								d.RelativeColumn();
@@ -201,10 +201,10 @@ namespace SiAB.API.Controllers.Belico
 
 							table.Header(header =>
 							{								
-								header.Cell().Element(CellStyle).AlignCenter().Text("Cantidad");
-								header.Cell().Element(CellStyle).AlignCenter().Text("Unidad");
-								header.Cell().Element(CellStyle).AlignCenter().Text("Detalle");
-								header.Cell().Element(CellStyle).AlignLeft().Text("Observaciones");
+								header.Cell().Element(CellStyle).AlignCenter().Text("CANTIDAD");
+								header.Cell().Element(CellStyle).AlignCenter().Text("UNIDAD");
+								header.Cell().Element(CellStyle).AlignCenter().Text("DETALLE");
+								header.Cell().Element(CellStyle).AlignLeft().Text("OBSERVACIONES");
 								
 							});
 
@@ -310,6 +310,7 @@ namespace SiAB.API.Controllers.Belico
 							.Column(col =>
 							{
 								col.Item()
+								.PaddingBottom(10, Unit.Point)
 								.LineHorizontal(1, Unit.Point)
 								.LineColor(Colors.Black);
 
@@ -317,7 +318,7 @@ namespace SiAB.API.Controllers.Belico
 								.AlignCenter()
 								.Text(t =>
 								{
-									t.Span($"{InputTransaccionReport53.Intendente}\n");
+									t.Span($"{InputTransaccionReport53.Intendente}\n").Bold();
 									t.Span("Coronel, ERD. (DEM).\n");
 									t.Span("Int. Gral. Material Belico de las FFAA");
 								});
