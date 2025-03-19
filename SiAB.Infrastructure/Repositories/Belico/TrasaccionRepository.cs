@@ -1,4 +1,5 @@
-﻿using QuestPDF.Companion;
+﻿using Microsoft.AspNetCore.Http;
+using QuestPDF.Companion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -90,90 +91,25 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			}			
 		}
 
-		public async Task GenerateFormulario53(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
+		public async Task SaveFormulario53(int transaccionId, string archivo)
 		{
-			await Document.Create(container =>
+			var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(archivo);
+			var archivoByte = Convert.FromBase64String(archivoBase64);
+
+			await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
 			{
-				container.Page(page =>
-				{
-					page.Size(PageSizes.A4);
-					page.Margin(1, Unit.Centimetre);
-					page.PageColor(Colors.White);
-					page.DefaultTextStyle(x => x.FontSize(12));
+				TransaccionId = transaccionId,
+				TipoDocuemntoId = 1,
+				NumeracionDocumento = $"formulario_53_{transaccionId}",
+				Archivo = archivoByte,
+			});
 
-					// Header 
+			await _context.SaveChangesAsync();
+		}
 
-					page.Header()
-					.Column(column =>
-					{
-						column.Item()
-						.AlignLeft()
-						.Row(row =>
-						{
-							row.ConstantItem(100)
-							.Text($"Form. No.53A");
-
-							row.ConstantItem(800)
-							.AlignCenter()
-							.Column(col1 =>
-							{
-								var image = System.IO.File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Images", "Mini_Logo_Principal_MIDE.png"));
-
-								col1.Item()
-								.AlignCenter()
-								.Width(150)
-								.Height(100)
-								.Image(image);
-
-								col1.Item()
-								.AlignCenter()
-								.Text("REPÚBLICA DOMINICANA");
-
-								col1.Item()
-								.AlignCenter()
-								.Text("INTENDECIA GENERAL DEL MATERIAL BELICO, FF.AA.");
-
-								col1.Item()
-								.AlignCenter()
-								.Text("DIRECCION GENERAL DEL MATERIAL BELICO");
-
-							});
-
-						});
-
-					});
-
-					// Content 
-
-					page.Content()
-					.PaddingVertical(2, Unit.Centimetre)
-					.Column(column =>
-					{
-						column.Item()
-						.Row(row =>
-						{
-							row.ConstantItem(100)
-							.AlignLeft()
-							.Text($"No. {transaccionCargoDescargoDto.Secuencia}");
-
-							row.ConstantItem(100)
-							.AlignRight()
-							.Text(transaccionCargoDescargoDto.Fecha);
-						});
-
-						column.Item()
-						.Border(2)
-						.BorderColor(Colors.Black)
-						.Text(t =>
-						{
-							t.Span("1.- LAS PROPIEDADES DETALLADAS A CONTINUACIÓn FUERON: Recibida al Mayor Generla, \nEN LA FECHA CITADA Y CUYA CONFORMIDAD CERTIFICO: ");
-							t.Span("(NOMBRE_QUIEN_CERTIFICA").Bold();
-						});
-
-					});
-
-				});
-			}).ShowInCompanionAsync();
+		public Task GenerateFormulario53(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

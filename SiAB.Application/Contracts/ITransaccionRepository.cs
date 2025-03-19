@@ -11,5 +11,7 @@ namespace SiAB.Application.Contracts
 	{
 		Task<int> CreateTransaccionCargoDescargo(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto);
 		Task GenerateFormulario53(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto);
+
+		Task SaveFormulario53(int transaccionId, string archivo);
 	}
 }

@@ -86,10 +86,17 @@ namespace SiAB.API.Controllers.Belico
 			return Ok(transaccion);
 		}
 
-		[HttpPost("generar-formulario-53")]
-		public async Task GenerateFormulario53([FromBody] InputTransaccionReport53 InputTransaccionReport53)
+		[HttpPost("adjuntar-formulario-53")]
+		public async Task<IActionResult> AdjuntarFormulario53([FromBody] AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
 		{
-			await Document.Create(container =>
+			await _uow.TransaccionRepository.SaveFormulario53(adjuntarFormulario53Dto.Id, adjuntarFormulario53Dto.Url);
+			return Ok();
+		}
+
+		[HttpPost("generar-formulario-53")]
+		public IActionResult GenerateFormulario53([FromBody] InputTransaccionReport53 InputTransaccionReport53)
+		{
+			var formulario53 = Document.Create(container =>
 			{
 				container.Page(page =>
 				{
@@ -329,7 +336,8 @@ namespace SiAB.API.Controllers.Belico
 					});
 
 				});
-			}).ShowInCompanionAsync();
+			}).GeneratePdf();
+			return File(formulario53, "application/pdf", "Formulario53.pdf");
 		}
 
 		[HttpPost("upload-excel-relacion-articulos")]
