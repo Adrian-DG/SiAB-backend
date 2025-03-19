@@ -96,7 +96,7 @@ namespace SiAB.API.Controllers.Belico
 					page.Size(PageSizes.A4);
 					page.Margin(1, Unit.Centimetre);
 					page.PageColor(Colors.White);
-					page.DefaultTextStyle(x => x.FontSize(12));
+					page.DefaultTextStyle(x => x.FontSize(11));
 
 					// Header 
 
@@ -212,7 +212,7 @@ namespace SiAB.API.Controllers.Belico
 							{
 								table.Cell().Element(CellStyle).AlignCenter().Text(item.Cantidad.ToString());
 								table.Cell().Element(CellStyle).AlignCenter().Text("UNA");
-								table.Cell().Element(CellStyle).AlignLeft().PaddingLeft(3).Text($"{item.SubTipo} {item.Marca} Cal.0.0 {item.Serie}");
+								table.Cell().Element(CellStyle).AlignLeft().PaddingLeft(3).Text($"{item.SubTipo} {item.Marca} Cal. {item.Calibre}, No. | {item.Serie}");
 								table.Cell().Element(CellStyle).AlignLeft().Text("XXXXX");	
 							}
 
@@ -231,7 +231,7 @@ namespace SiAB.API.Controllers.Belico
 								if (item == (template_rows_start + 4))
 								{
 									table.Cell().Column(1).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
-									table.Cell().Column(2).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("NOTA: ").Bold();
+									table.Cell().Column(2).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("NOTA: ").AlignCenter().Bold();
 									table.Cell().Column(3).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
 									table.Cell().Column(4).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
 								}

@@ -21,6 +21,6 @@ namespace SiAB.Core.DTO.Transacciones
 
 		public required string Fecha { get; set; }
 		public string? Comentario { get; set; }
-		public required List<CreateArticuloItemDto> Articulos { get; set; }
+		public required List<ArticuloItemDto> Articulos { get; set; }
 	}
 }
