@@ -21,6 +21,7 @@ using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
 using System.Data;
+using System.Linq.Expressions;
 using System.Net;
 
 namespace SiAB.API.Controllers.Belico
@@ -67,6 +68,24 @@ namespace SiAB.API.Controllers.Belico
 
 				return new JsonResult(result);
 			}
+		}
+
+		[HttpGet("{id:int}/documentos-transaccion")]
+		public async Task<IActionResult> GetDocumentosTransaccion([FromRoute] int id)
+		{
+			var result = await _uow.Repository<DocumentoTransaccion>().GetListAsync(
+				includes: new Expression<System.Func<DocumentoTransaccion, object>>[] { dt => dt.TipoDocumento },
+				predicate: dt => dt.TransaccionId == id,
+				selector: dt => new
+				{
+					Id = dt.Id,
+					NumeracionDocumento = dt.NumeracionDocumento,
+					Archivo = dt.Archivo,
+					TipoDocumento = dt.TipoDocumento.Nombre
+				}
+			);
+
+			return new JsonResult(result);
 		}
 
 		internal sealed class ArticuloItemMetadata
