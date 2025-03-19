@@ -1,5 +1,6 @@
 ﻿using SiAB.Core.DTO.Inventario;
 using SiAB.Core.Enums;
+using SiAB.Core.Models.Sipffaa;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace SiAB.Core.DTO.Transacciones
 		public string? Observaciones { get; set; }
 		public required List<CreateArticuloItemDto> Articulos { get; set; }
 
-		public string? EncargadoArmas { get; set; }
+		public required string EncargadoArmas { get; set; }
 		public string? EncargadoDepositos { get; set; }
 					 
 		public string? Entrega { get; set; }

@@ -174,8 +174,8 @@ namespace SiAB.API.Controllers.Belico
 						.BorderColor(Colors.Black)
 						.Text(t =>
 						{
-							t.Span("1.- LAS PROPIEDADES DETALLADAS A CONTINUACIÓn FUERON: Recibida al Mayor Generla, \nEN LA FECHA CITADA Y CUYA CONFORMIDAD CERTIFICO: ");
-							t.Span(InputTransaccionReport53.RecibidoPor).Bold();
+							t.Span("1.- LAS PROPIEDADES DETALLADAS A CONTINUACIÓn FUERON: Recibida al Mayor General, \nEN LA FECHA CITADA Y CUYA CONFORMIDAD CERTIFICÓ: ");
+							t.Span(InputTransaccionReport53.RecibidoPor.NombreApellidoCompleto).Bold();
 							t.Justify();
 						});
 
@@ -250,7 +250,7 @@ namespace SiAB.API.Controllers.Belico
 										.Text(t =>
 										{
 											t.DefaultTextStyle(st => st.FontSize(10));
-											t.Span(InputTransaccionReport53.Comentarios);
+											t.Span(InputTransaccionReport53.Comentario);
 										});
 
 									}
@@ -285,8 +285,8 @@ namespace SiAB.API.Controllers.Belico
 							.AlignLeft()
 							.Text(t =>
 							{
-								t.Span(InputTransaccionReport53.EncargadoArmas).Bold();
-								t.Span("\nMayor ERD"); // Rango encargado armas
+								t.Span(InputTransaccionReport53.EncargadoDepositos.NombreApellidoCompleto).Bold();
+								t.Span($"\n{InputTransaccionReport53.EncargadoDepositos.Rango}"); // Rango encargado depositos
 								t.Span("\nEnc. Rec. Y Ent. de Armas IGMBFA.");
 								t.AlignCenter();
 							});
@@ -295,8 +295,8 @@ namespace SiAB.API.Controllers.Belico
 							.AlignRight()
 							.Text(t =>
 							{
-								t.Span(InputTransaccionReport53.EncargadoArmas).Bold();
-								t.Span("\nMayor ERD"); // Rango encargado armas
+								t.Span(InputTransaccionReport53.EncargadoArmas.NombreApellidoCompleto).Bold();
+								t.Span($"\n{InputTransaccionReport53.EncargadoArmas.Rango}"); // Rango encargado armas
 								t.Span("\nEnc. Depto. Armas EF y P/C. IGMBFA.");
 								t.AlignCenter();
 							});
@@ -318,8 +318,8 @@ namespace SiAB.API.Controllers.Belico
 								.AlignCenter()
 								.Text(t =>
 								{
-									t.Span($"{InputTransaccionReport53.Intendente}\n").Bold();
-									t.Span("Coronel, ERD. (DEM).\n");
+									t.Span($"{InputTransaccionReport53.Intendente.NombreApellidoCompleto}\n").Bold();
+									t.Span($"{InputTransaccionReport53.Intendente.Rango}\n");
 									t.Span("Int. Gral. Material Belico de las FFAA");
 								});
 							});

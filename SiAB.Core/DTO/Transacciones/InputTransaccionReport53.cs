@@ -9,13 +9,18 @@ namespace SiAB.Core.DTO.Transacciones
 {
     public record InputTransaccionReport53
     {
-		public required string RecibidoPor { get; set; }
 		public required string Secuencia { get; set; }
-		public required string Intendente { get; set; }
-		public required string EncargadoArmas { get; set; }
-		public required string EncargadoDepositos { get; set; }
+
+		public required IMiembroListDetail RecibidoPor { get; set; }
+		public required IMiembroListDetail EntregadoPor { get; set; }
+		public required IMiembroListDetail FirmadoPor { get; set; }
+
+		public required IMiembroListDetail Intendente { get; set; }
+		public required IMiembroListDetail EncargadoArmas { get; set; }
+		public required IMiembroListDetail EncargadoDepositos { get; set; }		
+
 		public required string Fecha { get; set; }
+		public string? Comentario { get; set; }
 		public required List<CreateArticuloItemDto> Articulos { get; set; }
-		public string? Comentarios { get; set; }
 	}
 }
