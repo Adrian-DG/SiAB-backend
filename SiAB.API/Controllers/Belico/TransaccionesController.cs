@@ -216,53 +216,70 @@ namespace SiAB.API.Controllers.Belico
 								table.Cell().Element(CellStyle).AlignLeft().Text("XXXXX");	
 							}
 
-							foreach (var item in Enumerable.Range(2, 11))
+							int template_rows_start = InputTransaccionReport53.Articulos.Count + 1;
+
+							foreach (var item in Enumerable.Range(1, template_rows_start + 11))
 							{
-								table.Cell().Element(CellStyle).AlignCenter().Text("");
-
-								if (item.Equals(5))
+								if (item > template_rows_start && item < template_rows_start + 4)
 								{
-									table.Cell().Element(CellStyle).AlignCenter().Text("NOTA: ").Bold();
-								}
-								else
-								{
-									table.Cell().Element(CellStyle).AlignCenter().Text("");
+									table.Cell().Column(1).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(2).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(3).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(4).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
 								}
 
-								if (item.Equals(6))
+								if (item == (template_rows_start + 4))
 								{
-									table.Cell()
-									.Column(3)
-									.Row((uint)item)
-									.RowSpan(7)
-									.Text(t =>
+									table.Cell().Column(1).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(2).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("NOTA: ").Bold();
+									table.Cell().Column(3).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(4).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+								}
+
+								else if (item > (template_rows_start + 4) && item < (template_rows_start + 11))
+								{
+									table.Cell().Column(1).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(2).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+
+									if (item == (template_rows_start + 5))
 									{
-										t.DefaultTextStyle(st => st.FontSize(10));
-										t.Span(InputTransaccionReport53.Comentarios);
-									});
-								}
-								else if (item < 6 || item > 12)
-								{
-									table.Cell().Element(CellStyle);									
-								}
-								else if (item.Equals(12))
-								{
-									table.Cell()
-									.Column(3)
-									.Row(12)
-									.BorderBottom(1)
-									.BorderColor(Colors.Black);
+										table.Cell()
+										.Column(3)
+										.Row((uint)(template_rows_start + item))
+										.RowSpan(8)
+										.Text(t =>
+										{
+											t.DefaultTextStyle(st => st.FontSize(10));
+											t.Span(InputTransaccionReport53.Comentarios);
+										});
+
+									}
+
+									table.Cell().Column(4).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
 								}
 
-								table.Cell().Element(CellStyle).AlignLeft().Text("");
+								else if (item == (template_rows_start + 11))
+								{
+									table.Cell().Column(1).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(2).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+									table.Cell().Column(3).Row((uint)(template_rows_start + item)).BorderBottom(1).BorderColor(Colors.Black).Text("");
+									table.Cell().Column(4).Row((uint)(template_rows_start + item)).Element(CellStyle).Text("");
+								}
+
 							}
 
-						});
+						});								
+						
+					});
 
+					page.Footer()
+					.Column(column =>
+					{
 						column.Item()
+						.PaddingBottom(50)
 						.Row(row =>
 						{
-							row.Spacing(300);	
+							row.Spacing(100);
 
 							row.RelativeItem()
 							.AlignLeft()
@@ -283,10 +300,32 @@ namespace SiAB.API.Controllers.Belico
 								t.Span("\nEnc. Depto. Armas EF y P/C. IGMBFA.");
 								t.AlignCenter();
 							});
-						});					
-						
+						});
+
+						column.Item()
+						.AlignCenter()
+						.Row(row =>
+						{
+							row.AutoItem()
+							.Column(col =>
+							{
+								col.Item()
+								.LineHorizontal(1, Unit.Point)
+								.LineColor(Colors.Black);
+
+								col.Item()
+								.AlignCenter()
+								.Text(t =>
+								{
+									t.Span($"{InputTransaccionReport53.Intendente}\n");
+									t.Span("Coronel, ERD. (DEM).\n");
+									t.Span("Int. Gral. Material Belico de las FFAA");
+								});
+							});
+
+						});
+
 					});
-					
 
 				});
 			}).ShowInCompanionAsync();
