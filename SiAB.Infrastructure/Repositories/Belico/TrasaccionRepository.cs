@@ -47,8 +47,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 						EntregadoA = transaccionCargoDescargoDto.Entrega,
 						RecibidoPor = transaccionCargoDescargoDto.Recibe,
-						FirmadoPor = transaccionCargoDescargoDto.Firma,
-
+						FirmadoPor = transaccionCargoDescargoDto.Firma
 					});
 
 					await _context.SaveChangesAsync();

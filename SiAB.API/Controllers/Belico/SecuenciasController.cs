@@ -26,7 +26,7 @@ namespace SiAB.API.Controllers.Belico
 
 			return ((InstitucionEnum)_codInstitucionUsuario) switch
 			{
-				InstitucionEnum.MIDE => $"{fecha_cadena}-{numero_cadena}",
+				InstitucionEnum.MIDE => $"{numero_cadena}-{DateTime.Now.Year}",
 				InstitucionEnum.ERD => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest),
 				InstitucionEnum.ARD => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest),
 				InstitucionEnum.FARD => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest),
