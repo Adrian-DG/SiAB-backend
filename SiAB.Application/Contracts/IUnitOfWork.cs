@@ -17,5 +17,6 @@ namespace SiAB.Application.Contracts
 		IReportRepository ReportRepository { get; }
 		ISipffaaRepository SipffaaRepository { get; }
 		ITransaccionRepository TransaccionRepository { get; }
+		ISecuenciaRepository SecuenciaRepository { get; }
 	}
 }

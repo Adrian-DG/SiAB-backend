@@ -39,6 +39,8 @@ namespace SiAB.Infrastructure.Data
 
 		public ITransaccionRepository TransaccionRepository => new TrasaccionRepository(_context);
 
+		public ISecuenciaRepository SecuenciaRepository => new SecuenciaRepository(_context);
+
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
 			repositories ??= [];

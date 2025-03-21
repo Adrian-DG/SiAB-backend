@@ -19,45 +19,18 @@ namespace SiAB.API.Controllers.Belico
 		{
 		}
 
-		private string GenerarSecuencia(int numero)
-		{           
-			var fecha_cadena = DateTime.Now.ToString("yyyy-MM-dd");
-			var numero_cadena = "" + (numero < 10 ? "0" + numero : numero);
-
-			return ((InstitucionEnum)_codInstitucionUsuario) switch
-			{
-				InstitucionEnum.MIDE => $"{numero_cadena}-{DateTime.Now.Year}",
-				InstitucionEnum.ERD => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest),
-				InstitucionEnum.ARD => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest),
-				InstitucionEnum.FARD => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest),
-				_ => throw new BaseException("No se ha definido la institución", HttpStatusCode.BadRequest)
-			};
-		}
-
 		[HttpGet("generar")]
 		public async Task<IActionResult> GetSecuenciaInstitucion()
 		{
-			var result = await _uow.Repository<Secuencia>().FindWhereAsync(
-				predicate: s => s.CodInstitucion == (InstitucionEnum)_codInstitucionUsuario && s.FechaCreacion.Year == DateTime.Now.Year,
-				selector: s => s.SecuenciaCadena);
-
+			var result = await _uow.SecuenciaRepository.GetSecuenciaInstitucion(_codInstitucionUsuario);
 			return new JsonResult(result);
 		}
 
 		[HttpPost]
 		[ServiceFilter(typeof(CreateAuditableFilter))]
-		public async Task<IActionResult> Create([FromBody] CreateSecuenciaDto createSecuenciaDto)
+		public async Task<IActionResult> Create()
 		{
-			if (await _uow.Repository<Secuencia>().ConfirmExistsAsync(s => s.CodInstitucion == (InstitucionEnum)_codInstitucionUsuario && s.FechaCreacion.Year ==  DateTime.Now.Year))
-			{
-				throw new BaseException("Ya existe una secuencia para esta institución", HttpStatusCode.BadRequest);
-			}
-
-			var secuencia = String.IsNullOrEmpty(createSecuenciaDto.Secuencia) 
-				? throw new BaseException("La secuencia no puede ser nula o vacía", HttpStatusCode.BadRequest)
-				: new Secuencia { SecuenciaCadena = GenerarSecuencia(int.Parse(createSecuenciaDto.Secuencia)), SecuenciaNumero = int.Parse(createSecuenciaDto.Secuencia), CodInstitucion = (InstitucionEnum)_codInstitucionUsuario, UsuarioId = _codUsuario };			
-
-			await _uow.Repository<Secuencia>().AddAsync(secuencia);
+			await _uow.SecuenciaRepository.CreateSecuencia(_codInstitucionUsuario);
 			return Ok();
 		}
 	}

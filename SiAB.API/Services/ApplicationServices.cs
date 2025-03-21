@@ -9,6 +9,7 @@ using SiAB.Core.Constants;
 using SiAB.Infrastructure.Data;
 using SiAB.Infrastructure.Interceptors;
 using SiAB.Infrastructure.Repositories;
+using SiAB.Infrastructure.Repositories.Belico;
 using SiAB.Infrastructure.Repositories.JCE;
 
 namespace SiAB.API.Services
@@ -26,6 +27,7 @@ namespace SiAB.API.Services
 				.AddScoped<IUsuarioRepository, UsuarioRepository>()
 				.AddScoped<IRoleRepository, RoleRepository>()
 				.AddScoped<IReportRepository, ReportRepository>()
+				.AddScoped<ISecuenciaRepository, SecuenciaRepository>()
 				.AddScoped<CodUsuarioFilter>()
 				.AddScoped<CodInstitucionFilter>()
 				.AddScoped(typeof(NamedFilter<>))
