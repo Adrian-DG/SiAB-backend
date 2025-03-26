@@ -42,7 +42,6 @@ namespace SiAB.Core.Entities.Inventario
 		public int PropiedadId { get; set; }
 		public virtual Propiedad? Propiedad { get; set; }
 		public string? Serie { get; set; }
-		public EstadoEnum Estado { get; set; }
 
 		// Auditables
 

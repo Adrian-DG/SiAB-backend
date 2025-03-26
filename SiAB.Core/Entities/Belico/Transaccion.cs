@@ -19,7 +19,6 @@ namespace SiAB.Core.Entities.Belico
 
 		public TipoOrigenDestinoEnum TipoDestino { get; set; }
 		public required string Destino { get; set; }
-		public TipoTransaccionEnum TipoTransaccion { get; set; }
 
 		[StringLength(11)]
 		public required string Intendente { get; set; }
@@ -29,15 +28,6 @@ namespace SiAB.Core.Entities.Belico
 		
 		[StringLength(11)]
 		public required string EncargadoDeposito { get; set; }
-
-		[StringLength(11)]
-		public required string EntregadoA { get; set; }
-
-		[StringLength(11)]
-		public required string RecibidoPor { get; set; }
-
-		[StringLength(11)]
-		public required string FirmadoPor { get; set; }
 
 		public DateOnly FechaEfectividad { get; set; }
 

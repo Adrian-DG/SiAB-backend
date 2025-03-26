@@ -166,7 +166,6 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Deposito> Depositos { get; set; }
 		public DbSet<HistorialUbicacion> HistoricoUbicacion { get; set; }
 		public DbSet<StockArticulo> StockArticulos { get; set; }
-		public DbSet<LicenciaEmpresa> Licencias { get; set; }
 
 		#endregion
 
@@ -177,7 +176,6 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
-		public DbSet<Empresa> Empresas { get; set; }
 		public DbSet<TipoDocumento> TipoDocumentos { get; set; }
 
 		#endregion

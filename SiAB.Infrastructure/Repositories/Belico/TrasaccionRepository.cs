@@ -44,10 +44,6 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						Intendente = transaccionCargoDescargoDto.Intendente,
 						EncargadoGeneral = transaccionCargoDescargoDto.EncargadoArmas,
 						EncargadoDeposito = transaccionCargoDescargoDto.EncargadoDepositos,
-
-						EntregadoA = transaccionCargoDescargoDto.Entrega,
-						RecibidoPor = transaccionCargoDescargoDto.Recibe,
-						FirmadoPor = transaccionCargoDescargoDto.Firma
 					});
 
 					await _context.SaveChangesAsync();

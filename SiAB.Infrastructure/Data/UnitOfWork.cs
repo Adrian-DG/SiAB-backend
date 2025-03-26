@@ -31,8 +31,6 @@ namespace SiAB.Infrastructure.Data
 
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
 
-		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
-
 		public IReportRepository ReportRepository => new ReportRepository(_context);
 
 		public ISipffaaRepository SipffaaRepository => new SipffaaRepository(_dapper);
