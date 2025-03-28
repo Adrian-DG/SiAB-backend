@@ -31,8 +31,6 @@ namespace SiAB.API.Controllers.Belico
 	[Route("api/transacciones")]
 	public class TransaccionesController : GenericController<Transaccion>
 	{
-		private readonly IDatabaseConnectionService _connectionService;
-
 		public TransaccionesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
 			QuestPDF.Settings.License = LicenseType.Community;
@@ -71,9 +69,16 @@ namespace SiAB.API.Controllers.Belico
 			return new JsonResult(result);
 		}
 
-		
+		[HttpGet]
+		public async Task<IActionResult> GetTransacciones([FromQuery] TransaccionPaginationFilter filters)
+		{
+			
+			var result = await _uow.TransaccionRepository.GetTransacciones(filters, _codInstitucionUsuario, _roles);
+			return new JsonResult(result);
+		}
 
-		
+
+
 		[HttpPost("registrar-cargo-descargo")]
 		[ServiceFilter(typeof(CreateAuditableFilter))]
 		public async Task<IActionResult> CreateTransaccionCargoDescargo([FromBody] CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)

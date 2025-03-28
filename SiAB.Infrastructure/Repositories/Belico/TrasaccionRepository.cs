@@ -14,6 +14,8 @@ using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
+using SiAB.Core.Models;
+using SiAB.Core.Models.Transacciones;
 using SiAB.Core.ProcedureResults;
 using SiAB.Infrastructure.Data;
 using SiAB.Infrastructure.Helpers;
@@ -21,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,14 +32,14 @@ namespace SiAB.Infrastructure.Repositories.Belico
 {
 	public class TrasaccionRepository : ITransaccionRepository
 	{
-		private readonly AppDbContext _context;
 		private Dictionary<string, int> datosArticulosDict;
-		public TrasaccionRepository(AppDbContext context)
-		{ 
-			QuestPDF.Settings.License = LicenseType.Community;
-			_context = context;
+		private readonly AppDbContext _context;
 
+		public TrasaccionRepository(AppDbContext dbContext) 
+		{
+			QuestPDF.Settings.License = LicenseType.Community;			
 			datosArticulosDict = new Dictionary<string, int>();
+			_context = dbContext;
 		}
 
 		public async Task<int> CreateTransaccionCargoDescargo(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
@@ -67,7 +70,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 					await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
 					{
 						TransaccionId = transaccion.Entity.Id,
-						TipoDocuemntoId = 1,
+						TipoDocuemntoId = (int)TipoDocumentoEnum.NO_DEFINIDO,
 						NumeracionDocumento = transaccionCargoDescargoDto.NoDocumento,
 						Archivo = archivoByte,						
 					});
@@ -369,17 +372,66 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				});
 			}).GeneratePdf();
 			return formulario53;
-		}	
+		}
 
+
+		public async Task<PagedData<TransaccionViewModel>> GetTransacciones(TransaccionPaginationFilter filters, int CodInstitucion, string[] roles)
+		{
+			string query = @$"
+                            select 
+                            T.Id,
+                            (
+                                case
+                                    when T.TipoOrigen = 1 then T.Origen
+                                    when T.TipoOrigen = 3 then iif(T.Origen = 'N/A', 'N/A', (select D.Nombre from Inv.Depositos as D where D.Id = cast(T.Origen as int))) 
+                                    else 'NO DISPONIBLE'
+                                end
+                            ) as Origen,
+                            (
+                                case
+                                    when T.TipoDestino = 1 then T.Destino
+                                    when T.TipoDestino = 3 then iif(T.Destino = 'N/A', 'N/A', (select D.Nombre from Inv.Depositos as D where D.Id = cast(T.Destino as int))) 
+                                    else 'NO DISPONIBLE'
+                                end
+                            ) as Destino,
+                            T.FechaEfectividad as Fecha,
+                            isnull(DT.NumeracionDocumento, 'NO DEFINIDO') as Formulario,
+							cast(iif(DT.Id is null, 0, 1) as bit) as Tiene53,
+							concat(iif(U.Institucion = 3, R.NombreArmada, R.Nombre), ', ', U.Nombre, ' ', U.Apellido) as Usuario,
+							T.FechaCreacion
+                            from Belico.Transacciones as T
+                            left join Belico.DocumentosTransaccion as DT on DT.TransaccionId = T.Id and DT.TipoDocuemntoId = {(int)TipoDocumentoEnum.FORMULARIO_53}
+							left join accesos.Usuarios as U on U.Id = T.UsuarioId
+							left join Personal.Rangos as R on R.Id = U.RangoId
+                            where T.CodInstitucion = {CodInstitucion}
+                            ";
+
+			if (!String.IsNullOrEmpty(filters.Formulario53)) query += $" and DT.NumeracionDocumento like '{filters.Formulario53}%' ";
+			if (!String.IsNullOrEmpty(filters.Origen)) query += $" and T.Origen like '{filters.Origen}%' ";
+			if (!String.IsNullOrEmpty(filters.Destino)) query += $" and T.Destino like '{filters.Destino}%' ";
+			if (filters.FechaInicial.HasValue && filters.FechaFinal.HasValue) query += $" and T.FechaEfectividad between '{filters.FechaInicial}' and '{filters.FechaFinal}' ";
+
+			query += $" order by T.FechaEfectividad desc OFFSET {(filters.Page - 1) * filters.Size} ROWS FETCH NEXT {filters.Size} ROWS ONLY";
+
+			var result = await _context.SP_Obtener_Listado_Transacciones.FromSqlRaw(query).ToListAsync<TransaccionViewModel>();
+
+			return new PagedData<TransaccionViewModel>
+			{
+				Page = filters.Page,
+				Size = filters.Size,
+				Rows = result,
+				TotalCount = result.Count
+			};
+		}
 
 		public async Task<List<SerieTransaccionItem>> GetTransaccionesBySerie(string serie)
 		{
 			string query = $@"
 							select 
 							T.Origen,
-							T.Destino,
-							DT.NumeracionDocumento as Formulario,
-							T.FechaEfectividad
+							T.Destino,							
+							T.FechaEfectividad,
+							DT.NumeracionDocumento as Formulario
 							from Belico.DetallesArticuloTransaccion as DAT
 							left join Belico.DocumentosTransaccion as DT on DT.TransaccionId = DAT.TransaccionId
 							left join Inv.Articulos as A on A.Id = DAT.ArticuloId
@@ -402,9 +454,9 @@ namespace SiAB.Infrastructure.Repositories.Belico
 							MO.Nombre as Modelo,
 							ST.Nombre as SubTipo,
 							C.Nombre as Calibre,
-							DAT.Cantidad,
-							DT.NumeracionDocumento as Formulario,
-							T.FechaEfectividad
+							DAT.Cantidad,							
+							T.FechaEfectividad,
+							DT.NumeracionDocumento as Formulario
 							from Belico.DetallesArticuloTransaccion as DAT
 							left join Inv.Articulos as A on A.Id = DAT.ArticuloId
 							left join Misc.Marcas as M on M.Id = A.MarcaId

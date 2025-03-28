@@ -20,6 +20,7 @@ namespace SiAB.API.Controllers
 	[Route("api/[controller]")]
 	[TypeFilter(typeof(CodUsuarioFilter))]
 	[TypeFilter(typeof(CodInstitucionFilter))]
+	[TypeFilter(typeof(PermisoFilter))]
 	public abstract class GenericController<T> : ControllerBase where T : EntityMetadata
 	{
 		protected readonly IUnitOfWork _uow;
@@ -37,6 +38,13 @@ namespace SiAB.API.Controllers
 			get => _userContextService.CodInstitucionUsuario;
 			set => _userContextService.CodInstitucionUsuario = value;
 		}
+
+		public string[] _roles
+		{
+			get => _userContextService.Roles;
+			set => _userContextService.Roles = value;
+		}
+
 		public GenericController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService)
 		{
 			_uow = unitOfWork;
