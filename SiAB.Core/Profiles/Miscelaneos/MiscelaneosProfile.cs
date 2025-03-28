@@ -21,14 +21,6 @@ namespace SiAB.Core.Profiles.Miscelaneos
 				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
 			#endregion
 
-			#region Propiedades
-
-			CreateMap<Propiedad, NamedModel>()
-				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-				.ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
-
-			#endregion
-
 			#region Categorias
 			CreateMap<Categoria, NamedModel>()
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

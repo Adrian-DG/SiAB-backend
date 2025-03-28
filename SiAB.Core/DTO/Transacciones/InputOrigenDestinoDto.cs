@@ -10,7 +10,7 @@ namespace SiAB.Core.DTO.Transacciones
 {
 	public record InputOrigenDestinoDto
 	{
-		public TipoTransaccionEnum Origen { get; set; }
-		public TipoTransaccionEnum Destino { get; set; }
+		public TipoOrigenDestinoEnum Origen { get; set; }
+		public TipoOrigenDestinoEnum Destino { get; set; }
 	}
 }

@@ -21,12 +21,6 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Dependencia { Id = 5, Nombre = "POLICIA NACIONAL (PN)", Institucion = Core.Enums.InstitucionEnum.MIDE }
 			);
 
-			builder.Entity<Propiedad>().HasData(
-				new Propiedad { Id = 1, Nombre = "ARMA DE SU PROPIEDAD" },
-				new Propiedad { Id = 2, Nombre = "FF.AA" },
-				new Propiedad { Id = 3, Nombre = "PERDIDA" }
-			);
-
 			builder.Entity<Categoria>().HasData(
 				new Categoria { Id = 1, Nombre = "NO DEFINIDA" },
 				new Categoria { Id = 2, Nombre = "ARMAS" },

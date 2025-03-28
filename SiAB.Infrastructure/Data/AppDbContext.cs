@@ -173,7 +173,6 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Categoria> Categorias { get; set; }		
 		public DbSet<Marca> Marcas { get; set; }
 		public DbSet<Modelo> Modelos { get; set; }
-		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
 		public DbSet<TipoDocumento> TipoDocumentos { get; set; }
