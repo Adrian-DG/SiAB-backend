@@ -11,6 +11,7 @@ namespace SiAB.Core.DTO.Transacciones
 		public string? Origen { get; set; }
 		public string? Destino { get; set; }
 		public string? Formulario53 { get; set; }
+		public bool? Adjunto53 { get; set; }
 		public DateOnly? FechaInicial { get; set; }
 		public DateOnly? FechaFinal { get; set; }
 	}

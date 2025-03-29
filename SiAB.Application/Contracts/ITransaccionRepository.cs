@@ -19,6 +19,8 @@ namespace SiAB.Application.Contracts
 
 		Task<PagedData<TransaccionViewModel>> GetTransacciones(TransaccionPaginationFilter filters, int CodInstitucion, string[] roles);
 
+		Task<object> GetTransaccionDetails(int Id);
+
 		byte[] GenerateFormulario53(InputTransaccionReport53 InputTransaccionReport53);
 
 		Task SaveFormulario53(int transaccionId, string archivo);

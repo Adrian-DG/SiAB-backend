@@ -77,6 +77,13 @@ namespace SiAB.API.Controllers.Belico
 			return new JsonResult(result);
 		}
 
+		[HttpGet("{Id:int}")]
+		public async Task<IActionResult> GetTransaccionDetails([FromRoute] int Id)
+		{
+			var result = await _uow.TransaccionRepository.GetTransaccionDetails(Id);
+			return new JsonResult(result);
+		}
+
 
 
 		[HttpPost("registrar-cargo-descargo")]

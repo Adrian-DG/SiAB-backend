@@ -60,6 +60,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						Intendente = transaccionCargoDescargoDto.Intendente,
 						EncargadoGeneral = transaccionCargoDescargoDto.EncargadoArmas,
 						EncargadoDeposito = transaccionCargoDescargoDto.EncargadoDepositos,
+						Estatus = EstatusTransaccionEnum.EN_PROCESO,
 					});
 
 					await _context.SaveChangesAsync();
@@ -409,6 +410,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			if (!String.IsNullOrEmpty(filters.Formulario53)) query += $" and DT.NumeracionDocumento like '{filters.Formulario53}%' ";
 			if (!String.IsNullOrEmpty(filters.Origen)) query += $" and T.Origen like '{filters.Origen}%' ";
 			if (!String.IsNullOrEmpty(filters.Destino)) query += $" and T.Destino like '{filters.Destino}%' ";
+			if (filters.Adjunto53.HasValue) query += $" and cast(iif(DT.Id is null, 0, 1) as bit) = {Convert.ToInt32(filters.Adjunto53)} ";
 			if (filters.FechaInicial.HasValue && filters.FechaFinal.HasValue) query += $" and T.FechaEfectividad between '{filters.FechaInicial}' and '{filters.FechaFinal}' ";
 
 			query += $" order by T.FechaEfectividad desc OFFSET {(filters.Page - 1) * filters.Size} ROWS FETCH NEXT {filters.Size} ROWS ONLY";
@@ -421,6 +423,42 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				Size = filters.Size,
 				Rows = result,
 				TotalCount = result.Count
+			};
+		}
+
+		public async Task<object> GetTransaccionDetails(int Id)
+		{
+			var result = await _context.Transacciones
+				.Include(t => t.DetallesTransaccion)
+				.ThenInclude(dt => dt.Articulo)
+				.Include(t => t.DocumentosTransaccion)
+				.ThenInclude(dt => dt.TipoDocumento)
+				.FirstOrDefaultAsync(t => t.Id == Id);
+
+			return new 
+			{
+				Transaccion = new
+				{
+					Origen = result.Origen,
+					Destino = result.Destino,
+					FechaEfectividad = result.FechaEfectividad
+				},
+				Articulos = result.DetallesTransaccion.Select(dt => new
+				{
+					Id = dt.ArticuloId,
+					Serie = dt.Articulo.Serie,
+					Marca = dt.Articulo.Marca.Nombre,
+					Modelo = dt.Articulo.Modelo.Nombre,
+					SubTipo = dt.Articulo.SubTipo.Nombre,
+					Calibre = dt.Articulo.Calibre.Nombre,
+					dt.Cantidad
+				}),
+				Documentos = result.DocumentosTransaccion.Select(dt => new
+				{
+					dt.Id,
+					dt.NumeracionDocumento,
+					dt.TipoDocumento.Nombre
+				})
 			};
 		}
 

@@ -3,6 +3,7 @@ using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -30,6 +31,9 @@ namespace SiAB.Core.Entities.Belico
 		public required string EncargadoDeposito { get; set; }
 
 		public DateOnly FechaEfectividad { get; set; }
+
+		[DefaultValue(EstatusTransaccionEnum.EN_PROCESO)]
+		public EstatusTransaccionEnum Estatus { get; set; } = EstatusTransaccionEnum.EN_PROCESO;
 
 		// auditables 
 
