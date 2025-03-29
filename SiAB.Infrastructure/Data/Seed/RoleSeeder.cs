@@ -13,21 +13,31 @@ namespace SiAB.Infrastructure.Data.Seed
 		public static void Seed(this ModelBuilder builder)
 		{
 			builder.Entity<Role>().HasData(
-				new Role { Id = 1, Name = "ADMINISTRADOR GENERAL", NormalizedName = "ADMINISTRADOR GENERAL", Descripcion = "Acceso global a todos los módulos del sistema." },
-				new Role { Id = 2, Name = "CONSULTA GENERAL", NormalizedName = "CONSULTA GENERAL", Descripcion = "Modulo para consulta de existencia por miembro, civil, deposito y función(S4)." },
-				new Role { Id = 3, Name = "CONSULTA GENERAL MILITAR", NormalizedName = "CONSULTA GENERAL MILITAR", Descripcion = "Consultar solo personal militar." },
-				new Role { Id = 4, Name = "CONSULTA GENERAL CIVIL", NormalizedName = "CONSULTA GENERAL CIVIL", Descripcion = "Consultar solo civiles (consultar JCE)" },
-				new Role { Id = 5, Name = "CONSULTA GENERAL DEPOSITO", NormalizedName = "CONSULTA GENERAL DEPOSITO", Descripcion = "Consultar solo los depositos." },
-				new Role { Id = 6, Name = "CONSULTA GENERAL FUNCION (S4)", NormalizedName = "CONSULTA GENERAL FUNCION (S4)", Descripcion = "Consultar solo las funciónes  (S4)." },
-				new Role { Id = 7, Name = "GENERAR REPORTE CONSULTA", NormalizedName = "GENERAR REPORTE CONSULTA", Descripcion = "Generar las reporteria de los articulos asignados según el tipo de consulta." },
-				new Role { Id = 8, Name = "MODULO MANTENIMIENTO", NormalizedName = "MODULO MANTENIMIENTO", Descripcion = "Acceso para la creacion de recursos como marcas, modelos, depositos...etc." },
-				new Role { Id = 9, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "Módulo para la creacion de usuarios y asignación de roles." },
-				new Role { Id = 10, Name = "ASIGNACION DEPOSITO USUARIO", NormalizedName = "ASIGNACION DEPOSITO USUARIO", Descripcion = "Asignar depositos especificos para un usuario." },
-				new Role { Id = 11, Name = "MODULO ESTADISTICAS", NormalizedName = "MODULO ESTADISTICAS", Descripcion = "Acceso a panel de estadisticas generales." },
-				new Role { Id = 12, Name = "MODULO ALERTAS", NormalizedName = "MODULO ALERTAS", Descripcion = "Acceso al listado de las alertas." },
-				new Role { Id = 13, Name = "CREAR ALERTA", NormalizedName = "CREAR ALERTA", Descripcion = "Creación de una nueva alerta para un miembro o civil." },
-				new Role { Id = 14, Name = "MODULO REPORTERIA", NormalizedName = "MODULO REPORTERIA", Descripcion = "Acceso a la generación de reportes genericos." },
-				new Role { Id = 15, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS",Descripcion = "Acceso al modulo de empresas y registro de licencias" }
+				new Role { Id = 1, Name = "ADMINISTRADOR GENERAL", NormalizedName = "ADMINISTRADOR GENERAL", Descripcion = "ACCESO ILIMITADO A TODAS LAS FUNCIONES DEL SISTEMA" },
+				new Role { Id = 2, Name = "MODULO EXISTENCIAS", NormalizedName = "MODULO EXISTENCIAS", Descripcion = "ACCESO AL MODULO DE EXISTENCIAS" },
+
+				new Role { Id = 3, Name = "MODULO TRANSACCIONES", NormalizedName = "MODULO TRANSACCIONES", Descripcion = "ACCESO AL MODULO DE TRANSACCIONES" },
+				new Role { Id = 4, Name = "TRANSACCIONES CREAR CARGO DESCARGO", NormalizedName = "TRANSACCIONES CREAR CARGO DESCARGO", Descripcion = "CREAR CARGOS Y DESCARGOS" },
+				new Role { Id = 5, Name = "TRANSACCIONES VISUALIZAR DETALLES", NormalizedName = "TRANSACCIONES VISUALIZAR DETALLES", Descripcion = "VISUALIZAR DETALLES DE LAS TRANSACCIONES" },
+				new Role { Id = 6, Name = "TRANSACCIONES VISUALIZAR DOCUMENTOS", NormalizedName = "TRANSACCIONES VISUALIZAR DOCUMENTOS", Descripcion = "VISUALIZAR DOCUMENTOS DE LAS TRANSACCIONES" },
+				new Role { Id = 7, Name = "TRANSACCIONES GENERAR FORMULARIO 53", NormalizedName = "TRANSACCIONES GENERAR FORMULARIO 53", Descripcion = "GENERAR FORMULARIO 53" },
+				new Role { Id = 8, Name = "TRANSACCIONES ADJUNTAR FORMULARIO 53", NormalizedName = "TRANSACCIONES ADJUNTAR FORMULARIO 53", Descripcion = "ADJUNTAR FORMULARIO 53" },
+				new Role { Id = 9, Name = "TRANSACCIONES CARGAR INVENTARIO EXCEL", NormalizedName = "TRANSACCIONES CARGAR INVENTARIO EXCEL", Descripcion = "CARGAR INVENTARIO DESDE EXCEL" },
+
+				new Role { Id = 10, Name = "MODULO MANTENIMIENTO", NormalizedName = "MODULO MANTENIMIENTO", Descripcion = "ACCESO AL MODULO DE MANTENIMIENTO" },
+				new Role { Id = 11, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS", Descripcion = "ACCESO AL MODULO DE EMPRESAS" },
+				new Role { Id = 12, Name = "EMPRESAS CREAR", NormalizedName = "EMPRESAS CREAR", Descripcion = "CREAR EMPRESAS" },
+				new Role { Id = 13, Name = "EMPRESAS EDITAR", NormalizedName = "EMPRESAS EDITAR", Descripcion = "EDITAR EMPRESAS" },
+				new Role { Id = 14, Name = "EMPRESAS ELIMINAR", NormalizedName = "EMPRESAS ELIMINAR", Descripcion = "ELIMINAR EMPRESAS" },
+
+				new Role { Id = 15, Name = "EMPRESAS VISUALIZAR ORDENES", NormalizedName = "EMPRESAS VISUALIZAR ORDENES", Descripcion = "VISUALIZAR ORDENES DE EMPRESAS" },
+				new Role { Id = 16, Name = "EMPRESAS CREAR ORDEN", NormalizedName = "EMPRESAS CREAR ORDEN", Descripcion = "CREAR ORDENES DE EMPRESAS" },
+				new Role { Id = 17, Name = "EMPRESAS EDITAR ORDEN", NormalizedName = "EMPRESAS EDITAR ORDEN", Descripcion = "EDITAR ORDENES DE EMPRESAS" },
+				new Role { Id = 18, Name = "EMPRESAS ELIMINAR ORDEN", NormalizedName = "EMPRESAS ELIMINAR ORDEN", Descripcion = "ELIMINAR ORDENES DE EMPRESAS" },
+				new Role { Id = 19, Name = "EMPRESAS VISUALIZAR DETALLES ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DETALLES ORDEN", Descripcion = "VISUALIZAR DETALLES DE ORDENES DE EMPRESAS" },
+				new Role { Id = 20, Name = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", Descripcion = "VISUALIZAR DOCUMENTOS DE ORDENES DE EMPRESAS" },
+				
+				new Role { Id = 21, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "ACCESO AL MODULO DE USUARIOS" }
 			);
 		}
 	}
