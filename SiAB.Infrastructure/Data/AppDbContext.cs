@@ -11,6 +11,7 @@ using SiAB.Infrastructure.Data.Seed;
 using SiAB.Core.ProcedureResults;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Models.Transacciones;
+using SiAB.Core.Entities.Empresa;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -188,6 +189,17 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Rango> Rangos { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
+		#endregion
+
+		#region Empresa
+
+		public DbSet<Empresa> Empresas { get; set; }
+		public DbSet<Titular> Titulares { get; set; }
+		public DbSet<OrdenEmpresa> OrdenesEmpresa { get; set; }
+		public DbSet<OrdenEmpresaArticulo> OrdenesEmpresaArticulos { get; set; }
+		public DbSet<OrdenEmpresaDetalle> OrdenesEmpresaDetalles { get; set; }
+		public DbSet<OrdenEmpresaDocumento> OrdenesEmpresDocumentos { get; set; }
+		public DbSet<Contacto> Contactos { get; set; }
 		#endregion
 
 		#endregion
