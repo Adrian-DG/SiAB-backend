@@ -3,6 +3,7 @@ using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Repositories;
 using SiAB.Infrastructure.Repositories.Belico;
+using SiAB.Infrastructure.Repositories.Empresa;
 using SiAB.Infrastructure.Repositories.JCE;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,13 @@ namespace SiAB.Infrastructure.Data
     {
 		private Dictionary<string, object> repositories;
 
-		private readonly AppDbContext _context;		
+		private readonly AppDbContext _context;
+		private DapperContext _dapper;
 
 		public UnitOfWork(AppDbContext context)
 		{
 			_context = context;
+			_dapper = new DapperContext();
 		}
 
 		public IJCERepository JCERepository => new JCERepository();
@@ -28,6 +31,14 @@ namespace SiAB.Infrastructure.Data
 		public IUsuarioRepository UsuarioRepository => new UsuarioRepository(_context);
 
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
+
+		public IReportRepository ReportRepository => new ReportRepository(_context);
+
+		public ISipffaaRepository SipffaaRepository => new SipffaaRepository(_dapper);
+
+		public ITransaccionRepository TransaccionRepository => new TrasaccionRepository(_context);
+
+		public ISecuenciaRepository SecuenciaRepository => new SecuenciaRepository(_context);
 
 		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
 

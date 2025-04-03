@@ -21,12 +21,6 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Dependencia { Id = 5, Nombre = "POLICIA NACIONAL (PN)", Institucion = Core.Enums.InstitucionEnum.MIDE }
 			);
 
-			builder.Entity<Propiedad>().HasData(
-				new Propiedad { Id = 1, Nombre = "ARMA DE SU PROPIEDAD" },
-				new Propiedad { Id = 2, Nombre = "FF.AA" },
-				new Propiedad { Id = 3, Nombre = "PERDIDA" }
-			);
-
 			builder.Entity<Categoria>().HasData(
 				new Categoria { Id = 1, Nombre = "NO DEFINIDA" },
 				new Categoria { Id = 2, Nombre = "ARMAS" },
@@ -47,7 +41,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Tipo { Id = 8, Nombre = "EQUIPO DE PROTECCION", CategoriaId = 2 },
 				new Tipo { Id = 9, Nombre = "EQUIPO DE TRANSPORTE", CategoriaId = 2 },
 				new Tipo { Id = 10, Nombre = "EQUIPO DE VIGILANCIA", CategoriaId = 2 },
-				new Tipo { Id = 11, Nombre = "EXPLOSIVOS", CategoriaId = 4 },
+				new Tipo { Id = 11, Nombre = "EXPLOSIVOS", CategoriaId = 5 },
 				new Tipo { Id = 12, Nombre = "MUNICIONES", CategoriaId = 3 }
 			);
 
@@ -61,7 +55,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new SubTipo { Id = 7, Nombre = "FUSIL", TipoId = 4 },
 				new SubTipo { Id = 8, Nombre = "GRANADAS", TipoId = 10 },
 				new SubTipo { Id = 9, Nombre = "LANZACOHETES", TipoId = 5 },
-				new SubTipo { Id = 10, Nombre = "MINAS", TipoId = 10 },
+				new SubTipo { Id = 10, Nombre = "MINAS", TipoId = 11 },
 				new SubTipo { Id = 11, Nombre = "PISTOLAS", TipoId = 3 },
 				new SubTipo { Id = 12, Nombre = "RADIOS", TipoId = 6 },
 				new SubTipo { Id = 13, Nombre = "REVOLVERES", TipoId = 3 },

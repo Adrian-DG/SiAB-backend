@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiAB.Core.Enums
+namespace SiAB.Core.DTO.Empresa
 {
-	public enum LicenciaEstatusEnum
+	public record CreateContactoDto
 	{
-		ACTIVA = 1,
-		EXPIRADA,
-		PENDIENTE,
-		CANCELADA
+		public string? Telefono { get; set; }
 	}
 }

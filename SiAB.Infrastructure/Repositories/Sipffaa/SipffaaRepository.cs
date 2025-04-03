@@ -23,7 +23,7 @@ namespace SiAB.Infrastructure.Repositories
 			_context = context;
 		}
 
-		private async Task<byte[]?> GetMiembroFoto(string cedula)
+		public async Task<byte[]?> GetMiembroFoto(string cedula)
 		{
 			var query = $@"SELECT TOP 1 M.foto AS Foto
 						   FROM miembros.MIEMBROS AS M
@@ -48,7 +48,7 @@ namespace SiAB.Infrastructure.Repositories
 						  M.EstadoMiembro
 						  FROM Consultas.Miembros AS M
 						  LEFT JOIN miembros.MIEMBROS AS M2 ON M2.CodMiembro = M.CodMiembro AND M2.CodInstitucion = M.CodInstitucion
-						  WHERE M.Cedula LIKE '%{param}%' OR M.NombreApellidoCompleto LIKE '%{param}%' ORDER BY M.CodRango ASC";
+						  WHERE M.Cedula LIKE '%{param}%' OR UPPER(M.NombreApellidoCompleto) LIKE '%{param.ToUpper()}%' ORDER BY M.CodRango ASC";
 
 			using (var connection = _context.CreateConnection())
 			{

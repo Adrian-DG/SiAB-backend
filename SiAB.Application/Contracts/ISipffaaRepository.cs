@@ -12,5 +12,7 @@ namespace SiAB.Application.Contracts
 	{
 		Task<IEnumerable<MiembroListDetail>> GetMiembrosByCedulaNombre(string param);
 		Task<ConsultaMiembro?> GetMiembroByCedula(string cedula);
+		Task<byte[]?> GetMiembroFoto(string cedula);
+
 	}
 }

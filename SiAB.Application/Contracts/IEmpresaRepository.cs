@@ -1,4 +1,4 @@
-﻿using SiAB.Core.DTO.Misc;
+﻿using SiAB.Core.DTO.Empresa;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace SiAB.Application.Contracts
 {
-	public interface IEmpresaRepository
+	public interface IEmpresaRepository 
 	{
-		Task CreateEmpresa_Licencia(CreateEmpresaDto createEmpresaDto);
+		Task CreateEmpresa(CreateEmpresaDto createEmpresaDto);
+		Task CreateOrdenEmpresa(int Id, CreateOrdenEmpresaDto createOrdenEmpresaDto);
 	}
 }

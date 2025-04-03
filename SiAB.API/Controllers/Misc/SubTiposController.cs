@@ -40,6 +40,22 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(subtipos);
 		}
 
+		[HttpGet("filtrar-por-tipo")]
+		public async Task<IActionResult> GetFilterByTipo([FromQuery] int tipo)
+		{
+			var result = await _uow.Repository<SubTipo>().GetListAsync(
+				predicate: st => st.TipoId == tipo,
+				selector: st => new NamedModel
+				{
+					Id = st.Id,
+					Nombre = st.Nombre,
+				},
+				orderBy: st => st.OrderBy(o => o.Nombre)
+			);
+
+			return new JsonResult(result);
+		}
+
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<SubTipo>))]
 		public async Task<IActionResult> Create([FromBody] CreateSubTipoDto createSubTipoDto)

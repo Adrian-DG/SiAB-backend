@@ -53,11 +53,21 @@ namespace SiAB.Infrastructure.Repositories
 			await CommitChangeAsync();
 		}
 
-		public async Task<TResult> FindWhereAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+		public async Task<TResult> FindWhereAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[]? includes)
 		{
+			IQueryable<T> query = _repository;
+
+			if (includes is not null)
+			{
+				foreach (var include in includes)
+				{
+					query = query.Include(include);
+				}
+			}
+
 			if (predicate is null) throw new BaseException("El filtro no puede ser nulo");
 
-			var entity = await _repository.Where(predicate).Select(selector).FirstOrDefaultAsync();
+			var entity = await query.Where(predicate).Select(selector).FirstOrDefaultAsync();
 			
 			if (entity is null)
 			{

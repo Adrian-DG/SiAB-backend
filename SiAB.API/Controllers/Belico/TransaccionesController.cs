@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OfficeOpenXml;
+using QuestPDF.Companion;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using SiAB.API.Attributes;
+using SiAB.API.Filters;
 using SiAB.API.Helpers;
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO.Transacciones;
@@ -15,6 +21,7 @@ using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
 using SiAB.Infrastructure.Data;
 using System.Data;
+using System.Linq.Expressions;
 using System.Net;
 
 namespace SiAB.API.Controllers.Belico
@@ -24,216 +31,91 @@ namespace SiAB.API.Controllers.Belico
 	[Route("api/transacciones")]
 	public class TransaccionesController : GenericController<Transaccion>
 	{
-		private readonly DbContextOptionsBuilder<AppDbContext> optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-		private readonly IDatabaseConnectionService _connectionService;
-
-		public TransaccionesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService, IDatabaseConnectionService databaseConnectionService) : base(unitOfWork, mapper, userContextService)
+		public TransaccionesController(IUnitOfWork unitOfWork, IMapper mapper, IUserContextService userContextService) : base(unitOfWork, mapper, userContextService)
 		{
-			_connectionService = databaseConnectionService;
-			optionsBuilder.UseSqlServer(_connectionService.GetConnectionString());
+			QuestPDF.Settings.License = LicenseType.Community;
 		}
 
 		[HttpGet("filter-transacciones-serie")]
 		public async Task<IActionResult> GetTransaccionesBySerie([FromQuery] string serie)
 		{
-			using (var context = new AppDbContext(optionsBuilder.Options))
-			{
-				var result = await context.SP_Obtener_Transacciones_Serie.FromSqlRaw("EXEC [Belico].[obtener_transacciones_serie] @Serie, @CodInstitucion",
-						new SqlParameter("@Serie", serie),
-						new SqlParameter("@CodInstitucion", _codInstitucionUsuario)).ToListAsync();
-
-				return new JsonResult(result);
-
-			}
+			var result = await _uow.TransaccionRepository.GetTransaccionesBySerie(serie);
+			return new JsonResult(result);
 		}
 
 
 		[HttpGet("filter-articulos-origen-transaccion")]
 		public async Task<IActionResult> GetArticulosOrigenTransaccion([FromQuery] TipoTransaccionEnum tipoOrigen, [FromQuery] string origen)
 		{
-			using (var context = new AppDbContext(optionsBuilder.Options))
-			{
-				var result = await context.SP_Obtener_Articulos_Origen_Transaccion.FromSqlRaw("EXEC [Belico].[obtener_articulos_origen_transaccion] @TipoOrigen, @Origen, @CodInstitucion",
-						new SqlParameter("@TipoOrigen", (int)tipoOrigen),
-						new SqlParameter("@Origen", origen.Replace("-", "")),
-						new SqlParameter("@CodInstitucion", _codInstitucionUsuario)).ToListAsync();
-
-				return new JsonResult(result);
-			}
+			var result = await _uow.TransaccionRepository.GetArticulosOrigenTransaccion(tipoOrigen, origen);
+			return new JsonResult(result);
 		}
 
-		internal sealed class ArticuloItemMetadata
+		[HttpGet("{id:int}/documentos-transaccion")]
+		public async Task<IActionResult> GetDocumentosTransaccion([FromRoute] int id)
 		{
-			public int ArticuloId { get; set; }
-			public int TransaccionId { get; set; }
-			public int Cantidad { get; set; }
-		}
-
-
-		[HttpPost("upload-excel-relacion-articulos")]
-		public async Task<IActionResult> UploadRelacionArticulos(IFormFile File, [FromQuery] InputOrigenDestinoDto inputOrigenDestinoDto)
-		{
-			if (File is null || File.Length == 0)
-			{
-				throw new BaseException("No se ha enviado un archivo", HttpStatusCode.BadRequest);
-			}
-
-			using (var stream = new MemoryStream())
-			{
-				await File.CopyToAsync(stream);
-
-				using (ExcelPackage excel = new ExcelPackage(stream))
+			var result = await _uow.Repository<DocumentoTransaccion>().GetListAsync(
+				includes: new Expression<System.Func<DocumentoTransaccion, object>>[] { dt => dt.TipoDocumento },
+				predicate: dt => dt.TransaccionId == id,
+				selector: dt => new
 				{
-					var workBook = excel.Workbook;
-
-					foreach (var worksheet in workBook.Worksheets)
-					{
-						var articulosData = new List<ArticuloItemMetadata>();
-
-						int start_row = 2;
-						int row_dimmession = worksheet.Dimension.End.Row;
-
-						for (int row = start_row; row <= row_dimmession; row++)
-						{
-							var origen = worksheet.Cells[row, 1].Value.ToString(); // Cedula o Deposito
-							var destino  = worksheet.Cells[row, 2].Value?.ToString(); // Cedula o Deposito
-							var categoria = worksheet.Cells[row, 3].Value?.ToString();
-							var tipo = worksheet.Cells[row, 4].Value?.ToString();
-							var subtipo = worksheet.Cells[row, 5].Value?.ToString();
-							var marca = worksheet.Cells[row, 6].Value?.ToString();
-							var modelo = worksheet.Cells[row, 7].Value?.ToString();
-							var calibre = worksheet.Cells[row, 8].Value?.ToString();
-							var serie = worksheet.Cells[row, 9].Value?.ToString();
-							var formulario53 = worksheet.Cells[row, 10].Value?.ToString();
-							var fechaValue = worksheet.Cells[row, 11].Value?.ToString();
-
-							DateTime fechaEfectividad = int.TryParse(fechaValue, out int result) 
-								? DateTime.FromOADate(Convert.ToDouble(fechaValue)) 
-								: DateTime.Parse(fechaValue); 
-												
-							var articuloId = await InsertArticulo(
-									categoria: categoria,
-									tipo: tipo,
-									subtipo: subtipo,
-									marca: marca,
-									modelo: modelo,
-									calibre: calibre,
-									serie: serie);
-
-							var transaccionId = await InsertTransaccion(
-								tipoOrigen: inputOrigenDestinoDto.Origen,
-								origen: origen,
-								tipoDestino: inputOrigenDestinoDto.Destino,
-								destino: destino.ToString().Replace("-", ""),
-								fechaEfectividad: fechaEfectividad);
-
-							await InsertDocumentoTransaccion(numero: formulario53, transaccionId: transaccionId);
-
-							articulosData.Add(new ArticuloItemMetadata { ArticuloId = articuloId, TransaccionId = transaccionId, Cantidad = 1 });
-						
-						}
-
-						await InsertDetalleTransaccion(articulosData);
-
-						
-					}
+					Id = dt.Id,
+					NumeracionDocumento = dt.NumeracionDocumento,
+					Archivo = dt.Archivo,
+					TipoDocumento = dt.TipoDocumento.Nombre
 				}
-			}
+			);
 
+			return new JsonResult(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetTransacciones([FromQuery] TransaccionPaginationFilter filters)
+		{
+			
+			var result = await _uow.TransaccionRepository.GetTransacciones(filters, _codInstitucionUsuario, _roles);
+			return new JsonResult(result);
+		}
+
+		[HttpGet("{Id:int}")]
+		public async Task<IActionResult> GetTransaccionDetails([FromRoute] int Id)
+		{
+			var result = await _uow.TransaccionRepository.GetTransaccionDetails(Id);
+			return new JsonResult(result);
+		}
+
+
+
+		[HttpPost("registrar-cargo-descargo")]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
+		public async Task<IActionResult> CreateTransaccionCargoDescargo([FromBody] CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
+		{
+			var transaccion = await _uow.TransaccionRepository.CreateTransaccionCargoDescargo(transaccionCargoDescargoDto);
+
+			return Ok(transaccion);
+		}
+
+		[HttpPost("adjuntar-formulario-53")]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
+		public async Task<IActionResult> AdjuntarFormulario53([FromBody] AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
+		{
+			await _uow.TransaccionRepository.SaveFormulario53(adjuntarFormulario53Dto.Id, adjuntarFormulario53Dto.Url);
 			return Ok();
 		}
 
-		private async Task InsertDocumentoTransaccion(string numero, int transaccionId)
+		[HttpPost("generar-formulario-53")]
+		public IActionResult GenerateFormulario53([FromBody] InputTransaccionReport53 InputTransaccionReport53)
 		{
-			using (var context = new AppDbContext(optionsBuilder.Options))
-			{
-				await context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
-				{
-					NumeracionDocumento = $"F-53-{numero}",
-					TransaccionId = transaccionId,
-					Archivo = null,
-					UsuarioId = _codUsuario,
-					CodInstitucion = (InstitucionEnum)_codInstitucionUsuario
-				});
-
-				await context.SaveChangesAsync();
-			}
+			var formulario53 = _uow.TransaccionRepository.GenerateFormulario53(InputTransaccionReport53);
+			return File(formulario53, "application/pdf", "Formulario53.pdf");
 		}
 
-
-		private async Task<int> InsertArticulo(string categoria, string tipo, string subtipo, string marca, string modelo, string calibre, string serie)
+		[HttpPost("upload-excel-relacion-articulos")]
+		[ServiceFilter(typeof(CreateAuditableFilter))]
+		public async Task<IActionResult> UploadRelacionArticulos(IFormFile File, [FromQuery] InputOrigenDestinoDto inputOrigenDestinoDto)
 		{
-			using (var context = new AppDbContext(optionsBuilder.Options))
-			{
-				// Define output parameter
-				var outputParamter = new SqlParameter("@ArticuloId", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
-
-				// Prepare other parameters
-				var parameters = new List<SqlParameter>
-				{
-					new SqlParameter("@Categoria", categoria),
-					new SqlParameter("@Tipo", tipo),
-					new SqlParameter("@SubTipo", subtipo),
-					new SqlParameter("@Marca", marca),
-					new SqlParameter("@Modelo", modelo),
-					new SqlParameter("@Calibre", calibre),
-					new SqlParameter("@Serie", serie),
-					new SqlParameter("@CodUsuario", _codUsuario),
-					new SqlParameter("@CodInstitucion", _codInstitucionUsuario),
-					outputParamter
-				};
-
-				// Execute stored procedure
-				await context.Database.ExecuteSqlRawAsync("EXEC [Inv].[Agregar_Articulo_Inventario] @Categoria, @Tipo, @SubTipo, @Marca, @Modelo, @Calibre, @Serie, @CodUsuario, @CodInstitucion, @ArticuloId OUTPUT", parameters.ToArray());
-
-				return (int)outputParamter.Value;
-			}
-		}
-
-		private async Task<int> InsertTransaccion(TipoTransaccionEnum tipoOrigen, string origen, TipoTransaccionEnum tipoDestino, string destino, DateTime fechaEfectividad)
-		{
-			using (var context = new AppDbContext(optionsBuilder.Options))
-			{
-				// Prepare parameters
-				var outputParameter = new SqlParameter("@TransaccionId", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
-
-				var parameters = new SqlParameter[]
-				{
-					new SqlParameter("@TipoOrigen", (int)tipoOrigen),
-					new SqlParameter("@Origen", origen),
-					new SqlParameter("@TipoDestino", (int)tipoDestino),
-					new SqlParameter("@Destino", destino),
-					new SqlParameter("@FechaEfectividad", fechaEfectividad.ToString("yyyy-MM-dd")),
-					new SqlParameter("@CodUsuario", _codUsuario),
-					new SqlParameter("@CodInstitucion", _codInstitucionUsuario),
-					outputParameter
-				};
-
-				await context.Database.ExecuteSqlRawAsync("EXEC [Belico].[registrar_transaccion] @TipoOrigen, @Origen, @TipoDestino, @Destino, @FechaEfectividad, @CodUsuario, @CodInstitucion, @TransaccionId OUTPUT", parameters);
-
-				return (int)outputParameter.Value;
-			}
-		}
-
-		
-		private async Task InsertDetalleTransaccion(List<ArticuloItemMetadata> data)
-		{
-			foreach (var item in data)
-			{
-				var parameters = new SqlParameter[]
-				{
-					new SqlParameter("@ArticuloId", item.ArticuloId),
-					new SqlParameter("@TransaccionId", item.TransaccionId),
-					new SqlParameter("@UsuarioId", _codUsuario),
-					new SqlParameter("@CodInstitucion", _codInstitucionUsuario)
-				};
-
-				using (var context = new AppDbContext(optionsBuilder.Options))
-				{
-					await context.Database.ExecuteSqlRawAsync("EXEC [Belico].[registrar_detalle_transaccion] @ArticuloId, @TransaccionId, @UsuarioId, @CodInstitucion", parameters);
-				}
-			}
-			
+			await _uow.TransaccionRepository.UploadRelacionArticulos(File, inputOrigenDestinoDto);
+			return Ok();
 		}
 
 
