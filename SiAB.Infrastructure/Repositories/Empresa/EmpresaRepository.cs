@@ -83,7 +83,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 
 					var orden = await _context.OrdenesEmpresa.AddAsync(new OrdenEmpresa
 					{
-						FechaEfectividad = createOrdenEmpresaDto.FechaEfectividad,
+						FechaEfectividad = DateOnly.Parse(createOrdenEmpresaDto.FechaEfectividad),
 						Comentario = createOrdenEmpresaDto.Comentario,
 						EmpresaId = Id
 					});
