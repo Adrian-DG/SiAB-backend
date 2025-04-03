@@ -10,7 +10,7 @@ namespace SiAB.Core.DTO.Empresa
 	public record CreateOrdenEmpresaDto
 	{
 		public string? Comentario { get; set; }
-		public DateOnly FechaEfectividad { get; set; }
+		public required string FechaEfectividad { get; set; }
 		public List<CreateOrdenEmpresaArticuloDto>? Articulos { get; set; }
 		public List<CreateOrdenEmpresaDocumentoDto>? Documentos { get; set; }
 
