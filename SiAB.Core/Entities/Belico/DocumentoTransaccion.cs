@@ -17,8 +17,8 @@ namespace SiAB.Core.Entities.Belico
 		public int TransaccionId { get; set; }
 		public virtual Transaccion? Transaccion { get; set; }
 
-		[ForeignKey(nameof(TipoDocuemntoId))]
-		public int TipoDocuemntoId { get; set; }
+		[ForeignKey(nameof(TipoDocumentoId))]
+		public int TipoDocumentoId { get; set; }
 		public virtual TipoDocumento? TipoDocumento { get; set; }
 
 		public required string NumeracionDocumento { get; set; }

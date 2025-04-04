@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
+using SiAB.Core.Enums;
+using SiAB.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,44 +24,38 @@ namespace SiAB.Infrastructure.Data.Seed
 			);
 
 			builder.Entity<Categoria>().HasData(
-				new Categoria { Id = 1, Nombre = "NO DEFINIDA" },
-				new Categoria { Id = 2, Nombre = "ARMAS" },
-				new Categoria { Id = 3, Nombre = "EQUIPO" },
-				new Categoria { Id = 4, Nombre = "MUNICIONES" },
-				new Categoria { Id = 5, Nombre = "EXPLOSIVOS" },
-				new Categoria { Id = 6, Nombre = "ACCESORIOS" }
+				new Categoria { Id = (int)CategoriaArticuloEnum.NO_DEFINIDA, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.NO_DEFINIDA) },
+				new Categoria { Id = (int)CategoriaArticuloEnum.ARMAS, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.ARMAS) },
+				new Categoria { Id = (int)CategoriaArticuloEnum.MUNICIONES, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.MUNICIONES) },				
+				new Categoria { Id = (int)CategoriaArticuloEnum.EXPLOSIVOS, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.EXPLOSIVOS) },
+				new Categoria { Id = (int)CategoriaArticuloEnum.EQUIPOS, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.EQUIPOS) },
+				new Categoria { Id = (int)CategoriaArticuloEnum.QUIMICOS, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.QUIMICOS) },
+				new Categoria { Id = (int)CategoriaArticuloEnum.ACCESORIOS, Nombre = CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.ACCESORIOS) }
 			);
 
 			builder.Entity<Tipo>().HasData(
-				new Tipo { Id = 1, Nombre = "NO DEFINIDO", CategoriaId = 1 },
-				new Tipo { Id = 2, Nombre = "ACCESORIO(S) DE ARMAS", CategoriaId = 5 },
-				new Tipo { Id = 3, Nombre = "ARMAS BLANCAS", CategoriaId = 1 },
-				new Tipo { Id = 4, Nombre = "ARMAS CORTAS", CategoriaId = 1 },
-				new Tipo { Id = 5, Nombre = "ARMAS LARGAS", CategoriaId = 1 },
-				new Tipo { Id = 6, Nombre = "ARMAS PESADAS", CategoriaId = 1 },
-				new Tipo { Id = 7, Nombre = "EQUIPO DE COMUNICACION", CategoriaId = 2 },
-				new Tipo { Id = 8, Nombre = "EQUIPO DE PROTECCION", CategoriaId = 2 },
-				new Tipo { Id = 9, Nombre = "EQUIPO DE TRANSPORTE", CategoriaId = 2 },
-				new Tipo { Id = 10, Nombre = "EQUIPO DE VIGILANCIA", CategoriaId = 2 },
-				new Tipo { Id = 11, Nombre = "EXPLOSIVOS", CategoriaId = 5 },
-				new Tipo { Id = 12, Nombre = "MUNICIONES", CategoriaId = 3 }
+				new Tipo { Id = (int)TipoArticuloEnum.NO_DEFINIDO, Nombre = "NO DEFINIDO", CategoriaId = (int)CategoriaArticuloEnum.NO_DEFINIDA },
+				new Tipo { Id = (int)TipoArticuloEnum.ACCESORIOS_DE_ARMAS, Nombre = "ACCESORIO(S) DE ARMAS", CategoriaId = (int)CategoriaArticuloEnum.ACCESORIOS },
+				new Tipo { Id = (int)TipoArticuloEnum.ARMAS_BLANCAS, Nombre = "ARMAS BLANCAS", CategoriaId = (int)CategoriaArticuloEnum.ARMAS },
+				new Tipo { Id = (int)TipoArticuloEnum.ARMAS_CORTAS, Nombre = "ARMAS CORTAS", CategoriaId = (int)CategoriaArticuloEnum.ARMAS },
+				new Tipo { Id = (int)TipoArticuloEnum.ARMAS_LARGAS, Nombre = "ARMAS LARGAS", CategoriaId = (int)CategoriaArticuloEnum.ARMAS },
+				new Tipo { Id = (int)TipoArticuloEnum.ARMAS_PESADAS, Nombre = "ARMAS PESADAS", CategoriaId = (int)CategoriaArticuloEnum.ARMAS },
+				new Tipo { Id = (int)TipoArticuloEnum.EQUIPO_DE_COMUNICACION, Nombre = "EQUIPO DE COMUNICACION", CategoriaId = (int)CategoriaArticuloEnum.EQUIPOS },
+				new Tipo { Id = (int)TipoArticuloEnum.EQUIPO_DE_PROTECCION, Nombre = "EQUIPO DE PROTECCION", CategoriaId = (int)CategoriaArticuloEnum.EQUIPOS },
+				new Tipo { Id = (int)TipoArticuloEnum.EQUIPO_DE_TRANSPORTE, Nombre = "EQUIPO DE TRANSPORTE", CategoriaId = (int)CategoriaArticuloEnum.EQUIPOS },
+				new Tipo { Id = (int)TipoArticuloEnum.EQUIPO_DE_VIGILANCIA, Nombre = "EQUIPO DE VIGILANCIA", CategoriaId = (int)CategoriaArticuloEnum.EQUIPOS },
+				new Tipo { Id = (int)TipoArticuloEnum.EXPLOSIVOS, Nombre = "EXPLOSIVOS", CategoriaId = (int)CategoriaArticuloEnum.EXPLOSIVOS },
+				new Tipo { Id = (int)TipoArticuloEnum.MUNICIONES, Nombre = "MUNICIONES", CategoriaId = (int)CategoriaArticuloEnum.MUNICIONES },
+				new Tipo { Id = (int)TipoArticuloEnum.QUIMICOS, Nombre = "QUIMICOS", CategoriaId = (int)CategoriaArticuloEnum.QUIMICOS }
 			);
 
 			builder.Entity<SubTipo>().HasData(
-				new SubTipo { Id = 1, Nombre = "NO DEFINIDO", TipoId = 1 },
-				new SubTipo { Id = 2, Nombre = "AMETRALLADORAS", TipoId = 4 },
-				new SubTipo { Id = 3, Nombre = "CARABINAS", TipoId = 4 },
-				new SubTipo { Id = 4, Nombre = "CASCOS", TipoId = 7 },
-				new SubTipo { Id = 5, Nombre = "CHALECOS", TipoId = 7 },
-				new SubTipo { Id = 6, Nombre = "ESCOPETAS", TipoId = 4 },
-				new SubTipo { Id = 7, Nombre = "FUSIL", TipoId = 4 },
-				new SubTipo { Id = 8, Nombre = "GRANADAS", TipoId = 10 },
-				new SubTipo { Id = 9, Nombre = "LANZACOHETES", TipoId = 5 },
-				new SubTipo { Id = 10, Nombre = "MINAS", TipoId = 11 },
-				new SubTipo { Id = 11, Nombre = "PISTOLAS", TipoId = 3 },
-				new SubTipo { Id = 12, Nombre = "RADIOS", TipoId = 6 },
-				new SubTipo { Id = 13, Nombre = "REVOLVERES", TipoId = 3 },
-				new SubTipo { Id = 14, Nombre = "SUBAMETRALLADORAS", TipoId = 3 }
+				new SubTipo { Id = 1, Nombre = "NO DEFINIDO", TipoId = (int)TipoArticuloEnum.NO_DEFINIDO },
+				new SubTipo { Id = 2, Nombre = "GRANADAS", TipoId = (int)TipoArticuloEnum.EXPLOSIVOS },
+				new SubTipo { Id = 3, Nombre = "MINAS", TipoId = (int)TipoArticuloEnum.EXPLOSIVOS },
+				new SubTipo { Id = 4, Nombre = "PISTOLAS", TipoId = (int)TipoArticuloEnum.ARMAS_CORTAS },
+				new SubTipo { Id = 5, Nombre = "RADIOS", TipoId = (int)TipoArticuloEnum.EQUIPO_DE_COMUNICACION },
+				new SubTipo { Id = 6, Nombre = "REVOLVERES", TipoId = (int)TipoArticuloEnum.ARMAS_CORTAS }
 			);
 
 			builder.Entity<Marca>().HasData(
@@ -87,20 +83,17 @@ namespace SiAB.Infrastructure.Data.Seed
 			);
 
 			builder.Entity<Calibre>().HasData(
-					new Calibre { Id = 1, Nombre = "NO DEFINIDO" },
-					new Calibre { Id = 2, Nombre = "12mm" },
-					new Calibre { Id = 3, Nombre = "9mm" },
-					new Calibre { Id = 4, Nombre = ".22mm" },
-					new Calibre { Id = 5, Nombre = "5.56mm" }
-				);
+				new Calibre { Id = 1, Nombre = "NO DEFINIDO" }
+			);
 
 			builder.Entity<TipoDocumento>().HasData(
-					new TipoDocumento { Id = 1, Nombre = "NO DEFINIDO" },
-					new TipoDocumento { Id = 2, Nombre = "FORMULARIO #53" },
-					new TipoDocumento { Id = 3, Nombre = "LICENCIA" },
-					new TipoDocumento { Id = 4, Nombre = "AUTORIZACIÓN IMPORTACIÓN" },
-					new TipoDocumento { Id = 5, Nombre = "AUTORIZACIÓN RETIRO ADUANAL" }
-				);
+				new TipoDocumento { Id = 1, Nombre = "NO DEFINIDO" },
+				new TipoDocumento { Id = 2, Nombre = "OFICIO" },
+				new TipoDocumento { Id = 3, Nombre = "FORMULARIO #53" },
+				new TipoDocumento { Id = 4, Nombre = "LICENCIA" },
+				new TipoDocumento { Id = 5, Nombre = "AUTORIZACIÓN IMPORTACIÓN" },
+				new TipoDocumento { Id = 6, Nombre = "AUTORIZACIÓN RETIRO ADUANAL" }
+			);
 
 
 		}
