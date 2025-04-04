@@ -23,7 +23,7 @@ namespace SiAB.Application.Contracts
 
 		byte[] GenerateFormulario53(InputTransaccionReport53 InputTransaccionReport53);
 
-		Task SaveFormulario53(int transaccionId, string archivo);
+		Task SaveDocumento(AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto);
 
 		Task<List<SerieTransaccionItem>> GetTransaccionesBySerie(string serie);
 

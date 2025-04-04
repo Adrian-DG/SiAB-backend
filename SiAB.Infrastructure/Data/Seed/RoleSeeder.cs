@@ -3,6 +3,7 @@ using SiAB.Core.Entities.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,19 +26,30 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Role { Id = 9, Name = "TRANSACCIONES CARGAR INVENTARIO EXCEL", NormalizedName = "TRANSACCIONES CARGAR INVENTARIO EXCEL", Descripcion = "CARGAR INVENTARIO DESDE EXCEL" },
 
 				new Role { Id = 10, Name = "MODULO MANTENIMIENTO", NormalizedName = "MODULO MANTENIMIENTO", Descripcion = "ACCESO AL MODULO DE MANTENIMIENTO" },
-				new Role { Id = 11, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS", Descripcion = "ACCESO AL MODULO DE EMPRESAS" },
-				new Role { Id = 12, Name = "EMPRESAS CREAR", NormalizedName = "EMPRESAS CREAR", Descripcion = "CREAR EMPRESAS" },
-				new Role { Id = 13, Name = "EMPRESAS EDITAR", NormalizedName = "EMPRESAS EDITAR", Descripcion = "EDITAR EMPRESAS" },
-				new Role { Id = 14, Name = "EMPRESAS ELIMINAR", NormalizedName = "EMPRESAS ELIMINAR", Descripcion = "ELIMINAR EMPRESAS" },
+				new Role { Id = 11, Name = "MANTENIMIENTO INSTITUCIONES", NormalizedName = "MANTENIMIENTO INSTITUCIONES", Descripcion = "ACCESO A MANTENIMIENTO DE INSTITUCIONES" },
+				new Role { Id = 12, Name = "MANTENIMIENTO PROPIEDADES", NormalizedName = "MANTENIMIENTO PROPIEDADES", Descripcion = "ACCESO A MANTENIMIENTO DE PROPIEDADES" },
+				new Role { Id = 13, Name = "MANTENIMIENTO ARTICULOS", NormalizedName = "MANTENIMIENTO ARTICULOS", Descripcion = "ACCESO A MANTENIMIENTO DE ARTICULOS" },
+				new Role { Id = 14, Name = "MANTENIMIENTO TIPOS", NormalizedName = "MANTENIMIENTO TIPOS", Descripcion = "ACCESO A MANTENIMIENTO DE TIPOS" },
+				new Role { Id = 15, Name = "MANTENIMIENTO SUBTIPOS", NormalizedName = "MANTENIMIENTO SUBTIPOS", Descripcion = "ACCESO A MANTENIMIENTO DE SUBTIPOS" },
+				new Role { Id = 16, Name = "MANTENIMIENTO TIPOS DOCUMENTOS", NormalizedName = "MANTENIMIENTO TIPOS DOCUMENTOS", Descripcion = "ACCESO A MANTENIMIENTO DE TIPOS DE DOCUMENTOS" },
+				new Role { Id = 17, Name = "MANTINIMIENTO CALIBRES", NormalizedName = "MANTENIMIENTO CALIBRES", Descripcion = "ACCESO A MANTENIMIENTO DE CALIBRES" },
+				new Role { Id = 18, Name = "MANTINIMIENTO MARCAS", NormalizedName = "MANTENIMIENTO MARCAS", Descripcion = "ACCESO A MANTENIMIENTO DE MARCAS" },
+				new Role { Id = 19, Name = "MANTINIMIENTO MODELOS", NormalizedName = "MANTENIMIENTO MODELOS", Descripcion = "ACCESO A MANTENIMIENTO DE MODELOS" },
+				new Role { Id = 20, Name = "MANTINIMIENTO CATEGORIAS", NormalizedName = "MANTENIMIENTO CATEGORIAS", Descripcion = "ACCESO A MANTENIMIENTO DE CATEGORIAS" },
 
-				new Role { Id = 15, Name = "EMPRESAS VISUALIZAR ORDENES", NormalizedName = "EMPRESAS VISUALIZAR ORDENES", Descripcion = "VISUALIZAR ORDENES DE EMPRESAS" },
-				new Role { Id = 16, Name = "EMPRESAS CREAR ORDEN", NormalizedName = "EMPRESAS CREAR ORDEN", Descripcion = "CREAR ORDENES DE EMPRESAS" },
-				new Role { Id = 17, Name = "EMPRESAS EDITAR ORDEN", NormalizedName = "EMPRESAS EDITAR ORDEN", Descripcion = "EDITAR ORDENES DE EMPRESAS" },
-				new Role { Id = 18, Name = "EMPRESAS ELIMINAR ORDEN", NormalizedName = "EMPRESAS ELIMINAR ORDEN", Descripcion = "ELIMINAR ORDENES DE EMPRESAS" },
-				new Role { Id = 19, Name = "EMPRESAS VISUALIZAR DETALLES ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DETALLES ORDEN", Descripcion = "VISUALIZAR DETALLES DE ORDENES DE EMPRESAS" },
-				new Role { Id = 20, Name = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", Descripcion = "VISUALIZAR DOCUMENTOS DE ORDENES DE EMPRESAS" },
+				new Role { Id = 21, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS", Descripcion = "ACCESO AL MODULO DE EMPRESAS" },
+				new Role { Id = 22, Name = "EMPRESAS CREAR", NormalizedName = "EMPRESAS CREAR", Descripcion = "CREAR EMPRESAS" },
+				new Role { Id = 23, Name = "EMPRESAS EDITAR", NormalizedName = "EMPRESAS EDITAR", Descripcion = "EDITAR EMPRESAS" },
+				new Role { Id = 24, Name = "EMPRESAS ELIMINAR", NormalizedName = "EMPRESAS ELIMINAR", Descripcion = "ELIMINAR EMPRESAS" },
+
+				new Role { Id = 25, Name = "EMPRESAS VISUALIZAR ORDENES", NormalizedName = "EMPRESAS VISUALIZAR ORDENES", Descripcion = "VISUALIZAR ORDENES DE EMPRESAS" },
+				new Role { Id = 26, Name = "EMPRESAS CREAR ORDEN", NormalizedName = "EMPRESAS CREAR ORDEN", Descripcion = "CREAR ORDENES DE EMPRESAS" },
+				new Role { Id = 27, Name = "EMPRESAS EDITAR ORDEN", NormalizedName = "EMPRESAS EDITAR ORDEN", Descripcion = "EDITAR ORDENES DE EMPRESAS" },
+				new Role { Id = 28, Name = "EMPRESAS ELIMINAR ORDEN", NormalizedName = "EMPRESAS ELIMINAR ORDEN", Descripcion = "ELIMINAR ORDENES DE EMPRESAS" },
+				new Role { Id = 29, Name = "EMPRESAS VISUALIZAR DETALLES ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DETALLES ORDEN", Descripcion = "VISUALIZAR DETALLES DE ORDENES DE EMPRESAS" },
+				new Role { Id = 30, Name = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", Descripcion = "VISUALIZAR DOCUMENTOS DE ORDENES DE EMPRESAS" },
 				
-				new Role { Id = 21, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "ACCESO AL MODULO DE USUARIOS" }
+				new Role { Id = 31, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "ACCESO AL MODULO DE USUARIOS" }
 			);
 		}
 	}

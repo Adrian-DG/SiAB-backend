@@ -71,7 +71,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 					await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
 					{
 						TransaccionId = transaccion.Entity.Id,
-						TipoDocuemntoId = (int)TipoDocumentoEnum.NO_DEFINIDO,
+						TipoDocumentoId = (int)TipoDocumentoEnum.NO_DEFINIDO,
 						NumeracionDocumento = transaccionCargoDescargoDto.NoDocumento,
 						Archivo = archivoByte,						
 					});
@@ -103,18 +103,52 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			}			
 		}
 
-		public async Task SaveFormulario53(int transaccionId, string archivo)
+		public async Task SaveDocumento(AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
 		{
-			var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(archivo);
+			if (adjuntarFormulario53Dto.Url is null || adjuntarFormulario53Dto.Numeracion is null)
+			{
+				throw new BaseException("No se ha enviado un archivo o falta la numeracion", HttpStatusCode.BadRequest);
+			}
+
+			var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(adjuntarFormulario53Dto.Url);
 			var archivoByte = Convert.FromBase64String(archivoBase64);
 
-			await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
+			if (adjuntarFormulario53Dto.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53)
 			{
-				TransaccionId = transaccionId,
-				TipoDocuemntoId = 1,
-				NumeracionDocumento = $"formulario_53_{transaccionId}",
-				Archivo = archivoByte,
-			});
+				var formulario53 = await _context.DocumentosTransaccion.FirstOrDefaultAsync(dt => 
+				dt.TransaccionId == adjuntarFormulario53Dto.Id 
+				&& dt.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53);
+
+				if (formulario53 is null)
+				{
+					await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
+					{
+						TransaccionId = adjuntarFormulario53Dto.Id,
+						TipoDocumentoId = adjuntarFormulario53Dto.TipoDocumentoId,
+						NumeracionDocumento = adjuntarFormulario53Dto.Numeracion,
+						Archivo = archivoByte
+					});
+				}
+				else
+				{
+					formulario53.Archivo = archivoByte;
+
+					_context.Attach<DocumentoTransaccion>(formulario53);
+					_context.Entry<DocumentoTransaccion>(formulario53).State = EntityState.Modified;
+					_context.Update(formulario53);
+				}
+					
+			}
+			else
+			{
+				await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
+				{
+					TransaccionId = adjuntarFormulario53Dto.Id,
+					TipoDocumentoId = adjuntarFormulario53Dto.TipoDocumentoId,
+					NumeracionDocumento = adjuntarFormulario53Dto.Numeracion,
+					Archivo = archivoByte
+				});
+			}
 
 			await _context.SaveChangesAsync();
 		}
@@ -397,21 +431,21 @@ namespace SiAB.Infrastructure.Repositories.Belico
                             ) as Destino,
                             T.FechaEfectividad as Fecha,
                             isnull(DT.NumeracionDocumento, 'NO DEFINIDO') as Formulario,
-							cast(iif(DT.Id is null, 0, 1) as bit) as Tiene53,
+							cast(iif(DT.Archivo is null, 0, 1) as bit) as Tiene53,
 							concat(iif(U.Institucion = 3, R.NombreArmada, R.Nombre), ', ', U.Nombre, ' ', U.Apellido) as Usuario,
 							T.FechaCreacion
                             from Belico.Transacciones as T
-                            left join Belico.DocumentosTransaccion as DT on DT.TransaccionId = T.Id and DT.TipoDocuemntoId = {(int)TipoDocumentoEnum.FORMULARIO_53}
+                            left join Belico.DocumentosTransaccion as DT on DT.TransaccionId = T.Id and DT.TipoDocumentoId = {(int)TipoDocumentoEnum.FORMULARIO_53}
 							left join accesos.Usuarios as U on U.Id = T.UsuarioId
 							left join Personal.Rangos as R on R.Id = U.RangoId
                             where T.CodInstitucion = {CodInstitucion}
                             ";
 
-			if (!String.IsNullOrEmpty(filters.Formulario53)) query += $" and DT.NumeracionDocumento like '{filters.Formulario53}%' ";
-			if (!String.IsNullOrEmpty(filters.Origen)) query += $" and T.Origen like '{filters.Origen}%' ";
-			if (!String.IsNullOrEmpty(filters.Destino)) query += $" and T.Destino like '{filters.Destino}%' ";
-			if (filters.Adjunto53.HasValue) query += $" and cast(iif(DT.Id is null, 0, 1) as bit) = {Convert.ToInt32(filters.Adjunto53)} ";
-			if (filters.FechaInicial.HasValue && filters.FechaFinal.HasValue) query += $" and T.FechaEfectividad between '{filters.FechaInicial}' and '{filters.FechaFinal}' ";
+			if (!String.IsNullOrEmpty(filters.Formulario53)) query += $" and DT.NumeracionDocumento like '%{filters.Formulario53}%' ";
+			if (!String.IsNullOrEmpty(filters.Origen)) query += $" and T.Origen like '%{filters.Origen}%' ";
+			if (!String.IsNullOrEmpty(filters.Destino)) query += $" and T.Destino like '%{filters.Destino}%' ";
+			if (filters.Adjunto53.HasValue && filters.Adjunto53.Value) query += $" and cast(iif(DT.Id is null, 0, 1) as bit) = {Convert.ToInt32(filters.Adjunto53)} ";
+			if (filters.FechaInicial.HasValue && filters.FechaFinal.HasValue) query += $" and T.FechaEfectividad between '{filters.FechaInicial.Value.ToString("yyyy-MM-dd")}' and '{filters.FechaFinal.Value.ToString("yyyy-MM-dd")}' ";
 
 			query += $" order by T.FechaEfectividad desc OFFSET {(filters.Page - 1) * filters.Size} ROWS FETCH NEXT {filters.Size} ROWS ONLY";
 
@@ -426,16 +460,41 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			};
 		}
 
-		public async Task<object> GetTransaccionDetails(int Id)
+		public async Task<object?> GetTransaccionDetails(int Id)
 		{
 			var result = await _context.Transacciones
 				.Include(t => t.DetallesTransaccion)
 				.ThenInclude(dt => dt.Articulo)
+				.ThenInclude(a => a.Marca)
+				.Include(t => t.DetallesTransaccion)
+				.ThenInclude(dt => dt.Articulo)
+				.ThenInclude(a => a.Modelo)
+				.Include(t => t.DetallesTransaccion)
+				.ThenInclude(dt => dt.Articulo)
+				.ThenInclude(a => a.Calibre)
+				.Include(t => t.DetallesTransaccion)
+				.ThenInclude(dt => dt.Articulo)
+				.ThenInclude(a => a.Tipo)
+				.Include(t => t.DetallesTransaccion)
+				.ThenInclude(dt => dt.Articulo)
+				.ThenInclude(a => a.SubTipo)
 				.Include(t => t.DocumentosTransaccion)
 				.ThenInclude(dt => dt.TipoDocumento)
 				.FirstOrDefaultAsync(t => t.Id == Id);
 
-			return new 
+			if (result is null) return null;
+
+			if (result.TipoOrigen == TipoOrigenDestinoEnum.DEPOSITO)
+			{
+				result.Origen = (await _context.Depositos.FirstOrDefaultAsync(d => d.Id == Convert.ToInt32(result.Origen)))?.Nombre ?? "N/A";
+			}
+
+			if (result.TipoDestino == TipoOrigenDestinoEnum.DEPOSITO)
+			{
+				result.Destino = (await _context.Depositos.FirstOrDefaultAsync(d => d.Id == Convert.ToInt32(result.Destino)))?.Nombre ?? "N/A";
+			}
+
+			return new
 			{
 				Transaccion = new
 				{
@@ -446,18 +505,20 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				Articulos = result.DetallesTransaccion.Select(dt => new
 				{
 					Id = dt.ArticuloId,
-					Serie = dt.Articulo.Serie,
-					Marca = dt.Articulo.Marca.Nombre,
-					Modelo = dt.Articulo.Modelo.Nombre,
-					SubTipo = dt.Articulo.SubTipo.Nombre,
-					Calibre = dt.Articulo.Calibre.Nombre,
+					Serie = dt.Articulo?.Serie,
+					Marca = dt.Articulo?.Marca?.Nombre,
+					Modelo = dt.Articulo?.Modelo?.Nombre,
+					SubTipo = dt.Articulo?.SubTipo?.Nombre,
+					Calibre = dt.Articulo?.Calibre?.Nombre,
+					Tipo = dt.Articulo?.Tipo?.Nombre,
 					dt.Cantidad
 				}),
 				Documentos = result.DocumentosTransaccion.Select(dt => new
 				{
 					dt.Id,
-					dt.NumeracionDocumento,
-					dt.TipoDocumento.Nombre
+					Numeracion = dt.NumeracionDocumento,
+					TipoDocumentoId = dt.TipoDocumentoId,
+					TipoDocumento = dt.TipoDocumento?.Nombre
 				})
 			};
 		}
@@ -694,6 +755,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			{
 				NumeracionDocumento = $"F-53-{numero}",
 				TransaccionId = transaccionId,
+				TipoDocumentoId = (int)TipoDocumentoEnum.FORMULARIO_53,
 				Archivo = null
 			});
 
