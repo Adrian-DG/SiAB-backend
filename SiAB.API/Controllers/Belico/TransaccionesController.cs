@@ -95,11 +95,11 @@ namespace SiAB.API.Controllers.Belico
 			return Ok(transaccion);
 		}
 
-		[HttpPost("adjuntar-formulario-53")]
+		[HttpPost("adjuntar-documento")]
 		[ServiceFilter(typeof(CreateAuditableFilter))]
-		public async Task<IActionResult> AdjuntarFormulario53([FromBody] AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
+		public async Task<IActionResult> AdjuntarDocumento([FromBody] AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
 		{
-			await _uow.TransaccionRepository.SaveFormulario53(adjuntarFormulario53Dto.Id, adjuntarFormulario53Dto.Url);
+			await _uow.TransaccionRepository.SaveDocumento(adjuntarFormulario53Dto);
 			return Ok();
 		}
 
