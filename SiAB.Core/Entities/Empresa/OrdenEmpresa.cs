@@ -19,10 +19,8 @@ namespace SiAB.Core.Entities.Empresa
 		[ForeignKey(nameof(EmpresaId))]
 		public int EmpresaId { get; set; }
 		public virtual Empresa? Empresa { get; set; }
-
 		public virtual ICollection<OrdenEmpresaDocumento>? Documentos { get; set; }
-
-		public virtual ICollection<OrdenEmpresaDetalle>? Detalles { get; set; }
+		public virtual ICollection<OrdenEmpresaArticulo>? Articulos { get; set; }
 
 		// Auditables 
 

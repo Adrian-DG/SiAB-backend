@@ -41,15 +41,9 @@ namespace SiAB.Core.Entities.Empresa
 		public int CantidadRecibida { get; set; }
 		public int CantidadEntregada { get; set; } = 0;
 
-
-
 		[ForeignKey(nameof(OrdenEmpresaId))]
 		public int OrdenEmpresaId { get; set; }
 		public virtual OrdenEmpresa? OrdenEmpresa { get; set; }
-
-		[ForeignKey(nameof(EmpresaId))]
-		public int EmpresaId { get; set; }
-		public virtual Empresa? Empresa { get; set; }
 
 		// Auditables
 

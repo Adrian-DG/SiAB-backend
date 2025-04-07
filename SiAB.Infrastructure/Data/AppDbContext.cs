@@ -197,7 +197,6 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Titular> Titulares { get; set; }
 		public DbSet<OrdenEmpresa> OrdenesEmpresa { get; set; }
 		public DbSet<OrdenEmpresaArticulo> OrdenesEmpresaArticulos { get; set; }
-		public DbSet<OrdenEmpresaDetalle> OrdenesEmpresaDetalles { get; set; }
 		public DbSet<OrdenEmpresaDocumento> OrdenesEmpresDocumentos { get; set; }
 		public DbSet<Contacto> Contactos { get; set; }
 		#endregion

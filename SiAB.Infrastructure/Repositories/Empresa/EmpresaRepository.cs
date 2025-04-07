@@ -91,7 +91,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 
 					await _context.SaveChangesAsync();
 
-					// Create OrdenEmpresaArticulo & OrdenEmpresaDetalle
+					// Create OrdenEmpresaArticulo
 
 					if (createOrdenEmpresaDto.Articulos == null) throw new Exception("No se han especificado articulos para la orden");
 					
@@ -107,16 +107,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 							CalibreId = item.CalibreId,
 							Serie = item.Serie,
 							CantidadRecibida = item.Cantidad,
-							EmpresaId = Id,
 							OrdenEmpresaId = orden.Entity.Id,
-						});
-
-						await _context.SaveChangesAsync();
-
-						var ordenDetalle = await _context.OrdenesEmpresaDetalles.AddAsync(new OrdenEmpresaDetalle
-						{
-							OrdenEmpresaArticulo = articulo.Entity.Id,
-							OrdenEmpresaId = orden.Entity.Id
 						});
 
 						await _context.SaveChangesAsync();
