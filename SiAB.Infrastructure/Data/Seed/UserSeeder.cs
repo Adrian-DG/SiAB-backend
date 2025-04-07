@@ -95,7 +95,12 @@ namespace SiAB.Infrastructure.Data.Seed
 				new IdentityUserRole<int> { UserId = 3, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
 				new IdentityUserRole<int> { UserId = 4, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
 				new IdentityUserRole<int> { UserId = 5, RoleId = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL },
-				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MODULO_EMPRESAS }
+				
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MODULO_EMPRESAS },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MODULO_MANTENIMIENTO },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_TIPOS },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_SUBTIPOS },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_TIPOS_DOCUMENTOS }
 			);
 		}
 	}
