@@ -31,7 +31,7 @@ namespace SiAB.API.Controllers.Empresa
 						Id = oe.Id,
 						Comentario = oe.Comentario,
 						FechaEfectividad = oe.FechaEfectividad,
-						Cantidad = oe.Detalles.Sum(d => d.Articulo.Cantidad),
+						Cantidad = oe.Detalles.Sum(d => d.Articulo.CantidadRecibida),
 					},
 					page: filters.Page,
 					pageSize: filters.Size,
@@ -70,7 +70,7 @@ namespace SiAB.API.Controllers.Empresa
 					Tipo = oed.Articulo.Tipo.Nombre,
 					SubTipo = oed.Articulo.SubTipo.Nombre,
 					Articulo = oed.Articulo.Serie,
-					Cantidad = oed.Articulo.Cantidad,
+					Cantidad = oed.Articulo.CantidadRecibida,
 				}
 			);
 

@@ -105,7 +105,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 							ModeloId = item.ModeloId,
 							CalibreId = item.CalibreId,
 							Serie = item.Serie,
-							Cantidad = item.Cantidad,
+							CantidadRecibida = item.Cantidad,
 							EmpresaId = Id
 						});
 
@@ -132,7 +132,11 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 						await _context.OrdenesEmpresDocumentos.AddAsync(new OrdenEmpresaDocumento
 						{
 							TipoDocumentoId = item.TipoDocumentoId,
+							NombreArchivo = item.Nombre,
 							Archivo = archivoBytes,
+							FechaEmision = DateOnly.Parse(item.FechaEmision),
+							FechaDuracion = DateOnly.Parse(item.FechaDuracion),
+							FechaExpiracion = DateOnly.Parse(item.FechaExpiracion),
 							OrdenEmpresaId = orden.Entity.Id
 						});
 

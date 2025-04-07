@@ -17,6 +17,10 @@ namespace SiAB.Core.Entities.Empresa
 		public string? NombreArchivo { get; set; }
 		public byte[]? Archivo { get; set; }
 
+		public DateOnly FechaEmision { get; set; }
+		public DateOnly FechaDuracion { get; set; }
+		public DateOnly FechaExpiracion { get; set; }
+
 
 		[ForeignKey(nameof(TipoDocumentoId))]
 		public int TipoDocumentoId { get; set; }
