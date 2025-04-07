@@ -24,14 +24,14 @@ namespace SiAB.API.Controllers.Empresa
 		public async Task<IActionResult> GetOrdenesEmpresa([FromRoute] int id, [FromQuery] PaginationFilter filters)
 		{
 			var result = await _uow.Repository<OrdenEmpresa>().GetListPaginateAsync(
-					includes: new Expression<Func<OrdenEmpresa, object>>[] { oe => oe.Detalles },
+					includes: new Expression<Func<OrdenEmpresa, object>>[] { oe => oe.Articulos },
 					predicate: oe => oe.EmpresaId == id,
 					selector: oe => new OrdenEmpresaModel
 					{
 						Id = oe.Id,
 						Comentario = oe.Comentario,
 						FechaEfectividad = oe.FechaEfectividad,
-						Cantidad = oe.Detalles.Select(d => d.Articulo.CantidadRecibida).Sum(),
+						Cantidad = oe.Articulos.Select(d => d.CantidadRecibida).Sum(),
 					},
 					page: filters.Page,
 					pageSize: filters.Size,
@@ -64,25 +64,25 @@ namespace SiAB.API.Controllers.Empresa
 			return new JsonResult(result);
 		}
 
-		[HttpGet("{id:int}/articulos")]
-		public async Task<IActionResult> GetOrdenEmpresaDetalles([FromRoute] int id)
-		{
-			var result = await _uow.Repository<OrdenEmpresaDetalle>().GetListAsync(
-				includes: new Expression<Func<OrdenEmpresaDetalle, object>>[] { oed => oed.Articulo },
-				predicate: oed => oed.OrdenEmpresaId == id,
-				selector: oed => new
-				{
-					Id = oed.Id,
-					Tipo = oed.Articulo.Tipo.Nombre,
-					SubTipo = oed.Articulo.SubTipo.Nombre,
-					Articulo = oed.Articulo.Serie ?? "",
-					CantidadRecibida = oed.Articulo.CantidadRecibida,
-					CantidadEntregada = oed.Articulo.CantidadEntregada,
-				}
-			);
+		//[HttpGet("{id:int}/articulos")]
+		//public async Task<IActionResult> GetOrdenEmpresaDetalles([FromRoute] int id)
+		//{
+		//	var result = await _uow.Repository<OrdenEmpresaArticulo>().GetListAsync(
+		//		includes: new Expression<Func<OrdenEmpresaArticulo, object>>[] { oed => oed },
+		//		predicate: oed => oed.OrdenEmpresaId == id,
+		//		selector: oed => new
+		//		{
+		//			Id = oed.Id,
+		//			Tipo = oed.Articulo.Tipo.Nombre,
+		//			SubTipo = oed.Articulo.SubTipo.Nombre,
+		//			Articulo = oed.Articulo.Serie ?? "",
+		//			CantidadRecibida = oed.Articulo.CantidadRecibida,
+		//			CantidadEntregada = oed.Articulo.CantidadEntregada,
+		//		}
+		//	);
 
-			return new JsonResult(result);
-		}
+		//	return new JsonResult(result);
+		//}
 
 		[HttpPost("{id:int}")]
 		[ServiceFilter(typeof(CreateAuditableFilter))]
