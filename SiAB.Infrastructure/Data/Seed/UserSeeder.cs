@@ -84,8 +84,7 @@ namespace SiAB.Infrastructure.Data.Seed
 					NormalizedUserName = "EXPLOSIVOS",
 					Institucion = InstitucionEnum.MIDE,
 					PasswordHash = passwordHasher.HashPassword(null, "explosivos01")
-				}
-				);
+				});
 
 				
 
