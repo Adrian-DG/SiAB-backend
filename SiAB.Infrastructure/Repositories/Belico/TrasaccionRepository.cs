@@ -683,7 +683,8 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				MarcaId = await GetIdAsync(marca, _context.Marcas),
 				ModeloId = await GetIdAsync(modelo, _context.Modelos),
 				CalibreId = await GetIdAsync(calibre, _context.Calibres),
-				Serie = serie
+				Serie = serie,
+				EsSeriado = String.IsNullOrEmpty(serie) ? false : true,
 			};
 
 			var articulo = await _context.Articulos.AddAsync(newArticulo);

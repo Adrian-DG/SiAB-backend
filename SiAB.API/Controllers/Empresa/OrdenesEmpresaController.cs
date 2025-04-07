@@ -31,7 +31,7 @@ namespace SiAB.API.Controllers.Empresa
 						Id = oe.Id,
 						Comentario = oe.Comentario,
 						FechaEfectividad = oe.FechaEfectividad,
-						Cantidad = oe.Detalles.Sum(d => d.Articulo.Cantidad),
+						Cantidad = oe.Detalles.Select(d => d.Articulo.CantidadRecibida).Sum(),
 					},
 					page: filters.Page,
 					pageSize: filters.Size,
@@ -50,8 +50,14 @@ namespace SiAB.API.Controllers.Empresa
 				selector: oed => new
 				{
 					Id = oed.Id,
-					Documento = oed.Archivo,
-					TipoDocumento = oed.TipoDocumento.Nombre 
+					Nombre = oed.NombreArchivo,
+					Documento = oed.DocumentDataUrl,
+					TipoDocumento = oed.TipoDocumento.Nombre,
+					FechaEmision = oed.FechaEmision,
+					FechaRecepcion = oed.FechaRecepcion,
+					FechaExpiracion = oed.FechaExpiracion,
+					EstaVencida = oed.EstaVencida,
+					DiasRestantes = oed.DiasRestantes,
 				}
 			);
 
@@ -69,8 +75,9 @@ namespace SiAB.API.Controllers.Empresa
 					Id = oed.Id,
 					Tipo = oed.Articulo.Tipo.Nombre,
 					SubTipo = oed.Articulo.SubTipo.Nombre,
-					Articulo = oed.Articulo.Serie,
-					Cantidad = oed.Articulo.Cantidad,
+					Articulo = oed.Articulo.Serie ?? "",
+					CantidadRecibida = oed.Articulo.CantidadRecibida,
+					CantidadEntregada = oed.Articulo.CantidadEntregada,
 				}
 			);
 

@@ -1,4 +1,5 @@
-﻿using SiAB.Application.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using SiAB.Application.Contracts;
 using SiAB.Core.DTO.Empresa;
 using SiAB.Core.Entities.Empresa;
 using SiAB.Infrastructure.Data;
@@ -105,8 +106,9 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 							ModeloId = item.ModeloId,
 							CalibreId = item.CalibreId,
 							Serie = item.Serie,
-							Cantidad = item.Cantidad,
-							EmpresaId = Id
+							CantidadRecibida = item.Cantidad,
+							EmpresaId = Id,
+							OrdenEmpresaId = orden.Entity.Id,
 						});
 
 						await _context.SaveChangesAsync();
@@ -132,7 +134,11 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 						await _context.OrdenesEmpresDocumentos.AddAsync(new OrdenEmpresaDocumento
 						{
 							TipoDocumentoId = item.TipoDocumentoId,
+							NombreArchivo = item.Nombre,
 							Archivo = archivoBytes,
+							FechaEmision = DateOnly.Parse(item.FechaEmision),
+							FechaRecepcion = DateOnly.Parse(item.FechaRecepcion),
+							FechaExpiracion = DateOnly.Parse(item.FechaExpiracion),
 							OrdenEmpresaId = orden.Entity.Id
 						});
 
@@ -148,7 +154,6 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 				}
 			}
 		}
-
 
 
 	}

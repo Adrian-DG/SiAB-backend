@@ -38,6 +38,7 @@ namespace SiAB.Core.Entities.Inventario
 		public int CalibreId { get; set; }
 		public virtual Calibre? Calibre { get; set; }
 		public string? Serie { get; set; }
+		public bool EsSeriado { get; set; }
 
 		// Auditables
 
