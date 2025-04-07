@@ -30,7 +30,7 @@ namespace SiAB.Core.Entities.Empresa
 		public virtual Marca? Marca { get; set; }
 
 		[ForeignKey(nameof(ModeloId))]
-		public int ModeloId { get; set; }
+		public int ModeloId { get; set; } = 1;
 		public virtual Modelo? Modelo { get; set; }
 
 		[ForeignKey(nameof(CalibreId))]
