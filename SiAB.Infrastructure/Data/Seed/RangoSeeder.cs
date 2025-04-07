@@ -25,7 +25,8 @@ namespace SiAB.Infrastructure.Data.Seed
 					new Rango { Id = 10, Nombre = "SARGENTO", NombreArmada = "SARGENTO" },
 					new Rango { Id = 11, Nombre = "CABO", NombreArmada = "CABO" },
 					new Rango { Id = 12, Nombre = "RASO/MARINERO", NombreArmada = "MARINERO" },
-					new Rango { Id = 13, Nombre = "ASIMILADO", NombreArmada = "ASIMILADO" }
+					new Rango { Id = 13, Nombre = "ASIMILADO", NombreArmada = "ASIMILADO" },
+					new Rango { Id = 14, Nombre = "NO DEFINIDO", NombreArmada = "NO DEFINIDO" }
 			);
 		}
 	}

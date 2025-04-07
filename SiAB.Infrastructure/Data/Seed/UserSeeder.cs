@@ -33,7 +33,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Usuario
 				{
 					Id = 2,
-					Cedula = "0000000001",
+					Cedula = "00000000001",
 					Nombre = "MIDE",
 					Apellido = "MIDE",
 					UserName = "mide",
@@ -44,7 +44,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Usuario
 				{
 					Id = 3,
-					Cedula = "0000000002",
+					Cedula = "00000000002",
 					Nombre = "ERD",
 					Apellido = "ERD",
 					UserName = "erd",
@@ -55,7 +55,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Usuario
 				{
 					Id = 4,
-					Cedula = "0000000003",
+					Cedula = "00000000003",
 					Nombre = "ARD",
 					Apellido = "ARD",
 					UserName = "ard",
@@ -66,7 +66,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Usuario
 				{
 					Id = 5,
-					Cedula = "0000000004",
+					Cedula = "00000000004",
 					Nombre = "FARD",
 					Apellido = "FARD",
 					UserName = "fard",
@@ -77,7 +77,7 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Usuario
 				{
 					Id = 6,
-					Cedula = "0000000005",
+					Cedula = "00000000005",
 					Nombre = "EXPLOSIVOS",
 					Apellido = "EXPLOSIVOS",
 					UserName = "explosivos",
@@ -97,7 +97,10 @@ namespace SiAB.Infrastructure.Data.Seed
 				
 				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MODULO_EMPRESAS },
 				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MODULO_MANTENIMIENTO },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_CATEGORIAS },
 				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_TIPOS },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_CALIBRES },
+				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_MARCAS },
 				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_SUBTIPOS },
 				new IdentityUserRole<int> { UserId = 6, RoleId = (int)UsuarioRolesEnum.MANTENIMIENTO_TIPOS_DOCUMENTOS }
 			);
