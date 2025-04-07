@@ -12,7 +12,7 @@ namespace SiAB.Core.DTO.Empresa
 		public string? Nombre { get; set; }
 		public string? Archivo { get; set; }
 		public string? FechaEmision { get; set; }
-		public string? FechaDuracion { get; set; }
+		public string? FechaRecepcion { get; set; }
 		public string? FechaExpiracion { get; set; }
 
 	}
