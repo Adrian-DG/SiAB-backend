@@ -19,7 +19,7 @@ namespace SiAB.Core.DTO.Empresa
 		[DefaultValue(1)]
 		public int ModeloId { get; set; } = 1;
 		public int CalibreId { get; set; }
-		public string? Serie { get; set; }
+		public string? Serie { get; set; } = string.Empty;
 		public int Cantidad { get; set; }
 	}
 }
