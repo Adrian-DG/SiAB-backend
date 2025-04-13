@@ -146,6 +146,45 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 			}
 		}
 
+		public async Task<object> GetDetalleOrdenEmpresa(int OrdenId)
+		{
+			var orden = await _context.OrdenesEmpresa
+				.Include(o => o.Articulos)
+				.Include(o => o.Documentos)
+				.FirstOrDefaultAsync(o => o.Id == OrdenId);
+
+			if (orden == null) throw new Exception("No se ha encontrado la orden de empresa");
+
+			return new
+			{
+				orden.Id,
+				orden.Comentario,
+				orden.FechaEfectividad,
+				Articulos = orden.Articulos.Select(a => new
+				{
+					a.Id,
+					Categoria = a.Categoria.Nombre,
+					Tipo = a.Tipo.Nombre,
+					SubTipo = a.SubTipo.Nombre,
+					Marca = a.Marca.Nombre,
+					Calibre = a.Calibre.Nombre,
+					a.Serie,
+					a.CantidadRecibida,
+					a.CantidadEntregada
+				}),
+				Documentos = orden.Documentos.Select(d => new
+				{
+					d.Id,
+					d.NombreArchivo,
+					TipoDocumento = d.TipoDocumento.Nombre,
+					d.FechaEmision,
+					d.FechaRecepcion,
+					d.FechaExpiracion
+				})
+			};
+
+		}
+
 
 	}
 }
