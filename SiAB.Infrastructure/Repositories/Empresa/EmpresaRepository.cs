@@ -7,6 +7,7 @@ using SiAB.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -150,10 +151,20 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 		{
 			var orden = await _context.OrdenesEmpresa
 				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Categoria)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Tipo)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.SubTipo)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Marca)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Calibre)
 				.Include(o => o.Documentos)
+				.ThenInclude(d => d.TipoDocumento)
 				.FirstOrDefaultAsync(o => o.Id == OrdenId);
 
-			if (orden == null) throw new Exception("No se ha encontrado la orden de empresa");
+			if (orden is null) throw new Exception("No se ha encontrado la orden de empresa");
 
 			return new
 			{
@@ -176,6 +187,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 				{
 					d.Id,
 					d.NombreArchivo,
+					DataUrl = d.DocumentDataUrl,
 					TipoDocumento = d.TipoDocumento.Nombre,
 					d.FechaEmision,
 					d.FechaRecepcion,

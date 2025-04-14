@@ -41,7 +41,7 @@ namespace SiAB.API.Controllers.Empresa
 			return new JsonResult(result);
 		}
 
-		[HttpGet("{id:int}/detalle")]
+		[HttpGet("{id:int}/detalles")]
 		public async Task<IActionResult> GetDetalleOrdenEmpresa([FromRoute] int id)
 		{
 			var result = await _uow.EmpresaRepository.GetDetalleOrdenEmpresa(id);
