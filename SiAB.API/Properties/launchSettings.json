@@ -34,7 +34,7 @@
 			"launchBrowser": true,
 			"launchUrl": "swagger",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development" // Production
+				"ASPNETCORE_ENVIRONMENT": "Production" // Development
 			}
 		}
 	}
