@@ -7,6 +7,7 @@ using SiAB.Infrastructure.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -144,6 +145,56 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 					throw;
 				}
 			}
+		}
+
+		public async Task<object> GetDetalleOrdenEmpresa(int OrdenId)
+		{
+			var orden = await _context.OrdenesEmpresa
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Categoria)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Tipo)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.SubTipo)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Marca)
+				.Include(o => o.Articulos)
+				.ThenInclude(a => a.Calibre)
+				.Include(o => o.Documentos)
+				.ThenInclude(d => d.TipoDocumento)
+				.FirstOrDefaultAsync(o => o.Id == OrdenId);
+
+			if (orden is null) throw new Exception("No se ha encontrado la orden de empresa");
+
+			return new
+			{
+				orden.Id,
+				orden.Comentario,
+				orden.FechaEfectividad,
+				Articulos = orden.Articulos.Select(a => new
+				{
+					a.Id,
+					Categoria = a.Categoria.Nombre,
+					Tipo = a.Tipo.Nombre,
+					SubTipo = a.SubTipo.Nombre,
+					Marca = a.Marca.Nombre,
+					Calibre = a.Calibre.Nombre,
+					a.Serie,
+					a.CantidadRecibida,
+					a.CantidadEntregada
+				}),
+				Documentos = orden.Documentos.Select(d => new
+				{
+					d.Id,
+					d.NombreArchivo,
+					DataUrl = d.DocumentDataUrl,
+					TipoDocumento = d.TipoDocumento.Nombre,
+					d.FechaEmision,
+					d.FechaRecepcion,
+					d.FechaExpiracion
+				})
+			};
+
 		}
 
 

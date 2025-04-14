@@ -11,5 +11,6 @@ namespace SiAB.Application.Contracts
 	{
 		Task CreateEmpresa(CreateEmpresaDto createEmpresaDto);
 		Task CreateOrdenEmpresa(int Id, CreateOrdenEmpresaDto createOrdenEmpresaDto);
+		Task<object> GetDetalleOrdenEmpresa(int OrdenId);
 	}
 }

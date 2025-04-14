@@ -141,10 +141,12 @@ namespace SiAB.API.Controllers.Auth
 
 			if (usuario is null) throw new BaseException("", HttpStatusCode.NotFound);
 
+			int rangoId = (int)((usuarioUpdateDto.RangoId ?? 0) > 0 ? usuarioUpdateDto.RangoId : 14);
+
 			usuario.Nombre = usuarioUpdateDto.Nombre;
 			usuario.Apellido = usuarioUpdateDto.Apellido;
 			usuario.Cedula = usuarioUpdateDto.Cedula;
-			usuario.RangoId = usuarioUpdateDto.RangoId;
+			usuario.RangoId = rangoId;
 			usuario.SecurityStamp = usuario.SecurityStamp ?? Guid.NewGuid().ToString();
 
 			await _uow.UsuarioRepository.Update(usuario);
