@@ -396,7 +396,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 								{
 									t.Span($"{InputTransaccionReport53.Intendente.NombreApellidoCompleto}\n").Bold();
 									t.Span($"{InputTransaccionReport53.Intendente.Rango}\n");
-									t.Span("Int. Gral. Material Belico de las FFAA");
+									t.Span("Int. Gral. Material Bélico de las FFAA");
 								});
 							});
 
