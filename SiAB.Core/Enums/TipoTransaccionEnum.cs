@@ -9,6 +9,8 @@ namespace SiAB.Core.Enums
 {
 	public enum TipoTransaccionEnum
 	{
+		[Description("Sin una descripción clara")]
+		NO_DEFINIDA = 0,
 		[Description("Actualizacion de inventario, registros antiguos")]
 		ACTUALIZACION_INVENTARIO = 1,
 		[Description("Venta de un artículo a una persona (CIVIL).")]
