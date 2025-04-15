@@ -51,7 +51,9 @@ namespace SiAB.Infrastructure.Data.Seed
 				new Role { Id = 30, Name = "EMPRESAS VISUALIZAR DETALLES ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DETALLES ORDEN", Descripcion = "VISUALIZAR DETALLES DE ORDENES DE EMPRESAS" },
 				new Role { Id = 31, Name = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", Descripcion = "VISUALIZAR DOCUMENTOS DE ORDENES DE EMPRESAS" },
 				
-				new Role { Id = 32, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "ACCESO AL MODULO DE USUARIOS" }
+				new Role { Id = 32, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "ACCESO AL MODULO DE USUARIOS" },
+
+				new Role { Id = 33, Name = "MODULO ESTADISTICAS", NormalizedName = "MODULO ESTADISTICAS", Descripcion = "ACCESO AL MODULO DE ESTADISTICAS" }
 			);
 		}
 	}
