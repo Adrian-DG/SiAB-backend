@@ -109,6 +109,10 @@ namespace SiAB.Infrastructure.Data
 				.HasForeignKey(s => s.MarcaId)
 				.OnDelete(DeleteBehavior.NoAction);			
 
+			builder.Entity<HistorialUbicacion>().HasIndex(c => c.Serie).IsUnique();
+
+			builder.Entity<StockArticulo>().HasNoKey();
+
 			#endregion
 
 			#region Data seeding

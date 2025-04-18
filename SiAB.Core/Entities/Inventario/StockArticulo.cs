@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Inventario
 {
 	[Table("Stock", Schema = "Inv")]
-	public class StockArticulo : EntityMetadata
+	public class StockArticulo
 	{
 		[ForeignKey(nameof(ArticuloId))]	
 		public int ArticuloId { get; set; }
