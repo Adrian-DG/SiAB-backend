@@ -9,6 +9,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
+using SiAB.Core.DTO.Inventario;
 using SiAB.Core.DTO.Transacciones;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Inventario;
@@ -54,6 +55,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						TipoOrigen = transaccionCargoDescargoDto.TipoCargoCredito,
 						Origen = transaccionCargoDescargoDto.Credito,
 						TipoDestino = transaccionCargoDescargoDto.TipoCargoDebito,
+						TipoTransaccion = transaccionCargoDescargoDto.TipoTransaccion,
 						Destino = transaccionCargoDescargoDto.Debito,
 						FechaEfectividad = DateOnly.Parse(transaccionCargoDescargoDto.Fecha),
 

@@ -18,6 +18,8 @@ namespace SiAB.Core.DTO.Transacciones
 		public TipoOrigenDestinoEnum TipoCargoCredito { get; set; }
 		public required string Credito { get; set; }
 
+		public TipoTransaccionEnum TipoTransaccion { get; set; }
+
 		public required string NoDocumento { get; set; }
 		public required string Documento { get; set; }		
 		public required string Fecha { get; set; }
