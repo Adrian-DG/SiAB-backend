@@ -43,6 +43,72 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			_context = dbContext;
 		}
 
+
+		#region Create Transaccion 
+
+		private async Task UpdateHistorialUbicacion(CreateArticuloItemDto articuloItemDto, int TransaccionId)
+		{
+			var historial = await _context.HistoricoUbicacion.SingleOrDefaultAsync(h => h.Serie == articuloItemDto.Serie);
+
+			if (historial is null)
+			{
+				await _context.AddAsync(new HistorialUbicacion
+				{
+					Serie = articuloItemDto.Serie,
+					ArticuloId = articuloItemDto.Id,
+					TransaccionId = TransaccionId
+				});
+			}
+			else
+			{
+				historial.TransaccionId = TransaccionId;
+				_context.Entry<HistorialUbicacion>(historial).State = EntityState.Modified;
+			}
+
+			await _context.SaveChangesAsync();
+		}
+
+
+		private async Task UpdateStockArticulo(CreateArticuloItemDto articuloItemDto, TipoOrigenDestinoEnum TipoCredito, string Credito, TipoOrigenDestinoEnum TipoDebito, string Debito)
+		{
+			// Obtener los registros de stock para el origen y el destino en una sola consulta
+			var stockArticulos = await _context.StockArticulos
+								.Where(s => s.ArticuloId == articuloItemDto.Id &&
+								(s.TipoEntidad == TipoCredito && s.Entidad == Credito || s.TipoEntidad == TipoDebito && s.Entidad == Debito))
+								.ToListAsync();
+
+			// Actualizar el stock del origen si existe
+			var stockOrigen = stockArticulos.FirstOrDefault(s => s.TipoEntidad == TipoCredito && s.Entidad == Credito);
+			if (stockOrigen is not null)
+			{
+				stockOrigen.Cantidad -= articuloItemDto.Cantidad;
+				_context.Update(stockOrigen);
+			}
+
+			// Actualizar el stock del destino si existe
+			var stockDestino = stockArticulos.FirstOrDefault(s => s.TipoEntidad == TipoDebito && s.Entidad == Debito);
+			if (stockDestino is not null)
+			{
+				stockDestino.Cantidad += articuloItemDto.Cantidad;
+				_context.Update(stockDestino);
+			}
+			else
+			{
+				// Crear un nuevo registro de stock para el destino si no existe
+				await _context.StockArticulos.AddAsync(new StockArticulo
+				{
+					ArticuloId = articuloItemDto.Id,
+					Cantidad = articuloItemDto.Cantidad,
+					TipoEntidad = TipoDebito,
+					Entidad = Debito
+				});
+			}
+
+			// Guardar todos los cambios en una sola operación
+			await _context.SaveChangesAsync();
+		}
+
+
 		public async Task<int> CreateTransaccionCargoDescargo(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
 		{
 			using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -75,7 +141,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						TransaccionId = transaccion.Entity.Id,
 						TipoDocumentoId = (int)TipoDocumentoEnum.NO_DEFINIDO,
 						NumeracionDocumento = transaccionCargoDescargoDto.NoDocumento,
-						Archivo = archivoByte,						
+						Archivo = archivoByte,
 					});
 
 					await _context.SaveChangesAsync();
@@ -90,6 +156,19 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						});
 
 						await _context.SaveChangesAsync();
+
+						// Actualizar el historial de ubicacion solo para articulos seriados
+
+						if (item.EsSeriado)
+						{
+							await UpdateHistorialUbicacion(item, transaccion.Entity.Id);
+						}
+						else
+						{
+							await UpdateStockArticulo(item, transaccionCargoDescargoDto.TipoCargoCredito, transaccionCargoDescargoDto.Credito, transaccionCargoDescargoDto.TipoCargoDebito, transaccionCargoDescargoDto.Debito);
+						}
+
+						
 					}
 
 					await transaction.CommitAsync();
@@ -102,8 +181,10 @@ namespace SiAB.Infrastructure.Repositories.Belico
 					await transaction.RollbackAsync();
 					throw;
 				}
-			}			
+			}
 		}
+
+		#endregion
 
 		public async Task SaveDocumento(AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
 		{
