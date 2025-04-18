@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,10 +15,8 @@ namespace SiAB.Core.Entities.Inventario
 		[ForeignKey(nameof(ArticuloId))]	
 		public int ArticuloId { get; set; }
 		public virtual Articulo? Articulo { get; set; }
-
-		[ForeignKey(nameof(IdDeposito))]
-		public int IdDeposito { get; set; }
-		public virtual Deposito? Deposito { get; set; }
+		public TipoOrigenDestinoEnum TipoEntidad { get; set; }
+		public required string Entidad { get; set; }
 		public int Cantidad { get; set; }
 	}
 }

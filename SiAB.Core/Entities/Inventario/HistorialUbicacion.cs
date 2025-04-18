@@ -21,7 +21,7 @@ namespace SiAB.Core.Entities.Inventario
 		public virtual Articulo? Articulo { get; set; }
 
 		[ForeignKey(nameof(TransaccionId))]
-		public int TransaccionId { get; set; }	
+		public int TransaccionId { get; set; }
 		public virtual Transaccion? Transaccion { get; set; }
 	}
 }
