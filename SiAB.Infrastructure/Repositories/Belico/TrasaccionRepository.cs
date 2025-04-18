@@ -555,6 +555,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 							MO.Nombre as Modelo,
 							ST.Nombre as SubTipo,
 							C.Nombre as Calibre,
+							A.EsSeriado,
 							DAT.Cantidad,							
 							T.FechaEfectividad,
 							DT.NumeracionDocumento as Formulario
@@ -722,6 +723,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				Origen = origenResult,
 				TipoDestino = tipoDestino,
 				Destino = destinoResult,
+				TipoTransaccion = TipoTransaccionEnum.ACTUALIZACION_INVENTARIO,
 
 				FechaEfectividad = DateOnly.FromDateTime(fechaEfectividad),
 
