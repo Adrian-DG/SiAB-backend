@@ -86,5 +86,13 @@ namespace SiAB.API.Controllers.Inventario
 			return Ok();
 		}
 
+		[HttpGet("stock")]
+		[AuthorizeRole(UsuarioRolesEnum.ADMINISTRADOR_GENERAL, UsuarioRolesEnum.INVENTARIO_BELICO_VISUALIZAR)]
+		public async Task<IActionResult> GetStockByInventario()
+		{
+			var result = await _uow.DepositoRepository.GetStockByInventario();
+			return new JsonResult(result);
+		}
+
 	}
 }

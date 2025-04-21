@@ -9,6 +9,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
+using SiAB.Core.DTO;
 using SiAB.Core.DTO.Inventario;
 using SiAB.Core.DTO.Transacciones;
 using SiAB.Core.Entities.Belico;
