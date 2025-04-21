@@ -31,7 +31,9 @@ namespace SiAB.API.Controllers.Empresa
 						Id = oe.Id,
 						Comentario = oe.Comentario,
 						FechaEfectividad = oe.FechaEfectividad,
-						Cantidad = oe.Articulos.Select(d => d.CantidadRecibida).Sum(),
+						CantidadRecibida = oe.Articulos != null ? oe.Articulos.Sum(a => a.CantidadRecibida) : 0,
+						CantidadEntregada = oe.Articulos != null ? oe.Articulos.Sum(a => a.CantidadEntregada) : 0,
+						Documentos = oe.Documentos != null ? oe.Documentos.Count() : 0
 					},
 					page: filters.Page,
 					pageSize: filters.Size,
