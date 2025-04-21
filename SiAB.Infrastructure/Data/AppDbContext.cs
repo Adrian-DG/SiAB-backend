@@ -107,11 +107,10 @@ namespace SiAB.Infrastructure.Data
 				.HasOne(s => s.Marca)
 				.WithMany(p => p.Modelos)
 				.HasForeignKey(s => s.MarcaId)
-				.OnDelete(DeleteBehavior.NoAction);			
+				.OnDelete(DeleteBehavior.NoAction);
 
 			builder.Entity<HistorialUbicacion>()
-				.HasIndex(c => c.Serie)
-				.IsUnique();
+				.HasKey(c => c.Serie);
 
 			builder.Entity<StockArticulo>()
 				.HasKey(c => new { c.ArticuloId, c.TipoEntidad, c.Entidad });	
