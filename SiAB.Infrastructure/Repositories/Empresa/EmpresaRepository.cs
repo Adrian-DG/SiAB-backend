@@ -2,6 +2,7 @@
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO.Empresa;
 using SiAB.Core.Entities.Empresa;
+using SiAB.Core.Models.Empresa;
 using SiAB.Infrastructure.Data;
 using SiAB.Infrastructure.Helpers;
 using System;
@@ -146,6 +147,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 				}
 			}
 		}
+		
 
 		public async Task<object> GetDetalleOrdenEmpresa(int OrdenId)
 		{
@@ -166,33 +168,33 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 
 			if (orden is null) throw new Exception("No se ha encontrado la orden de empresa");
 
-			return new
+			return new OrdenEmpresaDetailModel
 			{
-				orden.Id,
-				orden.Comentario,
-				orden.FechaEfectividad,
-				Articulos = orden.Articulos.Select(a => new
+				Id = orden.Id,
+				Comentario = orden.Comentario,
+				FechaEfectividad = orden.FechaEfectividad,
+				Articulos = orden.Articulos.Select(a => new OrdenEmpresaArticuloModel
 				{
-					a.Id,
+					Id = a.Id,
 					Categoria = a.Categoria.Nombre,
 					Tipo = a.Tipo.Nombre,
 					SubTipo = a.SubTipo.Nombre,
 					Marca = a.Marca.Nombre,
 					Calibre = a.Calibre.Nombre,
-					a.Serie,
-					a.CantidadRecibida,
-					a.CantidadEntregada
-				}),
-				Documentos = orden.Documentos.Select(d => new
+					Serie = a.Serie,
+					CantidadRecibida = a.CantidadRecibida,
+					CantidadEntregada = a.CantidadEntregada
+				}).ToList(),
+				Documentos = orden.Documentos.Select(d => new OrdenEmpresaDocumentoDetailModel
 				{
-					d.Id,
-					d.NombreArchivo,
+					Id = d.Id,
+					NombreArchivo = d.NombreArchivo,
 					DataUrl = d.DocumentDataUrl,
 					TipoDocumento = d.TipoDocumento.Nombre,
-					d.FechaEmision,
-					d.FechaRecepcion,
-					d.FechaExpiracion
-				})
+					FechaEmision = d.FechaEmision,
+					FechaRecepcion = d.FechaRecepcion,
+					FechaExpiracion = d.FechaExpiracion
+				}).ToList()
 			};
 
 		}
