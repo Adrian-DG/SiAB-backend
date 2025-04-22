@@ -4,5 +4,6 @@
 	{
 		int CodUsuario { get; set; }
 		int CodInstitucionUsuario { get; set; }
+		string[] Roles { get; set; }
 	}
 }

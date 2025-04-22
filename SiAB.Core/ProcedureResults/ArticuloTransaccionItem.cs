@@ -13,6 +13,7 @@ namespace SiAB.Core.ProcedureResults
 		public string Modelo { get; set; }
 		public string SubTipo { get; set; }
 		public string Calibre { get; set; }
+		public bool EsSeriado { get; set; }
 		public string Serie { get; set; }
 		public int Cantidad { get; set; }
 		public string Formulario { get; set; }

@@ -10,5 +10,6 @@ namespace SiAB.Core.Constants
 	{
 		public const string CodUsuario = "CodUsuario";
 		public const string CodInstitucion = "CodInstitucion";
+		public const string Roles = "Roles";
 	}
 }

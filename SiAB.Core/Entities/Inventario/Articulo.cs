@@ -37,12 +37,8 @@ namespace SiAB.Core.Entities.Inventario
 		[ForeignKey(nameof(CalibreId))]
 		public int CalibreId { get; set; }
 		public virtual Calibre? Calibre { get; set; }
-
-		[ForeignKey(nameof(PropiedadId))]
-		public int PropiedadId { get; set; }
-		public virtual Propiedad? Propiedad { get; set; }
 		public string? Serie { get; set; }
-		public EstadoEnum Estado { get; set; }
+		public bool EsSeriado { get; set; }
 
 		// Auditables
 

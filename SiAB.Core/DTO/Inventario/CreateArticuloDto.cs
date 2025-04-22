@@ -13,6 +13,7 @@ namespace SiAB.Core.DTO.Inventario
 		public required string Modelo { get; set; }
 		public required string SubTipo { get; set; }
 		public required string Serie { get; set; }
+		public bool EsSeriado { get; set; }
 		public int Cantidad { get; set; }
 	}
 }

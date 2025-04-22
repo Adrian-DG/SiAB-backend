@@ -13,10 +13,11 @@ namespace SiAB.Application.Contracts
 		IJCERepository JCERepository { get; }
 		IUsuarioRepository UsuarioRepository { get; }
 		IRoleRepository RoleRepository { get; }
-		IEmpresaRepository EmpresaRepository { get; }
 		IReportRepository ReportRepository { get; }
 		ISipffaaRepository SipffaaRepository { get; }
 		ITransaccionRepository TransaccionRepository { get; }
 		ISecuenciaRepository SecuenciaRepository { get; }
+		IEmpresaRepository EmpresaRepository { get; }
+		IDepositoRepository DepositoRepository { get; }
 	}
 }

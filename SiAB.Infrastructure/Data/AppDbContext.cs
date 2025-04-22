@@ -10,6 +10,8 @@ using System.Linq.Expressions;
 using SiAB.Infrastructure.Data.Seed;
 using SiAB.Core.ProcedureResults;
 using SiAB.Core.Entities.Inventario;
+using SiAB.Core.Models.Transacciones;
+using SiAB.Core.Entities.Empresa;
 
 namespace SiAB.Infrastructure.Data
 {
@@ -34,6 +36,8 @@ namespace SiAB.Infrastructure.Data
 			builder.Entity<ArticuloTransaccionItem>().HasNoKey();
 
 			builder.Entity<SerieTransaccionItem>().HasNoKey();
+
+			builder.Entity<TransaccionViewModel>().HasNoKey();
 
 			#endregion
 
@@ -103,7 +107,13 @@ namespace SiAB.Infrastructure.Data
 				.HasOne(s => s.Marca)
 				.WithMany(p => p.Modelos)
 				.HasForeignKey(s => s.MarcaId)
-				.OnDelete(DeleteBehavior.NoAction);			
+				.OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<HistorialUbicacion>()
+				.HasKey(c => c.Serie);
+
+			builder.Entity<StockArticulo>()
+				.HasKey(c => new { c.ArticuloId, c.TipoEntidad, c.Entidad });	
 
 			#endregion
 
@@ -149,6 +159,8 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<ArticuloTransaccionItem> SP_Obtener_Articulos_Origen_Transaccion { get; set; }
 		public DbSet<SerieTransaccionItem> SP_Obtener_Transacciones_Serie { get; set; }
 
+		public DbSet<TransaccionViewModel> SP_Obtener_Listado_Transacciones { get; set; }
+
 		#endregion
 
 		#region Belico
@@ -166,7 +178,6 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Deposito> Depositos { get; set; }
 		public DbSet<HistorialUbicacion> HistoricoUbicacion { get; set; }
 		public DbSet<StockArticulo> StockArticulos { get; set; }
-		public DbSet<LicenciaEmpresa> Licencias { get; set; }
 
 		#endregion
 
@@ -174,10 +185,8 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Categoria> Categorias { get; set; }		
 		public DbSet<Marca> Marcas { get; set; }
 		public DbSet<Modelo> Modelos { get; set; }
-		public DbSet<Propiedad> Propiedades { get; set; }
 		public DbSet<SubTipo> SubTipos { get; set; }
 		public DbSet<Tipo> Tipos { get; set; }
-		public DbSet<Empresa> Empresas { get; set; }
 		public DbSet<TipoDocumento> TipoDocumentos { get; set; }
 
 		#endregion
@@ -186,6 +195,16 @@ namespace SiAB.Infrastructure.Data
 		public DbSet<Rango> Rangos { get; set; }
 		public DbSet<Dependencia> Dependencias { get; set; }
 
+		#endregion
+
+		#region Empresa
+
+		public DbSet<Empresa> Empresas { get; set; }
+		public DbSet<Titular> Titulares { get; set; }
+		public DbSet<OrdenEmpresa> OrdenesEmpresa { get; set; }
+		public DbSet<OrdenEmpresaArticulo> OrdenesEmpresaArticulos { get; set; }
+		public DbSet<OrdenEmpresaDocumento> OrdenesEmpresDocumentos { get; set; }
+		public DbSet<Contacto> Contactos { get; set; }
 		#endregion
 
 		#endregion

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SiAB.Core.Entities.Auth;
+using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,21 +15,52 @@ namespace SiAB.Infrastructure.Data.Seed
 		public static void Seed(this ModelBuilder builder)
 		{
 			builder.Entity<Role>().HasData(
-				new Role { Id = 1, Name = "ADMINISTRADOR GENERAL", NormalizedName = "ADMINISTRADOR GENERAL", Descripcion = "Acceso global a todos los módulos del sistema." },
-				new Role { Id = 2, Name = "CONSULTA GENERAL", NormalizedName = "CONSULTA GENERAL", Descripcion = "Modulo para consulta de existencia por miembro, civil, deposito y función(S4)." },
-				new Role { Id = 3, Name = "CONSULTA GENERAL MILITAR", NormalizedName = "CONSULTA GENERAL MILITAR", Descripcion = "Consultar solo personal militar." },
-				new Role { Id = 4, Name = "CONSULTA GENERAL CIVIL", NormalizedName = "CONSULTA GENERAL CIVIL", Descripcion = "Consultar solo civiles (consultar JCE)" },
-				new Role { Id = 5, Name = "CONSULTA GENERAL DEPOSITO", NormalizedName = "CONSULTA GENERAL DEPOSITO", Descripcion = "Consultar solo los depositos." },
-				new Role { Id = 6, Name = "CONSULTA GENERAL FUNCION (S4)", NormalizedName = "CONSULTA GENERAL FUNCION (S4)", Descripcion = "Consultar solo las funciónes  (S4)." },
-				new Role { Id = 7, Name = "GENERAR REPORTE CONSULTA", NormalizedName = "GENERAR REPORTE CONSULTA", Descripcion = "Generar las reporteria de los articulos asignados según el tipo de consulta." },
-				new Role { Id = 8, Name = "MODULO MANTENIMIENTO", NormalizedName = "MODULO MANTENIMIENTO", Descripcion = "Acceso para la creacion de recursos como marcas, modelos, depositos...etc." },
-				new Role { Id = 9, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "Módulo para la creacion de usuarios y asignación de roles." },
-				new Role { Id = 10, Name = "ASIGNACION DEPOSITO USUARIO", NormalizedName = "ASIGNACION DEPOSITO USUARIO", Descripcion = "Asignar depositos especificos para un usuario." },
-				new Role { Id = 11, Name = "MODULO ESTADISTICAS", NormalizedName = "MODULO ESTADISTICAS", Descripcion = "Acceso a panel de estadisticas generales." },
-				new Role { Id = 12, Name = "MODULO ALERTAS", NormalizedName = "MODULO ALERTAS", Descripcion = "Acceso al listado de las alertas." },
-				new Role { Id = 13, Name = "CREAR ALERTA", NormalizedName = "CREAR ALERTA", Descripcion = "Creación de una nueva alerta para un miembro o civil." },
-				new Role { Id = 14, Name = "MODULO REPORTERIA", NormalizedName = "MODULO REPORTERIA", Descripcion = "Acceso a la generación de reportes genericos." },
-				new Role { Id = 15, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS",Descripcion = "Acceso al modulo de empresas y registro de licencias" }
+				new Role { Id = (int)UsuarioRolesEnum.ADMINISTRADOR_GENERAL, Name = "ADMINISTRADOR GENERAL", NormalizedName = "ADMINISTRADOR GENERAL", Descripcion = "ACCESO ILIMITADO A TODAS LAS FUNCIONES DEL SISTEMA" },
+
+				new Role { Id = (int)UsuarioRolesEnum.CONSULTAR_HISTORIAL_PERSONA_FUNCION, Name = "CONSULTAR HISTORIAL PERSONA FUNCION", NormalizedName = "CONSULTAR HISTORIAL PERSONA FUNCION", Descripcion = "CONSULTAR HISTORIAL DE PROPIEDADES ASIGNADAS A UN MILITAR,CIVIL O FUNCIÓN(S4)." },
+				new Role { Id = (int)UsuarioRolesEnum.CONSULTAR_HISTORIAL_SERIE, Name = "CONSULTAR HISTORIAL SERIE", NormalizedName = "CONSULTAR HISTORIAL SERIE",Descripcion = "CONSULTAR EL HISTORIAL DE TRANSACCIONES REALIZADAS A UNA SERIE." },
+
+				new Role { Id = (int)UsuarioRolesEnum.MODULO_TRANSACCIONES, Name = "MODULO TRANSACCIONES", NormalizedName = "MODULO TRANSACCIONES", Descripcion = "ACCESO AL MODULO DE TRANSACCIONES" },
+				new Role { Id = (int)UsuarioRolesEnum.TRANSACCIONES_CREAR_CARGO_DESCARGO, Name = "TRANSACCIONES CREAR CARGO DESCARGO", NormalizedName = "TRANSACCIONES CREAR CARGO DESCARGO", Descripcion = "CREAR CARGOS Y DESCARGOS" },
+				new Role { Id = (int)UsuarioRolesEnum.TRANSACCIONES_VISUALIZAR_DETALLES, Name = "TRANSACCIONES VISUALIZAR DETALLES", NormalizedName = "TRANSACCIONES VISUALIZAR DETALLES", Descripcion = "VISUALIZAR DETALLES DE LAS TRANSACCIONES" },
+				new Role { Id = (int)UsuarioRolesEnum.TRANSACCIONES_VISUALIZAR_DOCUMENTOS, Name = "TRANSACCIONES VISUALIZAR DOCUMENTOS", NormalizedName = "TRANSACCIONES VISUALIZAR DOCUMENTOS", Descripcion = "VISUALIZAR DOCUMENTOS DE LAS TRANSACCIONES" },
+				new Role { Id = (int)UsuarioRolesEnum.TRANSACCIONES_GENERAR_FORMULARIO_53, Name = "TRANSACCIONES GENERAR FORMULARIO 53", NormalizedName = "TRANSACCIONES GENERAR FORMULARIO 53", Descripcion = "GENERAR FORMULARIO 53" },
+				new Role { Id = (int)UsuarioRolesEnum.TRANSACCIONES_ADJUNTAR_FORMULARIO_53, Name = "TRANSACCIONES ADJUNTAR FORMULARIO 53", NormalizedName = "TRANSACCIONES ADJUNTAR FORMULARIO 53", Descripcion = "ADJUNTAR FORMULARIO 53" },
+				new Role { Id = (int)UsuarioRolesEnum.TRANSACCIONES_EDITAR, Name = "TRANSACCIONES EDITAR", NormalizedName = "TRANSACCIONES EDITAR", Descripcion = "EDITAR LAS INFORMACIONES CLAVE DE UNA TRANSACCIÓN" },
+								
+
+				new Role { Id = (int)UsuarioRolesEnum.MODULO_MANTENIMIENTOS, Name = "MODULO MANTENIMIENTOS", NormalizedName = "MODULO MANTENIMIENTOS", Descripcion = "ACCESO AL MODULO DE MANTENIMIENTO" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_INSTITUCIONES, Name = "MANTENIMIENTO INSTITUCIONES", NormalizedName = "MANTENIMIENTO INSTITUCIONES", Descripcion = "ACCESO A MANTENIMIENTO DE INSTITUCIONES" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_DEPENDENCIAS, Name = "MANTENIMIENTO DEPENDENCIAS", NormalizedName = "MANTENIMIENTO DEPENDENCIAS", Descripcion = "ACCESO A MANTENIMIENTO DE DEPENDENCIAS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_PROPIEDADES, Name = "MANTENIMIENTO PROPIEDADES", NormalizedName = "MANTENIMIENTO PROPIEDADES", Descripcion = "ACCESO A MANTENIMIENTO DE PROPIEDADES" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_ARTICULOS, Name = "MANTENIMIENTO ARTICULOS", NormalizedName = "MANTENIMIENTO ARTICULOS", Descripcion = "ACCESO A MANTENIMIENTO DE ARTICULOS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_TIPOS, Name = "MANTENIMIENTO TIPOS", NormalizedName = "MANTENIMIENTO TIPOS", Descripcion = "ACCESO A MANTENIMIENTO DE TIPOS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_SUBTIPOS, Name = "MANTENIMIENTO SUBTIPOS", NormalizedName = "MANTENIMIENTO SUBTIPOS", Descripcion = "ACCESO A MANTENIMIENTO DE SUBTIPOS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_TIPOS_DOCUMENTOS, Name = "MANTENIMIENTO TIPOS DOCUMENTOS", NormalizedName = "MANTENIMIENTO TIPOS DOCUMENTOS", Descripcion = "ACCESO A MANTENIMIENTO DE TIPOS DE DOCUMENTOS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_CALIBRES, Name = "MANTENIMIENTO CALIBRES", NormalizedName = "MANTENIMIENTO CALIBRES", Descripcion = "ACCESO A MANTENIMIENTO DE CALIBRES" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_MARCAS, Name = "MANTENIMIENTO MARCAS", NormalizedName = "MANTENIMIENTO MARCAS", Descripcion = "ACCESO A MANTENIMIENTO DE MARCAS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_MODELOS, Name = "MANTENIMIENTO MODELOS", NormalizedName = "MANTENIMIENTO MODELOS", Descripcion = "ACCESO A MANTENIMIENTO DE MODELOS" },
+				new Role { Id = (int)UsuarioRolesEnum.MANTENIMIENTO_CATEGORIAS, Name = "MANTENIMIENTO CATEGORIAS", NormalizedName = "MANTENIMIENTO CATEGORIAS", Descripcion = "ACCESO A MANTENIMIENTO DE CATEGORIAS" },
+
+				new Role { Id = (int)UsuarioRolesEnum.MODULO_EMPRESAS, Name = "MODULO EMPRESAS", NormalizedName = "MODULO EMPRESAS", Descripcion = "ACCESO AL MODULO DE EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_CREAR, Name = "EMPRESAS CREAR", NormalizedName = "EMPRESAS CREAR", Descripcion = "CREAR EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_EDITAR, Name = "EMPRESAS EDITAR", NormalizedName = "EMPRESAS EDITAR", Descripcion = "EDITAR EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_ELIMINAR, Name = "EMPRESAS ELIMINAR", NormalizedName = "EMPRESAS ELIMINAR", Descripcion = "ELIMINAR EMPRESAS" },
+
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_VISUALIZAR_ORDENES, Name = "EMPRESAS VISUALIZAR ORDENES", NormalizedName = "EMPRESAS VISUALIZAR ORDENES", Descripcion = "VISUALIZAR ORDENES DE EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_CREAR_ORDEN, Name = "EMPRESAS CREAR ORDEN", NormalizedName = "EMPRESAS CREAR ORDEN", Descripcion = "CREAR ORDENES DE EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_EDITAR_ORDEN, Name = "EMPRESAS EDITAR ORDEN", NormalizedName = "EMPRESAS EDITAR ORDEN", Descripcion = "EDITAR ORDENES DE EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_ELIMINAR_ORDEN, Name = "EMPRESAS ELIMINAR ORDEN", NormalizedName = "EMPRESAS ELIMINAR ORDEN", Descripcion = "ELIMINAR ORDENES DE EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_VISUALIZAR_DETALLES_ORDEN, Name = "EMPRESAS VISUALIZAR DETALLES ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DETALLES ORDEN", Descripcion = "VISUALIZAR DETALLES DE ORDENES DE EMPRESAS" },
+				new Role { Id = (int)UsuarioRolesEnum.EMPRESAS_VISUALIZAR_DOCUMENTOS_ORDEN, Name = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", NormalizedName = "EMPRESAS VISUALIZAR DOCUMENTOS ORDEN", Descripcion = "VISUALIZAR DOCUMENTOS DE ORDENES DE EMPRESAS" },
+				
+				new Role { Id = (int)UsuarioRolesEnum.MODULO_USUARIOS, Name = "MODULO USUARIOS", NormalizedName = "MODULO USUARIOS", Descripcion = "ACCESO AL MODULO DE USUARIOS" },
+
+				new Role { Id = (int)UsuarioRolesEnum.MODULO_ESTADISTICAS, Name = "MODULO ESTADISTICAS", NormalizedName = "MODULO ESTADISTICAS", Descripcion = "ACCESO AL MODULO DE ESTADISTICAS" },
+
+				new Role { Id = (int)UsuarioRolesEnum.INVENTARIO_BELICO_CARGAR_EXCEL, Name = "INVENTARIO BELICO CARGAR EXCEL", NormalizedName = "INVENTARIO BELICO CARGAR EXCEL", Descripcion = "CARGAR INVENTARIO DE ARMERIAS Y DEPOSITOS DESDE EXCEL." },
+
+				new Role { Id = (int)UsuarioRolesEnum.INVENTARIO_BELICO_VISUALIZAR, Name = "INVENTARIO BELICO VISUALIZAR", NormalizedName = "INVENTARIO BELICO VISUALIZAR", Descripcion = "VISUALIZAR INVENTARIO DE ARMERIAS Y DEPOSITOS" }
 			);
 		}
 	}

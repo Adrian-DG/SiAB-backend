@@ -11,9 +11,8 @@ namespace SiAB.Core.DTO.Transacciones
     {
 		public required string Secuencia { get; set; }
 
-		public required IMiembroListDetail RecibidoPor { get; set; }
-		public required IMiembroListDetail EntregadoPor { get; set; }
-		public required IMiembroListDetail FirmadoPor { get; set; }
+		public required string RecibidoParam2 { get; set; }
+		public required string RecibidoParam1 { get; set; }
 
 		public required IMiembroListDetail Intendente { get; set; }
 		public required IMiembroListDetail EncargadoArmas { get; set; }

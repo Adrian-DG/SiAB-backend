@@ -16,7 +16,7 @@ namespace SiAB.Application.Contracts
 		Task<int> AddAsync(T entity);
 		Task Update(T entity);
 		Task DeleteById(int id);
-		Task<TResult> FindWhereAsync<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> selector);
+		Task<TResult> FindWhereAsync<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[]? includes);
 		Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>>? predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, bool ignoreFilter = false, params Expression<Func<T, object>>[]? includes);
 		Task<PagedData<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>>? predicate, Expression <Func<T, TResult>> selector,  Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, int page = 1, int pageSize = 10, params Expression<Func<T, object>>[]? includes) where TResult : class;
 		Task CommitChangeAsync();

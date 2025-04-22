@@ -57,6 +57,13 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(result);
 		}
 
+		[HttpGet("all")]
+		public async Task<IActionResult> GetMarcas()
+		{
+			var result = await _uow.Repository<Marca>().GetAllAsync();
+			return new JsonResult(result);
+		}
+
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<Marca>))]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)

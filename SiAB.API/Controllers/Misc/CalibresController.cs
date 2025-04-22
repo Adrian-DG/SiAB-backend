@@ -33,6 +33,13 @@ namespace SiAB.API.Controllers.Misc
 			return new JsonResult(calibres);
 		}
 
+		[HttpGet("all")]
+		public async Task<IActionResult> GetCalibres()
+		{
+			var result = await _uow.Repository<Calibre>().GetAllAsync();
+			return new JsonResult(result);
+		}
+
 		[HttpPost]
 		[ServiceFilter(typeof(NamedFilter<Calibre>))]
 		public async Task<IActionResult> Create([FromBody] CreateNamedEntityDto createNamedEntityDto)

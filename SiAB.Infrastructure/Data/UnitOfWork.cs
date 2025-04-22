@@ -3,6 +3,8 @@ using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Repositories;
 using SiAB.Infrastructure.Repositories.Belico;
+using SiAB.Infrastructure.Repositories.Deposito;
+using SiAB.Infrastructure.Repositories.Empresa;
 using SiAB.Infrastructure.Repositories.JCE;
 using System;
 using System.Collections.Generic;
@@ -31,8 +33,6 @@ namespace SiAB.Infrastructure.Data
 
 		public IRoleRepository RoleRepository => new RoleRepository(_context);
 
-		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
-
 		public IReportRepository ReportRepository => new ReportRepository(_context);
 
 		public ISipffaaRepository SipffaaRepository => new SipffaaRepository(_dapper);
@@ -40,6 +40,10 @@ namespace SiAB.Infrastructure.Data
 		public ITransaccionRepository TransaccionRepository => new TrasaccionRepository(_context);
 
 		public ISecuenciaRepository SecuenciaRepository => new SecuenciaRepository(_context);
+
+		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
+
+		public IDepositoRepository DepositoRepository => new DepositoRepository(_context);
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{
