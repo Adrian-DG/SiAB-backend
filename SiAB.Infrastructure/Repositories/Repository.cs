@@ -55,7 +55,7 @@ namespace SiAB.Infrastructure.Repositories
 
 		public async Task<TResult> FindWhereAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[]? includes)
 		{
-			IQueryable<T> query = _repository;
+			IQueryable<T> query = _repository.AsNoTracking();
 
 			if (includes is not null)
 			{
@@ -90,7 +90,7 @@ namespace SiAB.Infrastructure.Repositories
 
 		public async Task<IEnumerable<TResult>> GetListAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, bool ignoreFilter = false, params Expression<Func<T, object>>[]? includes)
 		{
-			IQueryable<T> query = ignoreFilter ? _repository.IgnoreQueryFilters() : _repository;
+			IQueryable<T> query = ignoreFilter ? _repository.AsNoTracking().IgnoreQueryFilters() : _repository.AsNoTracking();
 
 			if (includes is not null)
 			{
@@ -113,7 +113,7 @@ namespace SiAB.Infrastructure.Repositories
 		
 		public async Task<PagedData<TResult>> GetListPaginateAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<IQueryable<TResult>, IOrderedQueryable<TResult>>? orderBy = null, int page = 1, int pageSize = 10, params Expression<Func<T, object>>[]? includes) where TResult : class
 		{
-			IQueryable<T> query = _repository;
+			IQueryable<T> query = _repository.AsNoTracking();
 
 			if (includes is not null)
 			{
