@@ -9,8 +9,6 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
-using SiAB.Core.DTO;
-using SiAB.Core.DTO.Inventario;
 using SiAB.Core.DTO.Transacciones;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Inventario;
@@ -44,72 +42,6 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			_context = dbContext;
 		}
 
-
-		#region Create Transaccion 
-
-		private async Task UpdateHistorialUbicacion(CreateArticuloItemDto articuloItemDto, int TransaccionId)
-		{
-			var historial = await _context.HistoricoUbicacion.SingleOrDefaultAsync(h => h.Serie == articuloItemDto.Serie);
-
-			if (historial is null)
-			{
-				await _context.AddAsync(new HistorialUbicacion
-				{
-					Serie = articuloItemDto.Serie,
-					ArticuloId = articuloItemDto.Id,
-					TransaccionId = TransaccionId
-				});
-			}
-			else
-			{
-				historial.TransaccionId = TransaccionId;
-				_context.Entry<HistorialUbicacion>(historial).State = EntityState.Modified;
-			}
-
-			await _context.SaveChangesAsync();
-		}
-
-
-		private async Task UpdateStockArticulo(CreateArticuloItemDto articuloItemDto, TipoOrigenDestinoEnum TipoCredito, string Credito, TipoOrigenDestinoEnum TipoDebito, string Debito)
-		{
-			// Obtener los registros de stock para el origen y el destino en una sola consulta
-			var stockArticulos = await _context.StockArticulos
-								.Where(s => s.ArticuloId == articuloItemDto.Id &&
-								(s.TipoEntidad == TipoCredito && s.Entidad == Credito || s.TipoEntidad == TipoDebito && s.Entidad == Debito))
-								.ToListAsync();
-
-			// Actualizar el stock del origen si existe
-			var stockOrigen = stockArticulos.FirstOrDefault(s => s.TipoEntidad == TipoCredito && s.Entidad == Credito);
-			if (stockOrigen is not null)
-			{
-				stockOrigen.Cantidad -= articuloItemDto.Cantidad;
-				_context.Update(stockOrigen);
-			}
-
-			// Actualizar el stock del destino si existe
-			var stockDestino = stockArticulos.FirstOrDefault(s => s.TipoEntidad == TipoDebito && s.Entidad == Debito);
-			if (stockDestino is not null)
-			{
-				stockDestino.Cantidad += articuloItemDto.Cantidad;
-				_context.Update(stockDestino);
-			}
-			else
-			{
-				// Crear un nuevo registro de stock para el destino si no existe
-				await _context.StockArticulos.AddAsync(new StockArticulo
-				{
-					ArticuloId = articuloItemDto.Id,
-					Cantidad = articuloItemDto.Cantidad,
-					TipoEntidad = TipoDebito,
-					Entidad = Debito
-				});
-			}
-
-			// Guardar todos los cambios en una sola operación
-			await _context.SaveChangesAsync();
-		}
-
-
 		public async Task<int> CreateTransaccionCargoDescargo(CreateTransaccionCargoDescargoDto transaccionCargoDescargoDto)
 		{
 			using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -122,7 +54,6 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						TipoOrigen = transaccionCargoDescargoDto.TipoCargoCredito,
 						Origen = transaccionCargoDescargoDto.Credito,
 						TipoDestino = transaccionCargoDescargoDto.TipoCargoDebito,
-						TipoTransaccion = transaccionCargoDescargoDto.TipoTransaccion,
 						Destino = transaccionCargoDescargoDto.Debito,
 						FechaEfectividad = DateOnly.Parse(transaccionCargoDescargoDto.Fecha),
 
@@ -134,7 +65,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 					await _context.SaveChangesAsync();
 
-					var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(transaccionCargoDescargoDto.Documento);
+					var archivoBase64 = DataUrlToBase64Converter.ConvertDataUrlToBase64String(transaccionCargoDescargoDto.Documento);
 					var archivoByte = Convert.FromBase64String(archivoBase64);
 
 					await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
@@ -142,7 +73,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						TransaccionId = transaccion.Entity.Id,
 						TipoDocumentoId = (int)TipoDocumentoEnum.NO_DEFINIDO,
 						NumeracionDocumento = transaccionCargoDescargoDto.NoDocumento,
-						Archivo = archivoByte,
+						Archivo = archivoByte,						
 					});
 
 					await _context.SaveChangesAsync();
@@ -157,19 +88,6 @@ namespace SiAB.Infrastructure.Repositories.Belico
 						});
 
 						await _context.SaveChangesAsync();
-
-						// Actualizar el historial de ubicacion solo para articulos seriados
-
-						if (item.EsSeriado)
-						{
-							await UpdateHistorialUbicacion(item, transaccion.Entity.Id);
-						}
-						else
-						{
-							await UpdateStockArticulo(item, transaccionCargoDescargoDto.TipoCargoCredito, transaccionCargoDescargoDto.Credito, transaccionCargoDescargoDto.TipoCargoDebito, transaccionCargoDescargoDto.Debito);
-						}
-
-						
 					}
 
 					await transaction.CommitAsync();
@@ -182,10 +100,8 @@ namespace SiAB.Infrastructure.Repositories.Belico
 					await transaction.RollbackAsync();
 					throw;
 				}
-			}
+			}			
 		}
-
-		#endregion
 
 		public async Task SaveDocumento(AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto)
 		{
@@ -194,7 +110,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				throw new BaseException("No se ha enviado un archivo o falta la numeracion", HttpStatusCode.BadRequest);
 			}
 
-			var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(adjuntarFormulario53Dto.Url);
+			var archivoBase64 = DataUrlToBase64Converter.ConvertDataUrlToBase64String(adjuntarFormulario53Dto.Url);
 			var archivoByte = Convert.FromBase64String(archivoBase64);
 
 			if (adjuntarFormulario53Dto.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53)
@@ -480,7 +396,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 								{
 									t.Span($"{InputTransaccionReport53.Intendente.NombreApellidoCompleto}\n").Bold();
 									t.Span($"{InputTransaccionReport53.Intendente.Rango}\n");
-									t.Span("Int. Gral. Material Bélico de las FFAA");
+									t.Span("Int. Gral. Material Belico de las FFAA");
 								});
 							});
 
@@ -637,7 +553,6 @@ namespace SiAB.Infrastructure.Repositories.Belico
 							MO.Nombre as Modelo,
 							ST.Nombre as SubTipo,
 							C.Nombre as Calibre,
-							A.EsSeriado,
 							DAT.Cantidad,							
 							T.FechaEfectividad,
 							DT.NumeracionDocumento as Formulario
@@ -805,7 +720,6 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				Origen = origenResult,
 				TipoDestino = tipoDestino,
 				Destino = destinoResult,
-				TipoTransaccion = TipoTransaccionEnum.ACTUALIZACION_INVENTARIO,
 
 				FechaEfectividad = DateOnly.FromDateTime(fechaEfectividad),
 
