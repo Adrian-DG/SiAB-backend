@@ -41,6 +41,11 @@ namespace SiAB.Infrastructure.Data
 
 			#endregion
 
+			// Fix for CS8602: Ensure null checks before accessing Articulo and Transaccion
+			builder.Entity<HistorialUbicacion>().HasQueryFilter(h => h.Articulo != null && !h.Articulo.IsDeleted);
+			builder.Entity<HistorialUbicacion>().HasQueryFilter(h => h.Transaccion != null && !h.Transaccion.IsDeleted);
+			builder.Entity<StockArticulo>().HasQueryFilter(s => s.Articulo != null && !s.Articulo.IsDeleted);
+
 			#region Relations configuration
 
 			builder.Entity<Articulo>()
@@ -113,7 +118,7 @@ namespace SiAB.Infrastructure.Data
 				.HasKey(c => c.Serie);
 
 			builder.Entity<StockArticulo>()
-				.HasKey(c => new { c.ArticuloId, c.TipoEntidad, c.Entidad });	
+				.HasKey(c => new { c.ArticuloId, c.TipoEntidad, c.Entidad });
 
 			#endregion
 
@@ -129,9 +134,8 @@ namespace SiAB.Infrastructure.Data
 
 			SetGlobalQueryFilter(builder);
 
-			#endregion		
-			
-		}		
+			#endregion
+		}
 
 		// Configuramos un filtro global para las entidades, omitiendo registros borraddos (IsDeleted)
 		private void SetGlobalQueryFilter(ModelBuilder modelBuilder)
