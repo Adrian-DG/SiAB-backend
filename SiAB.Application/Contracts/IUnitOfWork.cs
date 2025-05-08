@@ -18,5 +18,6 @@ namespace SiAB.Application.Contracts
 		ITransaccionRepository TransaccionRepository { get; }
 		ISecuenciaRepository SecuenciaRepository { get; }
 		IEmpresaRepository EmpresaRepository { get; }
+		IDepositoRepository DepositoRepository { get; }
 	}
 }

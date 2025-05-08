@@ -65,7 +65,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 					await _context.SaveChangesAsync();
 
-					var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(transaccionCargoDescargoDto.Documento);
+					var archivoBase64 = DataUrlToBase64Converter.ConvertDataUrlToBase64String(transaccionCargoDescargoDto.Documento);
 					var archivoByte = Convert.FromBase64String(archivoBase64);
 
 					await _context.DocumentosTransaccion.AddAsync(new DocumentoTransaccion
@@ -110,7 +110,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				throw new BaseException("No se ha enviado un archivo o falta la numeracion", HttpStatusCode.BadRequest);
 			}
 
-			var archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(adjuntarFormulario53Dto.Url);
+			var archivoBase64 = DataUrlToBase64Converter.ConvertDataUrlToBase64String(adjuntarFormulario53Dto.Url);
 			var archivoByte = Convert.FromBase64String(archivoBase64);
 
 			if (adjuntarFormulario53Dto.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53)
@@ -396,7 +396,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 								{
 									t.Span($"{InputTransaccionReport53.Intendente.NombreApellidoCompleto}\n").Bold();
 									t.Span($"{InputTransaccionReport53.Intendente.Rango}\n");
-									t.Span("Int. Gral. Material Bélico de las FFAA");
+									t.Span("Int. Gral. Material Belico de las FFAA");
 								});
 							});
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SiAB.Infrastructure.Helpers
 {
-    public static class DateUrlToBase64Converter
+    public static class DataUrlToBase64Converter
     {
 		public static string ConvertDataUrlToBase64String(string dataUrl)
 		{

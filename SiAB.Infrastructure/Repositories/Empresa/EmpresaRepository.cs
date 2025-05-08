@@ -2,6 +2,8 @@
 using SiAB.Application.Contracts;
 using SiAB.Core.DTO.Empresa;
 using SiAB.Core.Entities.Empresa;
+using SiAB.Core.Exceptions;
+using SiAB.Core.Models.Empresa;
 using SiAB.Infrastructure.Data;
 using SiAB.Infrastructure.Helpers;
 using System;
@@ -120,7 +122,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 					{
 						if (item.Archivo == null) throw new Exception("No se ha especificado un archivo para el documento");
 
-						string archivoBase64 = DateUrlToBase64Converter.ConvertDataUrlToBase64String(item.Archivo);
+						string archivoBase64 = DataUrlToBase64Converter.ConvertDataUrlToBase64String(item.Archivo);
 						byte[] archivoBytes = Convert.FromBase64String(archivoBase64);
 
 						await _context.OrdenesEmpresDocumentos.AddAsync(new OrdenEmpresaDocumento
@@ -146,6 +148,7 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 				}
 			}
 		}
+		
 
 		public async Task<object> GetDetalleOrdenEmpresa(int OrdenId)
 		{
@@ -166,37 +169,83 @@ namespace SiAB.Infrastructure.Repositories.Empresa
 
 			if (orden is null) throw new Exception("No se ha encontrado la orden de empresa");
 
-			return new
+			return new OrdenEmpresaDetailModel
 			{
-				orden.Id,
-				orden.Comentario,
-				orden.FechaEfectividad,
-				Articulos = orden.Articulos.Select(a => new
+				Id = orden.Id,
+				Comentario = orden.Comentario,
+				FechaEfectividad = orden.FechaEfectividad,
+				Articulos = orden.Articulos.Select(a => new OrdenEmpresaArticuloModel
 				{
-					a.Id,
+					Id = a.Id,
 					Categoria = a.Categoria.Nombre,
 					Tipo = a.Tipo.Nombre,
 					SubTipo = a.SubTipo.Nombre,
 					Marca = a.Marca.Nombre,
 					Calibre = a.Calibre.Nombre,
-					a.Serie,
-					a.CantidadRecibida,
-					a.CantidadEntregada
-				}),
-				Documentos = orden.Documentos.Select(d => new
+					Serie = a.Serie,
+					CantidadRecibida = a.CantidadRecibida,
+					CantidadEntregada = a.CantidadEntregada
+				}).ToList(),
+				Documentos = orden.Documentos.Select(d => new OrdenEmpresaDocumentoDetailModel
 				{
-					d.Id,
-					d.NombreArchivo,
+					Id = d.Id,
+					NombreArchivo = d.NombreArchivo,
 					DataUrl = d.DocumentDataUrl,
 					TipoDocumento = d.TipoDocumento.Nombre,
-					d.FechaEmision,
-					d.FechaRecepcion,
-					d.FechaExpiracion
-				})
+					FechaEmision = d.FechaEmision,
+					FechaRecepcion = d.FechaRecepcion,
+					FechaExpiracion = d.FechaExpiracion
+				}).ToList()
 			};
 
 		}
 
+		public async Task UpdateOrdenAdjuntarDocumento(int ordenId, CreateOrdenEmpresaDocumentoDto ordenEmpresaDocumentoDto)
+		{
+			if (string.IsNullOrEmpty(ordenEmpresaDocumentoDto.Archivo) || ordenEmpresaDocumentoDto.Archivo is null) throw new ArgumentNullException("El archivo es obligatorio");
 
+			if (!DateOnly.TryParse(ordenEmpresaDocumentoDto.FechaEmision, out DateOnly FechaEmision) ||
+				!DateOnly.TryParse(ordenEmpresaDocumentoDto.FechaRecepcion, out DateOnly FechaRecepcion) ||
+				!DateOnly.TryParse(ordenEmpresaDocumentoDto.FechaExpiracion, out DateOnly FechaExpiracion))
+			{
+				throw new BaseException("Error al parsear campos requeridos", System.Net.HttpStatusCode.BadRequest);
+			}
+
+			string archivoBase64 = DataUrlToBase64Converter.ConvertDataUrlToBase64String(ordenEmpresaDocumentoDto.Archivo);
+			byte[] archivoByteArray = Convert.FromBase64String(archivoBase64);
+
+			var newOrdenEmpresaDoc = new OrdenEmpresaDocumento
+			{
+				TipoDocumentoId = ordenEmpresaDocumentoDto.TipoDocumentoId,
+				NombreArchivo = ordenEmpresaDocumentoDto.Nombre,
+				Archivo = archivoByteArray,
+				OrdenEmpresaId = ordenId,
+				FechaEmision = FechaEmision,
+				FechaRecepcion = FechaRecepcion,
+				FechaExpiracion = FechaExpiracion
+			};
+
+			await _context.OrdenesEmpresDocumentos.AddAsync(newOrdenEmpresaDoc);
+			await _context.SaveChangesAsync();
+		}
+
+		public async Task UpdateOrdenArticulosEntregados(int ordenId, List<OrdenEmpresaArticuloModel> ordenEmpresaArticulos)
+		{
+			var existingArticulos = await _context.OrdenesEmpresaArticulos
+				.Where(a => a.OrdenEmpresaId == ordenId)
+				.ToListAsync();
+
+			var articuloDictionary = ordenEmpresaArticulos.ToDictionary(a => a.Id, a => a.CantidadEntregada);
+
+			foreach (var articulo in existingArticulos)
+			{
+				if (articuloDictionary.TryGetValue(articulo.Id, out var cantidadEntregada))
+				{
+					articulo.CantidadEntregada = cantidadEntregada;
+				}
+			}
+
+			await _context.SaveChangesAsync();
+		}
 	}
 }

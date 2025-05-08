@@ -3,6 +3,7 @@ using SiAB.Application.Contracts;
 using SiAB.Core.Abstraction;
 using SiAB.Infrastructure.Repositories;
 using SiAB.Infrastructure.Repositories.Belico;
+using SiAB.Infrastructure.Repositories.Deposito;
 using SiAB.Infrastructure.Repositories.Empresa;
 using SiAB.Infrastructure.Repositories.JCE;
 using System;
@@ -41,6 +42,8 @@ namespace SiAB.Infrastructure.Data
 		public ISecuenciaRepository SecuenciaRepository => new SecuenciaRepository(_context);
 
 		public IEmpresaRepository EmpresaRepository => new EmpresaRepository(_context);
+
+		public IDepositoRepository DepositoRepository => new DepositoRepository(_context);
 
 		public IRepository<T> Repository<T>() where T : EntityMetadata
 		{

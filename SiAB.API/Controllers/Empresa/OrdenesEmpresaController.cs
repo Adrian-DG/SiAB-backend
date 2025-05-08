@@ -9,6 +9,7 @@ using SiAB.Core.DTO.Empresa;
 using SiAB.Core.Entities.Empresa;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Models;
+using SiAB.Core.Models.Empresa;
 using System.Linq.Expressions;
 
 namespace SiAB.API.Controllers.Empresa
@@ -31,7 +32,9 @@ namespace SiAB.API.Controllers.Empresa
 						Id = oe.Id,
 						Comentario = oe.Comentario,
 						FechaEfectividad = oe.FechaEfectividad,
-						Cantidad = oe.Articulos.Select(d => d.CantidadRecibida).Sum(),
+						CantidadRecibida = oe.Articulos != null ? oe.Articulos.Sum(a => a.CantidadRecibida) : 0,
+						CantidadEntregada = oe.Articulos != null ? oe.Articulos.Sum(a => a.CantidadEntregada) : 0,
+						Documentos = oe.Documentos != null ? oe.Documentos.Count() : 0
 					},
 					page: filters.Page,
 					pageSize: filters.Size,
@@ -56,6 +59,22 @@ namespace SiAB.API.Controllers.Empresa
 			return Ok();
 		}
 
-		
+		[HttpPost("{id:int}/adjuntar-documento")]
+		[ServiceFilter(typeof(UpdateAuditableFilter))]
+		public async Task<IActionResult> UpdateOrdenAdjuntarDocumento([FromRoute] int id, [FromBody] CreateOrdenEmpresaDocumentoDto ordenEmpresaDocumentoDto)
+		{
+			await _uow.EmpresaRepository.UpdateOrdenAdjuntarDocumento(id, ordenEmpresaDocumentoDto);
+			return Ok();
+		}
+
+		[HttpPut("{id:int}/articulos-entregados")]
+		[ServiceFilter(typeof(UpdateAuditableFilter))]
+		public async Task<IActionResult> UpdateOrdenArticulosEntregados([FromRoute] int id, [FromBody] List<OrdenEmpresaArticuloModel> ordenEmpresaArticulos)
+		{
+			await _uow.EmpresaRepository.UpdateOrdenArticulosEntregados(id, ordenEmpresaArticulos);
+			return Ok();
+		}
+
+
 	}
 }

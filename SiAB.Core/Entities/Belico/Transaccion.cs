@@ -21,6 +21,8 @@ namespace SiAB.Core.Entities.Belico
 		public TipoOrigenDestinoEnum TipoDestino { get; set; }
 		public required string Destino { get; set; }
 
+		public TipoTransaccionEnum TipoTransaccion { get; set; }
+
 		[StringLength(11)]
 		public required string Intendente { get; set; }
 
