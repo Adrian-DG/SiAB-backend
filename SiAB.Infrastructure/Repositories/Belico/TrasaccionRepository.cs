@@ -14,6 +14,7 @@ using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Enums;
 using SiAB.Core.Exceptions;
+using SiAB.Core.Extensions;
 using SiAB.Core.Models;
 using SiAB.Core.Models.Transacciones;
 using SiAB.Core.ProcedureResults;
@@ -612,12 +613,12 @@ namespace SiAB.Infrastructure.Repositories.Belico
 								{
 									var origen = worksheet.Cells[row, 1].Value.ToString(); // Cedula o Deposito
 									var destino = worksheet.Cells[row, 2].Value?.ToString(); // Cedula o Deposito
-									var categoria = worksheet.Cells[row, 3].Value?.ToString();
-									var tipo = worksheet.Cells[row, 4].Value?.ToString();
-									var subtipo = worksheet.Cells[row, 5].Value?.ToString();
-									var marca = worksheet.Cells[row, 6].Value?.ToString();
-									var modelo = worksheet.Cells[row, 7].Value?.ToString();
-									var calibre = worksheet.Cells[row, 8].Value?.ToString();
+									var categoria = worksheet.Cells[row, 3].Value?.ToString() ?? CategoriaArmaEnumExtensions.GetDescription(CategoriaArticuloEnum.NO_DEFINIDA);
+									var tipo = worksheet.Cells[row, 4].Value?.ToString() ?? "NO DEFINIDO";
+									var subtipo = worksheet.Cells[row, 5].Value?.ToString() ?? "NO DEFINIDO";
+									var marca = worksheet.Cells[row, 6].Value?.ToString() ?? "NO DEFINIDA";
+									var modelo = worksheet.Cells[row, 7].Value?.ToString() ?? "NO DEFINIDO";
+									var calibre = worksheet.Cells[row, 8].Value?.ToString() ?? "1"; // No Definido
 									var serie = worksheet.Cells[row, 9].Value?.ToString();
 									var formulario53 = worksheet.Cells[row, 10].Value?.ToString();
 									var fechaValue = worksheet.Cells[row, 11].Value?.ToString();
