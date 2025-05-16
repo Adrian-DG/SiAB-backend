@@ -116,9 +116,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 			if (adjuntarFormulario53Dto.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53)
 			{
-				var formulario53 = await _context.DocumentosTransaccion.FirstOrDefaultAsync(dt => 
-				dt.TransaccionId == adjuntarFormulario53Dto.Id 
-				&& dt.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53);
+				var formulario53 = await _context.DocumentosTransaccion.FirstOrDefaultAsync(dt => dt.TransaccionId == adjuntarFormulario53Dto.Id && dt.TipoDocumentoId == (int)TipoDocumentoEnum.FORMULARIO_53);
 
 				if (formulario53 is null)
 				{
