@@ -17,7 +17,6 @@ using SiAB.Core.Exceptions;
 using SiAB.Core.Extensions;
 using SiAB.Core.Models;
 using SiAB.Core.Models.Transacciones;
-using SiAB.Core.ProcedureResults;
 using SiAB.Infrastructure.Data;
 using SiAB.Infrastructure.Helpers;
 using System;
@@ -448,7 +447,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 
 			query += $" order by T.FechaEfectividad desc OFFSET {(filters.Page - 1) * filters.Size} ROWS FETCH NEXT {filters.Size} ROWS ONLY";
 
-			var result = await _context.SP_Obtener_Listado_Transacciones.FromSqlRaw(query).ToListAsync<TransaccionViewModel>();
+			var result = await _context.View_Obtener_Listado_Transacciones.FromSqlRaw(query).ToListAsync<TransaccionViewModel>();
 
 			return new PagedData<TransaccionViewModel>
 			{
@@ -522,7 +521,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 			};
 		}
 
-		public async Task<List<SerieTransaccionItem>> GetTransaccionesBySerie(string serie)
+		public async Task<List<SerieTransaccionViewModel>> GetTransaccionesBySerie(string serie)
 		{
 			string query = $@"
 							select 
@@ -537,12 +536,12 @@ namespace SiAB.Infrastructure.Repositories.Belico
 							where A.Serie = '{serie}'
 							order by T.FechaEfectividad asc";
 
-			var transacciones = await _context.SP_Obtener_Transacciones_Serie.FromSqlRaw(query).ToListAsync(); 
+			var transacciones = await _context.View_Obtener_Transacciones_Serie.FromSqlRaw(query).ToListAsync(); 
 
 			return transacciones;
 		}
 
-		public async Task<List<ArticuloTransaccionItem>> GetArticulosOrigenTransaccion(TipoTransaccionEnum tipoOrigen, string origen)
+		public async Task<List<ArticuloTransaccionViewModel>> GetArticulosOrigenTransaccion(TipoTransaccionEnum tipoOrigen, string origen)
 		{
 			string query = $@"
                             select 
@@ -566,7 +565,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 							where T.Destino like  '{origen}' + '%'
 							order by T.FechaEfectividad asc ";
 
-			var articulos = await _context.SP_Obtener_Articulos_Origen_Transaccion.FromSqlRaw(query).ToListAsync(); // Use FromSqlRaw instead of ExecuteSqlRawAsync
+			var articulos = await _context.View_Obtener_Articulos_Origen_Transaccion.FromSqlRaw(query).ToListAsync(); // Use FromSqlRaw instead of ExecuteSqlRawAsync
 			
 			return articulos;
 		}

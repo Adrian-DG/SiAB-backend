@@ -8,7 +8,6 @@ using SiAB.Core.Entities.Misc;
 using SiAB.Core.Entities.Personal;
 using System.Linq.Expressions;
 using SiAB.Infrastructure.Data.Seed;
-using SiAB.Core.ProcedureResults;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Models.Transacciones;
 using SiAB.Core.Entities.Empresa;
@@ -33,9 +32,9 @@ namespace SiAB.Infrastructure.Data
 
 			builder.Entity<Role>(e => e.ToTable("Roles", "accesos"));
 
-			builder.Entity<ArticuloTransaccionItem>().HasNoKey();
+			builder.Entity<ArticuloTransaccionViewModel>().HasNoKey();
 
-			builder.Entity<SerieTransaccionItem>().HasNoKey();
+			builder.Entity<SerieTransaccionViewModel>().HasNoKey();
 
 			builder.Entity<TransaccionViewModel>().HasNoKey();
 
@@ -160,9 +159,9 @@ namespace SiAB.Infrastructure.Data
 
 		#region Procedures
 
-		public DbSet<ArticuloTransaccionItem> SP_Obtener_Articulos_Origen_Transaccion { get; set; }
-		public DbSet<SerieTransaccionItem> SP_Obtener_Transacciones_Serie { get; set; }
-		public DbSet<TransaccionViewModel> SP_Obtener_Listado_Transacciones { get; set; }
+		public DbSet<ArticuloTransaccionViewModel> View_Obtener_Articulos_Origen_Transaccion { get; set; }
+		public DbSet<SerieTransaccionViewModel> View_Obtener_Transacciones_Serie { get; set; }
+		public DbSet<TransaccionViewModel> View_Obtener_Listado_Transacciones { get; set; }
 
 		#endregion
 

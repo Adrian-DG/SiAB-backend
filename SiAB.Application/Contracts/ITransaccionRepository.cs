@@ -4,7 +4,6 @@ using SiAB.Core.Entities.Belico;
 using SiAB.Core.Enums;
 using SiAB.Core.Models.Transacciones;
 using SiAB.Core.Models;
-using SiAB.Core.ProcedureResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +24,9 @@ namespace SiAB.Application.Contracts
 
 		Task SaveDocumento(AdjuntarFormularioTransaccionDto adjuntarFormulario53Dto);
 
-		Task<List<SerieTransaccionItem>> GetTransaccionesBySerie(string serie);
+		Task<List<SerieTransaccionViewModel>> GetTransaccionesBySerie(string serie);
 
-		Task<List<ArticuloTransaccionItem>> GetArticulosOrigenTransaccion(TipoTransaccionEnum tipoOrigen, string origen);
+		Task<List<ArticuloTransaccionViewModel>> GetArticulosOrigenTransaccion(TipoTransaccionEnum tipoOrigen, string origen);
 
 		Task UploadRelacionArticulos(IFormFile File, InputOrigenDestinoDto inputOrigenDestinoDto);
 	}

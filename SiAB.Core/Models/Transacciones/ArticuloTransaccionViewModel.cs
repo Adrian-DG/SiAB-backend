@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiAB.Core.ProcedureResults
+namespace SiAB.Core.Models.Transacciones
 {
-	public sealed class ArticuloTransaccionItem
+	public sealed class ArticuloTransaccionViewModel
 	{
 		public int Id { get; set; }
 		public string Marca { get; set; }

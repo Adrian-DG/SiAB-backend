@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiAB.Core.ProcedureResults
+namespace SiAB.Core.Models.Transacciones
 {
-    public class SerieTransaccionItem
+    public class SerieTransaccionViewModel
     {
 		public string? Origen { get; set; }
 		public string? Destino { get; set; }
