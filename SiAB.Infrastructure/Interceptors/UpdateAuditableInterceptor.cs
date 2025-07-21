@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
+using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +13,31 @@ namespace SiAB.Infrastructure.Interceptors
 	public sealed class UpdateAuditableInterceptor : SaveChangesInterceptor
 	{
 		private int? CodUsuario;
-		public UpdateAuditableInterceptor(int? codUsuario = 0)
+		private int? CodInstitucion;
+		public UpdateAuditableInterceptor(int? codUsuario = 0, int? codInstitucion = 0)
 		{
 			CodUsuario = codUsuario;
+			CodInstitucion = codInstitucion;
 		}
 
-		public void SetParameters(int codUsuario)
+		public void SetParameters(int codUsuario, int codInstitucion)
 		{
 			CodUsuario = codUsuario;
+			CodInstitucion = codInstitucion;
 		}
 
 		public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
 		{
-			var entries = eventData.Context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+			var entries = eventData?.Context?.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+
+			if (entries is null || !entries.Any()) return base.SavingChangesAsync(eventData, result, cancellationToken);
 
 			foreach (var entry in entries)
 			{
 				if (entry.Entity is IAuditableEntityMetadata auditable)
 				{
-					auditable.UsuarioIdModifico = CodUsuario ?? 0;
+					auditable.UsuarioEditorId = CodUsuario ?? 0;
+					auditable.UsuarioEditorCodInstitucion = (InstitucionEnum) (CodInstitucion ?? 0);
 					auditable.FechaModificacion = DateTime.Now;
 				}
 			}

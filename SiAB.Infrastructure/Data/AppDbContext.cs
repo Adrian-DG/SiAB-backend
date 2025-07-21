@@ -162,7 +162,6 @@ namespace SiAB.Infrastructure.Data
 
 		public DbSet<ArticuloTransaccionItem> SP_Obtener_Articulos_Origen_Transaccion { get; set; }
 		public DbSet<SerieTransaccionItem> SP_Obtener_Transacciones_Serie { get; set; }
-
 		public DbSet<TransaccionViewModel> SP_Obtener_Listado_Transacciones { get; set; }
 
 		#endregion

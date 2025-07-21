@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -34,8 +34,8 @@ namespace SiAB.Infrastructure.Interceptors
 			{
 				if (entry.Entity is IAuditableEntityMetadata auditable)
 				{
-					auditable.UsuarioId = CodUsuario ?? 0;
-					auditable.CodInstitucion = (InstitucionEnum)CodInstitucion;
+					auditable.UsuarioCreadorId = CodUsuario ?? 0;
+					auditable.UsuarioCreadorCodInstitucion = (InstitucionEnum)(CodInstitucion ?? 0);
 					auditable.FechaCreacion = DateTime.Now;
 				}
 			}
