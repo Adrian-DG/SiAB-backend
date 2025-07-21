@@ -11,17 +11,10 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Empresa
 {
 	[Table("Empresas", Schema = "EXP")]
-	public class Empresa : EntityMetadata, IAuditableEntityMetadata
+	public class Empresa : AuditableEntityMetadata
 	{
 		public required string Nombre { get; set; }
 		public required string RNC { get; set; }
-
-		public int UsuarioId { get; set; }
-		public InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioEditorId { get; set; }
-		public DateTime? FechaModificacion { get; set; }
-
 		public virtual ICollection<Titular>? Titulares { get; set; }
 		public virtual ICollection<Contacto>? Contactos { get; set; }
 		public virtual ICollection<OrdenEmpresa>? OrdenesEmpresa { get; set; }

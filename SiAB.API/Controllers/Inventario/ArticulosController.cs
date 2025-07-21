@@ -32,7 +32,7 @@ namespace SiAB.API.Controllers.Inventario
 						m => m.SubTipo,
 						m => m.Tipo
 					},
-					predicate: a => a.Serie.Contains(filter.SearchTerm ?? "") && a.CodInstitucion == (InstitucionEnum)_codInstitucionUsuario,
+					predicate: a => a.Serie.Contains(filter.SearchTerm ?? "") && a.UsuarioCreadorCodInstitucion == (InstitucionEnum)_codInstitucionUsuario,
 					selector: a => new
 					{
 						Id = a.Id,

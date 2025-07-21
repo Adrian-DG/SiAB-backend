@@ -23,7 +23,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 		public async Task CreateSecuencia(int CodInstitucion)
 		{
 			// find the last sequence
-			var lastSequence = await _context.Secuencias.Where(s => s.CodInstitucion == (InstitucionEnum)CodInstitucion && s.FechaCreacion.Year == DateTime.Now.Year)
+			var lastSequence = await _context.Secuencias.Where(s => s.UsuarioCreadorCodInstitucion == (InstitucionEnum)CodInstitucion && s.FechaCreacion.Year == DateTime.Now.Year)
 				.OrderByDescending(s => s.SecuenciaNumero)
 				.FirstOrDefaultAsync();
 
@@ -34,7 +34,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				{
 					SecuenciaCadena = GenerarSecuencia(lastSequence.SecuenciaNumero + 1, CodInstitucion),
 					SecuenciaNumero = lastSequence.SecuenciaNumero + 1,
-					CodInstitucion = (InstitucionEnum)CodInstitucion
+					UsuarioCreadorCodInstitucion = (InstitucionEnum)CodInstitucion
 				});
 			}
 			else
@@ -43,7 +43,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 				{
 					SecuenciaCadena = GenerarSecuencia(1, CodInstitucion),
 					SecuenciaNumero = 1,
-					CodInstitucion = (InstitucionEnum)CodInstitucion
+					UsuarioCreadorCodInstitucion = (InstitucionEnum)CodInstitucion
 				});
 			}
 
@@ -53,7 +53,7 @@ namespace SiAB.Infrastructure.Repositories.Belico
 		public async Task<string> GetSecuenciaInstitucion(int CodInstitucion)
 		{
 			// find the last sequence
-			var lastSequence = await _context.Secuencias.Where(s => s.CodInstitucion == (InstitucionEnum)CodInstitucion && s.FechaCreacion.Year == DateTime.Now.Year)
+			var lastSequence = await _context.Secuencias.Where(s => s.UsuarioCreadorCodInstitucion == (InstitucionEnum)CodInstitucion && s.FechaCreacion.Year == DateTime.Now.Year)
 				.OrderByDescending(s => s.SecuenciaNumero)
 				.FirstOrDefaultAsync();
 
