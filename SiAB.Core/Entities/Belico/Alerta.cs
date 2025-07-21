@@ -1,4 +1,4 @@
-﻿using SiAB.Core.Abstraction;
+﻿using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Enums;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SiAB.Core.Entities.Belico
 {
 	[Table("Alertas", Schema = "Belico")]
-	public class Alerta : EntityMetadata, IAuditableEntityMetadata
+	public class Alerta : AuditableEntityMetadata
 	{
         public string? Cedula { get; set; }
         public AlertaEstatusEnum Estatus { get; set; }
@@ -20,16 +20,7 @@ namespace SiAB.Core.Entities.Belico
         public string? Comentario { get; set; }
 
         [Required]
-        public DateTime FechaEfectividad { get; set; }
+        public DateTime FechaEfectividad { get; set; }	
 
-        [ForeignKey(nameof(UsuarioId))]
-		public required int UsuarioId { get; set; }
-		public required InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; } = DateTime.Now;
-
-		[ForeignKey(nameof(UsuarioIdModifico))]
-		public int? UsuarioIdModifico { get; set; }
-		public DateTime? FechaModificacion { get; set; } = null;
-		
 	}
 }

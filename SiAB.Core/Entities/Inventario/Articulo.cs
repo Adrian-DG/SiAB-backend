@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Entities.Belico;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Inventario
 {
 	[Table("Articulos", Schema = "Inv")]
-	public class Articulo : EntityMetadata, IAuditableEntityMetadata
+	public class Articulo : AuditableEntityMetadata
 	{
 		[ForeignKey(nameof(CategoriaId))]
 		public int CategoriaId { get; set; }
@@ -40,12 +41,5 @@ namespace SiAB.Core.Entities.Inventario
 		public string? Serie { get; set; }
 		public bool EsSeriado { get; set; }
 
-		// Auditables
-
-		public int UsuarioId { get; set; }
-		public InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioIdModifico { get; set; }
-		public DateTime? FechaModificacion { get; set; }
 	}
 }

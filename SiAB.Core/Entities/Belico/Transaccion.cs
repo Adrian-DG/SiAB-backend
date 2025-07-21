@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Belico
 {
 	[Table("Transacciones", Schema = "Belico")]
-	public class Transaccion : EntityMetadata, IAuditableEntityMetadata
+	public class Transaccion : AuditableEntityMetadata
 	{
 		public TipoOrigenDestinoEnum TipoOrigen { get; set; }
 		public required string Origen { get; set; }
@@ -36,14 +37,6 @@ namespace SiAB.Core.Entities.Belico
 
 		[DefaultValue(EstatusTransaccionEnum.EN_PROCESO)]
 		public EstatusTransaccionEnum Estatus { get; set; } = EstatusTransaccionEnum.EN_PROCESO;
-
-		// auditables 
-
-		public int UsuarioId { get; set; }
-		public InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioIdModifico { get; set; }
-		public DateTime? FechaModificacion { get; set; }
 
 		public virtual ICollection<DetalleArticuloTransaccion>? DetallesTransaccion { get; set; }
 		public virtual ICollection<DocumentoTransaccion>? DocumentosTransaccion { get; set; }

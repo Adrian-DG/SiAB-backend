@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Entities.Inventario;
 using SiAB.Core.Enums;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Belico
 {
 	[Table("DetallesArticuloTransaccion", Schema = "Belico")]
-	public class DetalleArticuloTransaccion : EntityMetadata, IAuditableEntityMetadata
+	public class DetalleArticuloTransaccion : AuditableEntityMetadata
 	{
 
 		[ForeignKey(nameof(ArticuloId))]
@@ -24,11 +25,5 @@ namespace SiAB.Core.Entities.Belico
 		public virtual Transaccion? Transaccion { get; set; }
 		public int Cantidad { get; set; }
 
-		// auditables 
-		public int UsuarioId { get; set; }
-		public InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioIdModifico { get; set; }
-		public DateTime? FechaModificacion { get; set; }
 	}
 }

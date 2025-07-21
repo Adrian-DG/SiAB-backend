@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Empresa
 {
 	[Table("OrdenesEmpresa", Schema = "EXP")]
-	public class OrdenEmpresa : EntityMetadata, IAuditableEntityMetadata
+	public class OrdenEmpresa : AuditableEntityMetadata
 	{
 		public string? Comentario { get; set; }
 
@@ -22,12 +23,5 @@ namespace SiAB.Core.Entities.Empresa
 		public virtual ICollection<OrdenEmpresaDocumento>? Documentos { get; set; }
 		public virtual ICollection<OrdenEmpresaArticulo>? Articulos { get; set; }
 
-		// Auditables 
-
-		public int UsuarioId { get; set; }
-		public InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioIdModifico { get; set; }
-		public DateTime? FechaModificacion { get; set; }
 	}
 }

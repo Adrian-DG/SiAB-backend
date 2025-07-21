@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SiAB.Core.Entities.Empresa
 		public int UsuarioId { get; set; }
 		public InstitucionEnum CodInstitucion { get; set; }
 		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioIdModifico { get; set; }
+		public int? UsuarioEditorId { get; set; }
 		public DateTime? FechaModificacion { get; set; }
 
 		public virtual ICollection<Titular>? Titulares { get; set; }

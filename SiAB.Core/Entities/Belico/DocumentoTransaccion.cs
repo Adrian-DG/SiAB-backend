@@ -1,4 +1,5 @@
 ﻿using SiAB.Core.Abstraction;
+using SiAB.Core.Abstraction.Auditable;
 using SiAB.Core.Entities.Misc;
 using SiAB.Core.Enums;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace SiAB.Core.Entities.Belico
 {
 	[Table("DocumentosTransaccion", Schema = "Belico")]
-	public class DocumentoTransaccion : EntityMetadata, IAuditableEntityMetadata
+	public class DocumentoTransaccion : AuditableEntityMetadata
 	{
 		[ForeignKey(nameof(TransaccionId))]
 		public int TransaccionId { get; set; }
@@ -24,11 +25,5 @@ namespace SiAB.Core.Entities.Belico
 		public required string NumeracionDocumento { get; set; }
 		public byte[]? Archivo { get; set; }
 
-		// auditables
-		public int UsuarioId { get; set; }
-		public InstitucionEnum CodInstitucion { get; set; }
-		public DateTime FechaCreacion { get; set; }
-		public int? UsuarioIdModifico { get; set; }
-		public DateTime? FechaModificacion { get; set; }
 	}
 }
